@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RHUYS VOLLEY BALL | Calendrier</title>
+    <meta name="description" content="Calendrier des matchs du RHUYS VOLLEY BALL, mis à jour automatiquement via Score’n’co." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header header-page" id="top">
+      <nav class="nav container" aria-label="Navigation principale">
+        <a href="index.html" class="logo">RHUYS <span>VOLLEY BALL</span></a>
+        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+        <ul class="nav-links" id="main-nav">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="club.html">Le club</a></li>
+          <li><a href="equipes.html">Équipes</a></li>
+          <li><a href="calendrier.html">Calendrier</a></li>
+          <li><a href="classements.html">Classements</a></li>
+          <li><a href="actualites.html">Actualités</a></li>
+          <li><a href="partenaires.html">Partenaires</a></li>
+          <li><a href="boutique.html">Boutique</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <section class="page-hero container reveal visible">
+        <p class="hero-tag">Calendrier</p>
+        <h1>Calendrier des matchs</h1>
+        <p>Retrouvez les prochains matchs du club, mis à jour automatiquement via Score’n’co.</p>
+      </section>
+    </header>
+
+    <main>
+      <section class="section section-alt" id="calendrier">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2>Calendrier des matchs</h2>
+            <p>Retrouvez les prochains matchs du club, mis à jour automatiquement via Score’n’co.</p>
+          </div>
+
+          <div class="scoreco-module reveal" data-scoreco-module="calendrier">
+            <div class="scoreco-filters card">
+              <h3>Filtrer par équipe</h3>
+              <div class="scoreco-actions">
+                <button type="button" class="btn btn-primary btn-sm scoreco-check-all">Tout cocher</button>
+                <button type="button" class="btn btn-outline btn-sm scoreco-uncheck-all">Tout décocher</button>
+              </div>
+
+              <div class="scoreco-filters-grid" role="group" aria-label="Filtres équipes calendrier">
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-all" value="all" data-role="all-teams" checked />
+                  <label for="cal-all">Toutes les équipes</label>
+                </div>
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-m13" value="m13" data-role="team" checked />
+                  <label for="cal-m13">M13</label>
+                </div>
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-m15" value="m15" data-role="team" checked />
+                  <label for="cal-m15">M15</label>
+                </div>
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-m18" value="m18" data-role="team" checked />
+                  <label for="cal-m18">M18</label>
+                </div>
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-seniors-f" value="seniors_f" data-role="team" checked />
+                  <label for="cal-seniors-f">Seniors Féminines</label>
+                </div>
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-seniors-m" value="seniors_m" data-role="team" checked />
+                  <label for="cal-seniors-m">Seniors Masculins</label>
+                </div>
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-loisirs" value="loisirs" data-role="team" checked />
+                  <label for="cal-loisirs">Loisirs</label>
+                </div>
+                <div class="scoreco-filter-item">
+                  <input type="checkbox" id="cal-competition" value="competition" data-role="team" checked />
+                  <label for="cal-competition">Compétition</label>
+                </div>
+              </div>
+            </div>
+
+            <p class="scoreco-count" aria-live="polite"></p>
+            <p class="scoreco-empty" aria-live="polite"></p>
+
+            <div class="widgets">
+              <div class="widget card reveal" data-team="m13">
+                <h3>M13</h3>
+                <!-- Coller ici le widget Score’n’co M13 -->
+                <iframe class="widget-frame widget-frame-calendar" title="Calendrier Score'n'co M13" src="about:blank" loading="lazy"></iframe>
+              </div>
+              <div class="widget card reveal" data-team="m15">
+                <h3>M15</h3>
+                <!-- Coller ici le widget Score’n’co M15 -->
+                <iframe class="widget-frame widget-frame-calendar" title="Calendrier Score'n'co M15" src="about:blank" loading="lazy"></iframe>
+              </div>
+              <div class="widget card reveal" data-team="m18">
+                <h3>M18</h3>
+                <!-- Coller ici le widget Score’n’co M18 -->
+                <iframe class="widget-frame widget-frame-calendar" title="Calendrier Score'n'co M18" src="about:blank" loading="lazy"></iframe>
+              </div>
+              <div class="widget card reveal" data-team="seniors_f">
+                <h3>Seniors Féminines</h3>
+                <!-- Coller ici le widget Score’n’co Seniors Féminines -->
+                <iframe class="widget-frame widget-frame-calendar" title="Calendrier Score'n'co Seniors Féminines" src="about:blank" loading="lazy"></iframe>
+              </div>
+              <div class="widget card reveal" data-team="seniors_m">
+                <h3>Seniors Masculins</h3>
+                <!-- Coller ici le widget Score’n’co Seniors Masculins -->
+                <iframe class="widget-frame widget-frame-calendar" title="Calendrier Score'n'co Seniors Masculins" src="about:blank" loading="lazy"></iframe>
+              </div>
+              <div class="widget card reveal" data-team="loisirs">
+                <h3>Loisirs</h3>
+                <!-- Coller ici le widget Score’n’co Loisirs -->
+                <iframe class="widget-frame widget-frame-calendar" title="Calendrier Score'n'co Loisirs" src="about:blank" loading="lazy"></iframe>
+              </div>
+              <div class="widget card reveal" data-team="competition">
+                <h3>Compétition</h3>
+                <!-- Coller ici le widget Score’n’co Compétition -->
+                <iframe class="widget-frame widget-frame-calendar" title="Calendrier Score'n'co Compétition" src="about:blank" loading="lazy"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div><h4>RHUYS VOLLEY BALL</h4><p>Gymnases de Sarzeau et Surzur</p><p>Presqu'île de Rhuys, Morbihan</p></div>
+          <div><h4>Navigation</h4><div class="footer-links"><a href="index.html">Accueil</a><a href="club.html">Le club</a><a href="equipes.html">Équipes</a><a href="calendrier.html">Calendrier</a><a href="classements.html">Classements</a><a href="actualites.html">Actualités</a><a href="partenaires.html">Partenaires</a><a href="boutique.html">Boutique</a><a href="contact.html">Contact</a></div></div>
+          <div><h4>Suivez-nous</h4><div class="social-links"><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></div></div>
+        </div>
+        <p class="footer-copy">© 2026 RHUYS VOLLEY BALL</p>
+      </div>
+    </footer>
+
+    <a href="contact.html" class="floating-cta" aria-label="Aller à la page d'inscription">S'inscrire</a>
+    <script src="script.js"></script>
+  </body>
+</html>

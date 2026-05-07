@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" role="img" aria-labelledby="title desc">
+  <title id="title">Logo RHUYS VOLLEY BALL</title>
+  <desc id="desc">Logo de secours du club RHUYS VOLLEY BALL</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b2a52"/>
+      <stop offset="100%" stop-color="#1f5a96"/>
+    </linearGradient>
+    <linearGradient id="ball" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8c836"/>
+      <stop offset="100%" stop-color="#ffd861"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="210" cy="210" r="198" fill="url(#bg)" stroke="#f8c836" stroke-width="12"/>
+  <circle cx="210" cy="165" r="82" fill="none" stroke="url(#ball)" stroke-width="12"/>
+  <path d="M128 136c34 18 83 18 116 0" fill="none" stroke="#f8c836" stroke-width="8"/>
+  <path d="M129 194c32-14 82-14 114 0" fill="none" stroke="#f8c836" stroke-width="8"/>
+  <path d="M166 90c22 40 22 108 0 150" fill="none" stroke="#f8c836" stroke-width="8"/>
+  <path d="M252 90c-22 40-22 108 0 150" fill="none" stroke="#f8c836" stroke-width="8"/>
+
+  <rect x="60" y="256" width="300" height="94" rx="16" fill="#061832" stroke="#f8c836" stroke-width="4"/>
+  <text x="210" y="295" text-anchor="middle" fill="#ffffff" font-size="36" font-family="Barlow, Arial, sans-serif" font-weight="800">
+    RHUYS
+  </text>
+  <text x="210" y="330" text-anchor="middle" fill="#f8c836" font-size="30" font-family="Barlow, Arial, sans-serif" font-weight="700">
+    VOLLEY BALL
+  </text>
+</svg>

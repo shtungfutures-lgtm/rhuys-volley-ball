@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RHUYS VOLLEY BALL | Contact</title>
+    <meta name="description" content="Contactez le RHUYS VOLLEY BALL pour les inscriptions, essais et informations club." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header header-page" id="top">
+      <nav class="nav container" aria-label="Navigation principale">
+        <a href="index.html" class="logo">RHUYS <span>VOLLEY BALL</span></a>
+        <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+        <ul class="nav-links" id="main-nav">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="club.html">Le club</a></li>
+          <li><a href="equipes.html">Équipes</a></li>
+          <li><a href="calendrier.html">Calendrier</a></li>
+          <li><a href="classements.html">Classements</a></li>
+          <li><a href="actualites.html">Actualités</a></li>
+          <li><a href="partenaires.html">Partenaires</a></li>
+          <li><a href="boutique.html">Boutique</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <section class="page-hero container reveal visible">
+        <p class="hero-tag">Contact</p>
+        <h1>Contactez le RHUYS VOLLEY BALL</h1>
+        <p>Nous vous répondons rapidement pour toute demande d'information ou d'inscription.</p>
+      </section>
+    </header>
+
+    <main>
+      <section class="section container" id="contact-form-section">
+        <div class="section-head reveal">
+          <h2>Coordonnées</h2>
+          <p>Une question ? Écrivez-nous ou passez nous voir au gymnase.</p>
+        </div>
+        <div class="contact-layout">
+          <article class="contact-info card reveal">
+            <h3>RHUYS VOLLEY BALL</h3>
+            <p><strong>Lieux :</strong> Gymnases de SARZEAU et SURZUR</p>
+            <p><strong>Président :</strong> Damien Medigue</p>
+            <p><strong>Trésorier :</strong> Benjamin Boissier</p>
+            <p><strong>E-mail :</strong> <a href="mailto:tresorier@rhuysvolley.fr">tresorier@rhuysvolley.fr</a></p>
+            <p><strong>Secrétaire :</strong> Emmanuelle Tillon</p>
+            <p><strong>E-mail :</strong> <a href="mailto:secretaire@rhuysvolley.fr">secretaire@rhuysvolley.fr</a></p>
+            <p><strong>Téléphone :</strong> <a href="tel:+33600000000">06 00 00 00 00</a></p>
+          </article>
+
+          <form class="contact-form card reveal">
+            <h3>Formulaire de contact</h3>
+            <div class="form-grid">
+              <div>
+                <label for="name">Nom complet</label>
+                <input type="text" id="name" name="name" placeholder="Votre nom" required />
+              </div>
+              <div>
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="Votre e-mail" required />
+              </div>
+            </div>
+            <div class="form-grid">
+              <div>
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone" placeholder="Votre numéro" />
+              </div>
+              <div>
+                <label for="topic">Sujet</label>
+                <select id="topic" name="topic">
+                  <option value="inscription">Inscription</option>
+                  <option value="essai">Séance d'essai</option>
+                  <option value="infos">Informations générales</option>
+                </select>
+              </div>
+            </div>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" placeholder="Votre message" required></textarea>
+            <button type="submit" class="btn btn-primary">Envoyer le message</button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div><h4>RHUYS VOLLEY BALL</h4><p>Gymnases de Sarzeau et Surzur</p><p>Presqu'île de Rhuys, Morbihan</p></div>
+          <div><h4>Navigation</h4><div class="footer-links"><a href="index.html">Accueil</a><a href="club.html">Le club</a><a href="equipes.html">Équipes</a><a href="calendrier.html">Calendrier</a><a href="classements.html">Classements</a><a href="actualites.html">Actualités</a><a href="partenaires.html">Partenaires</a><a href="boutique.html">Boutique</a><a href="contact.html">Contact</a></div></div>
+          <div><h4>Suivez-nous</h4><div class="social-links"><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></div></div>
+        </div>
+        <p class="footer-copy">© 2026 RHUYS VOLLEY BALL</p>
+      </div>
+    </footer>
+
+    <a href="#contact-form-section" class="floating-cta" aria-label="Aller au formulaire d'inscription">S'inscrire</a>
+    <script src="script.js"></script>
+  </body>
+</html>
