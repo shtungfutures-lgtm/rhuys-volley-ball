@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RHUYS VOLLEY BALL | Administration</title>
+    <meta name="robots" content="noindex" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body class="admin-body">
+    <main class="admin-shell">
+      <section class="admin-login card" id="login-panel">
+        <p class="hero-tag">Administration</p>
+        <h1>Connexion RHUYS VOLLEY BALL</h1>
+        <p>Connectez-vous pour modifier les actualités du site.</p>
+
+        <form class="admin-form" id="login-form">
+          <label>
+            Identifiant
+            <input type="text" id="admin-username" autocomplete="username" required />
+          </label>
+          <label>
+            Mot de passe
+            <input type="password" id="admin-password" autocomplete="current-password" required />
+          </label>
+          <button type="submit" class="btn btn-primary">Se connecter</button>
+          <p class="admin-message" id="login-message" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="admin-panel" id="editor-panel" hidden>
+        <div class="admin-topbar">
+          <div>
+            <p class="hero-tag">Actualités</p>
+            <h1>Gestion des articles</h1>
+          </div>
+          <button type="button" class="btn btn-outline" id="logout-button">Déconnexion</button>
+        </div>
+
+        <div class="admin-layout">
+          <aside class="admin-list card">
+            <div class="admin-list-head">
+              <h2>Articles</h2>
+              <button type="button" class="btn btn-primary" id="new-article-button">Nouvel article</button>
+            </div>
+            <div id="articles-list" class="articles-list"></div>
+          </aside>
+
+          <form class="admin-editor card" id="article-form">
+            <input type="hidden" id="article-id" />
+            <label>
+              Titre
+              <input type="text" id="article-title" required />
+            </label>
+            <div class="admin-grid">
+              <label>
+                Date
+                <input type="date" id="article-date" required />
+              </label>
+              <label>
+                Catégorie
+                <select id="article-category" required>
+                  <option>Matchs</option>
+                  <option>Club</option>
+                  <option>Événements</option>
+                  <option>Jeunes</option>
+                  <option>Annonces</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              Auteur
+              <input type="text" id="article-author" />
+            </label>
+            <label>
+              Image
+              <input type="file" id="article-image" accept="image/*" />
+            </label>
+            <img src="" alt="" class="admin-preview" id="article-preview" hidden />
+            <label>
+              Extrait
+              <textarea id="article-excerpt" rows="3" required></textarea>
+            </label>
+            <label>
+              Contenu complet
+              <textarea id="article-body" rows="9" required></textarea>
+            </label>
+
+            <div class="admin-actions">
+              <button type="submit" class="btn btn-primary">Publier les modifications</button>
+              <button type="button" class="btn btn-outline danger" id="delete-article-button">Supprimer</button>
+            </div>
+            <p class="admin-message" id="editor-message" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
