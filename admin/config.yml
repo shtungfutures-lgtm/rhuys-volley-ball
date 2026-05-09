@@ -7,6 +7,8 @@ backend:
   site_domain: rhuys-volley-ball-site.netlify.app
 
 local_backend: true
+site_url: "https://rhuys-volley-ball-site.netlify.app"
+display_url: "https://rhuys-volley-ball-site.netlify.app"
 media_folder: "uploads/images"
 public_folder: "/uploads/images"
 
@@ -31,7 +33,7 @@ collections:
                 name: "category"
                 widget: "select"
                 options: ["Matchs", "Club", "Événements", "Jeunes", "Annonces"]
-              - { label: "Image", name: "featured_image", widget: "image", required: false }
+              - { label: "Image", name: "image", widget: "image", required: false }
               - { label: "Extrait", name: "excerpt", widget: "text" }
               - { label: "Contenu", name: "body", widget: "markdown" }
 

@@ -7,6 +7,30 @@
       "image": "https://images.pexels.com/photos/6203571/pexels-photo-6203571.jpeg?auto=compress&cs=tinysrgb&w=1200"
     },
     {
+      "slug": "club",
+      "title": "Une histoire locale, une ambition collective",
+      "content": "Le RHUYS VOLLEY BALL développe la pratique du volley pour tous les publics sur la Presqu'île.",
+      "image": ""
+    },
+    {
+      "slug": "equipes",
+      "title": "Les équipes du RHUYS VOLLEY BALL",
+      "content": "Des groupes adaptés à chaque âge et à chaque niveau de pratique.",
+      "image": ""
+    },
+    {
+      "slug": "calendrier",
+      "title": "Calendrier des matchs",
+      "content": "Retrouvez les prochains matchs du club, mis à jour automatiquement via Score’n’co.",
+      "image": ""
+    },
+    {
+      "slug": "classements",
+      "title": "Classements",
+      "content": "Consultez les classements officiels des équipes du club.",
+      "image": ""
+    },
+    {
       "slug": "actualites",
       "title": "Toute l'actualité du club",
       "content": "Résultats, infos club, événements et vie des jeunes sections RHUYS VOLLEY BALL.",
@@ -22,6 +46,12 @@
       "slug": "partenaires",
       "title": "Partenaires du RHUYS VOLLEY BALL",
       "content": "Ils soutiennent le développement du club et la pratique du volley sur la Presqu'île de Rhuys.",
+      "image": ""
+    },
+    {
+      "slug": "contact",
+      "title": "Contact et inscriptions",
+      "content": "Une question, une demande d'essai ou une inscription ? Contactez l'équipe du RHUYS VOLLEY BALL.",
       "image": ""
     }
   ]

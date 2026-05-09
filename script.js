@@ -559,6 +559,56 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
+function renderInlineMarkdown(value) {
+  return value
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+}
+
+function markdownToHtml(value) {
+  const blocks = String(value || '')
+    .replace(/\r\n/g, '\n')
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
+  if (blocks.length === 0) {
+    return '';
+  }
+
+  return blocks
+    .map((block) => {
+      if (/^#{2,3}\s+/.test(block)) {
+        const level = block.startsWith('###') ? 'h4' : 'h3';
+        const text = block.replace(/^#{2,3}\s+/, '');
+        return `<${level}>${renderInlineMarkdown(escapeHtml(text))}</${level}>`;
+      }
+
+      if (/^[-*]\s+/m.test(block)) {
+        const items = block
+          .split('\n')
+          .map((line) => line.replace(/^[-*]\s+/, '').trim())
+          .filter(Boolean)
+          .map((line) => `<li>${renderInlineMarkdown(escapeHtml(line))}</li>`)
+          .join('');
+        return `<ul>${items}</ul>`;
+      }
+
+      return `<p>${renderInlineMarkdown(escapeHtml(block)).replace(/\n/g, '<br />')}</p>`;
+    })
+    .join('');
+}
+
+function markdownToPlainText(value) {
+  return String(value || '')
+    .replace(/\[(.*?)\]\(.*?\)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/[*_`>]/g, '')
+    .replace(/\n{2,}/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function normalizeArticleRecord(rawArticle, index) {
   const title = rawArticle.title || rawArticle.titre || 'Article';
   const category = rawArticle.category || rawArticle.categorie || 'Club';
@@ -700,7 +750,7 @@ async function initActualitesPage() {
       card.innerHTML = `
         <img
           src="${article.image}"
-          alt="${article.title}"
+          alt="${escapeHtml(article.title)}"
           loading="lazy"
           decoding="async"
           referrerpolicy="no-referrer"
@@ -708,10 +758,10 @@ async function initActualitesPage() {
         />
         <div class="news-meta">
           <p class="news-date">${formatArticleDate(article.date)}</p>
-          <span class="news-category-badge">${article.category}</span>
+          <span class="news-category-badge">${escapeHtml(article.category)}</span>
         </div>
-        <h3>${article.title}</h3>
-        <p>${article.excerpt}</p>
+        <h3>${escapeHtml(article.title)}</h3>
+        <p>${escapeHtml(article.excerpt)}</p>
         <a href="article.html?slug=${encodeURIComponent(article.slug)}" class="btn btn-primary">Lire l’article</a>
       `;
 
@@ -813,7 +863,7 @@ async function initArticlePage() {
       <div class="article-media">
         <img
           src="${article.image}"
-          alt="${article.title}"
+          alt="${escapeHtml(article.title)}"
           loading="lazy"
           decoding="async"
           referrerpolicy="no-referrer"
@@ -822,11 +872,11 @@ async function initArticlePage() {
       <div class="article-content">
         <p class="news-date">${formatArticleDate(article.date)}</p>
         <div class="article-header-meta">
-          <span class="news-category-badge">${article.category}</span>
-          <span class="article-author">Par ${article.author}</span>
+          <span class="news-category-badge">${escapeHtml(article.category)}</span>
+          <span class="article-author">Par ${escapeHtml(article.author)}</span>
         </div>
-        <h2>${article.title}</h2>
-        <p>${article.body}</p>
+        <h2>${escapeHtml(article.title)}</h2>
+        <div class="article-body">${markdownToHtml(article.body)}</div>
         <a href="actualites.html" class="btn btn-outline article-back">Retour aux actualités</a>
       </div>
     </article>
@@ -860,7 +910,7 @@ function normalizeProduct(rawProduct) {
     description: rawProduct.description || '',
     image: resolveCmsMediaUrl(rawProduct.image || ''),
     stripeLink: rawProduct.stripeLink || rawProduct.stripe_link || rawProduct.lienStripe || '',
-    statut: rawProduct.statut || rawProduct.status || 'indisponible'
+    statut: String(rawProduct.statut || rawProduct.status || 'indisponible').toLowerCase()
   };
 }
 
@@ -979,7 +1029,7 @@ async function initSimplePageContent() {
 
   const title = page.title || '';
   const content = page.content || '';
-  const image = resolveCmsMediaUrl(page.image || '');
+  const image = page.image ? resolveCmsMediaUrl(page.image) : '';
 
   const heroTitle = document.querySelector('.page-hero h1') || document.querySelector('.hero-content h1');
   const heroText =
@@ -991,7 +1041,7 @@ async function initSimplePageContent() {
   }
 
   if (content && heroText) {
-    heroText.textContent = content;
+    heroText.textContent = markdownToPlainText(content);
   }
 
   if (image && heroImage) {
