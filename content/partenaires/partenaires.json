@@ -1,0 +1,46 @@
+{
+  "partenaires": [
+    {
+      "nom": "Armor Littoral",
+      "logo": "",
+      "categorie": "Partenaire principal",
+      "description": "Accompagne la section compétition et soutient les déplacements de l'équipe seniors.",
+      "lien": "https://example.com"
+    },
+    {
+      "nom": "Breizh Conseil",
+      "logo": "",
+      "categorie": "Partenaire local",
+      "description": "Participe au financement des actions jeunesse et des événements internes du club.",
+      "lien": "https://example.com"
+    },
+    {
+      "nom": "Mairie de Rhuys",
+      "logo": "",
+      "categorie": "Institutionnel",
+      "description": "Soutient les infrastructures, les créneaux d'entraînement et la vie associative locale.",
+      "lien": "https://example.com"
+    },
+    {
+      "nom": "Volley Store",
+      "logo": "",
+      "categorie": "Équipementier",
+      "description": "Fournit du matériel technique et accompagne le club sur les équipements collectifs.",
+      "lien": "https://example.com"
+    },
+    {
+      "nom": "Océan Print",
+      "logo": "",
+      "categorie": "Partenaire local",
+      "description": "Réalise les supports de communication du club pour les matchs et tournois.",
+      "lien": "https://example.com"
+    },
+    {
+      "nom": "Sport Nature",
+      "logo": "",
+      "categorie": "Partenaire principal",
+      "description": "Contribue au développement des sections jeunes et au rayonnement du RVB.",
+      "lien": "https://example.com"
+    }
+  ]
+}

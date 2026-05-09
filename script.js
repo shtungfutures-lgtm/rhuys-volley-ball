@@ -287,11 +287,80 @@ const shopProducts = [
     stripeLink: ''
   }
 ];
+
+const fallbackPartners = [
+  {
+    nom: 'Armor Littoral',
+    logo: '',
+    categorie: 'Partenaire principal',
+    description: "Accompagne la section compétition et soutient les déplacements de l'équipe seniors.",
+    lien: 'https://example.com'
+  },
+  {
+    nom: 'Breizh Conseil',
+    logo: '',
+    categorie: 'Partenaire local',
+    description: 'Participe au financement des actions jeunesse et des événements internes du club.',
+    lien: 'https://example.com'
+  },
+  {
+    nom: 'Mairie de Rhuys',
+    logo: '',
+    categorie: 'Institutionnel',
+    description: "Soutient les infrastructures, les créneaux d'entraînement et la vie associative locale.",
+    lien: 'https://example.com'
+  },
+  {
+    nom: 'Volley Store',
+    logo: '',
+    categorie: 'Équipementier',
+    description: 'Fournit du matériel technique et accompagne le club sur les équipements collectifs.',
+    lien: 'https://example.com'
+  },
+  {
+    nom: 'Océan Print',
+    logo: '',
+    categorie: 'Partenaire local',
+    description: 'Réalise les supports de communication du club pour les matchs et tournois.',
+    lien: 'https://example.com'
+  },
+  {
+    nom: 'Sport Nature',
+    logo: '',
+    categorie: 'Partenaire principal',
+    description: 'Contribue au développement des sections jeunes et au rayonnement du RVB.',
+    lien: 'https://example.com'
+  }
+];
+
+const fallbackGalleryItems = [
+  {
+    title: 'Entraînement jeunes à Sarzeau',
+    image: 'https://images.pexels.com/photos/6203578/pexels-photo-6203578.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'Séance collective autour de la technique et du plaisir de jouer.'
+  },
+  {
+    title: 'Match en salle',
+    image: 'https://images.pexels.com/photos/6203571/pexels-photo-6203571.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'Ambiance de match pour les équipes du RHUYS VOLLEY BALL.'
+  },
+  {
+    title: 'Cohésion adultes',
+    image: 'https://images.pexels.com/photos/6203648/pexels-photo-6203648.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: "Un groupe loisir et compétition engagé toute l'année."
+  }
+];
+
 const cmsArticlesEndpoint = '/content/articles/articles.json';
 const liveArticlesEndpoint = '/api/articles';
 const githubArticlesEndpoint =
   'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main/content/articles/articles.json';
 const githubMediaBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
+const githubContentBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
+const galleryContentPath = '/content/galerie/galerie.json';
+const productsContentPath = '/content/produits/produits.json';
+const partnersContentPath = '/content/partenaires/partenaires.json';
+const pagesContentPath = '/content/pages/pages.json';
 let resolvedArticlesCache = null;
 
 const monthFormatter = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' });
@@ -441,7 +510,27 @@ function isLocalPreview() {
 }
 
 function getCmsArticleEndpoints() {
-  return isLocalPreview() ? [cmsArticlesEndpoint] : [liveArticlesEndpoint, githubArticlesEndpoint, cmsArticlesEndpoint];
+  return isLocalPreview() ? [cmsArticlesEndpoint] : [githubArticlesEndpoint, liveArticlesEndpoint, cmsArticlesEndpoint];
+}
+
+function getStaticContentEndpoints(path) {
+  return isLocalPreview() ? [path] : [`${githubContentBaseUrl}${path}`, path];
+}
+
+async function fetchFirstJson(endpoints) {
+  for (const endpoint of endpoints) {
+    try {
+      const response = await fetch(`${endpoint}?v=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      // On passe à la source suivante pour garder un fallback robuste.
+    }
+  }
+
+  return null;
 }
 
 function resolveCmsMediaUrl(value) {
@@ -459,6 +548,15 @@ function resolveCmsMediaUrl(value) {
 
   const normalizedPath = value.startsWith('/') ? value : `/${value}`;
   return `${githubMediaBaseUrl}${normalizedPath}`;
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function normalizeArticleRecord(rawArticle, index) {
@@ -629,6 +727,66 @@ async function initActualitesPage() {
   renderArticles();
 }
 
+async function initHomeNewsPreview() {
+  const previewRoot = document.getElementById('home-news-preview');
+  if (!previewRoot) {
+    return;
+  }
+
+  const latestArticles = (await getResolvedArticles()).slice(0, 3);
+  if (latestArticles.length === 0) {
+    return;
+  }
+
+  previewRoot.innerHTML = '';
+
+  latestArticles.forEach((article) => {
+    const card = document.createElement('article');
+    card.className = 'news-card card reveal';
+    card.innerHTML = `
+      <p class="news-date">${formatArticleDate(article.date)}</p>
+      <h3>${escapeHtml(article.title)}</h3>
+      <p>${escapeHtml(article.excerpt)}</p>
+      <a href="article.html?slug=${encodeURIComponent(article.slug)}" class="btn btn-primary">Lire plus</a>
+    `;
+    previewRoot.appendChild(card);
+  });
+
+  initRevealAnimations(previewRoot.querySelectorAll('.reveal'));
+}
+
+async function initGallery() {
+  const galleryRoot = document.getElementById('gallery-grid');
+  if (!galleryRoot) {
+    return;
+  }
+
+  const payload = await fetchFirstJson(getStaticContentEndpoints(galleryContentPath));
+  const galleryItems =
+    payload && Array.isArray(payload.galerie) && payload.galerie.length > 0 ? payload.galerie : fallbackGalleryItems;
+
+  galleryRoot.innerHTML = '';
+
+  galleryItems.forEach((item) => {
+    const image = resolveCmsMediaUrl(item.image || '');
+    const card = document.createElement('article');
+    card.className = 'gallery-item reveal';
+    card.innerHTML = `
+      <img
+        src="${image}"
+        alt="${escapeHtml(item.title || item.description || 'Photo du club')}"
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+      />
+    `;
+    galleryRoot.appendChild(card);
+  });
+
+  bindImageFallback(galleryRoot.querySelectorAll('img'));
+  initRevealAnimations(galleryRoot.querySelectorAll('.reveal'));
+}
+
 async function initArticlePage() {
   const articleRoot = document.getElementById('article-detail');
   const notFoundRoot = document.getElementById('article-not-found');
@@ -693,7 +851,26 @@ function isActiveStripePaymentLink(link) {
   return isStripeLink && !isPlaceholder;
 }
 
-function initBoutiquePage() {
+function normalizeProduct(rawProduct) {
+  return {
+    id: rawProduct.id || toArticleSlug(rawProduct.nom || rawProduct.name || 'produit'),
+    nom: rawProduct.nom || rawProduct.name || 'Produit du club',
+    prix: rawProduct.prix || rawProduct.price || '',
+    tailles: rawProduct.tailles || rawProduct.sizes || 'Selon stock',
+    description: rawProduct.description || '',
+    image: resolveCmsMediaUrl(rawProduct.image || ''),
+    stripeLink: rawProduct.stripeLink || rawProduct.stripe_link || rawProduct.lienStripe || '',
+    statut: rawProduct.statut || rawProduct.status || 'indisponible'
+  };
+}
+
+async function getResolvedProducts() {
+  const payload = await fetchFirstJson(getStaticContentEndpoints(productsContentPath));
+  const rawProducts = payload && Array.isArray(payload.produits) ? payload.produits : shopProducts;
+  return rawProducts.map(normalizeProduct);
+}
+
+async function initBoutiquePage() {
   const shopRoot = document.getElementById('shop-products');
   if (!shopRoot) {
     return;
@@ -701,11 +878,13 @@ function initBoutiquePage() {
 
   shopRoot.innerHTML = '';
 
-  shopProducts.forEach((product) => {
+  const products = await getResolvedProducts();
+
+  products.forEach((product) => {
     const card = document.createElement('article');
     card.className = 'product-card card reveal';
 
-    const canBuy = isActiveStripePaymentLink(product.stripeLink);
+    const canBuy = product.statut === 'disponible' && isActiveStripePaymentLink(product.stripeLink);
     const actionHtml = canBuy
       ? `<a href="${product.stripeLink}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Acheter</a>`
       : `<button type="button" class="btn btn-primary disabled" disabled aria-disabled="true">Bientôt disponible</button>`;
@@ -714,15 +893,15 @@ function initBoutiquePage() {
       <img
         class="product-image"
         src="${product.image}"
-        alt="${product.nom}"
+        alt="${escapeHtml(product.nom)}"
         loading="lazy"
         decoding="async"
         referrerpolicy="no-referrer"
       />
-      <h3>${product.nom}</h3>
-      <p class="product-price">${product.prix}</p>
-      <p class="product-sizes">Tailles : ${product.tailles}</p>
-      <p>${product.description}</p>
+      <h3>${escapeHtml(product.nom)}</h3>
+      <p class="product-price">${escapeHtml(product.prix)}</p>
+      <p class="product-sizes">Tailles : ${escapeHtml(product.tailles)}</p>
+      <p>${escapeHtml(product.description)}</p>
       ${actionHtml}
     `;
 
@@ -731,6 +910,93 @@ function initBoutiquePage() {
 
   bindImageFallback(shopRoot.querySelectorAll('.product-image'));
   initRevealAnimations(shopRoot.querySelectorAll('.reveal'));
+}
+
+function getPartnerInitials(name) {
+  return String(name || 'RVB')
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word.charAt(0).toUpperCase())
+    .join('');
+}
+
+async function initPartnersPage() {
+  const partnersRoot = document.getElementById('partners-list');
+  if (!partnersRoot) {
+    return;
+  }
+
+  const payload = await fetchFirstJson(getStaticContentEndpoints(partnersContentPath));
+  const partners =
+    payload && Array.isArray(payload.partenaires) && payload.partenaires.length > 0
+      ? payload.partenaires
+      : fallbackPartners;
+
+  partnersRoot.innerHTML = '';
+
+  partners.forEach((partner) => {
+    const name = partner.nom || partner.name || 'Partenaire';
+    const logo = resolveCmsMediaUrl(partner.logo || '');
+    const category = partner.categorie || partner.category || 'Partenaire local';
+    const description = partner.description || '';
+    const link = partner.lien || partner.url || partner.site || '';
+    const brand = partner.logo
+      ? `<img src="${logo}" alt="Logo ${escapeHtml(name)}" class="partner-logo" loading="lazy" decoding="async" />`
+      : `<div class="partner-brand">${escapeHtml(getPartnerInitials(name))}</div>`;
+    const linkHtml = link
+      ? `<a href="${link}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Voir le site</a>`
+      : '';
+    const card = document.createElement('article');
+    card.className = 'partner-card card reveal';
+    card.innerHTML = `
+      ${brand}
+      <h3>${escapeHtml(name)}</h3>
+      <p class="partner-category">${escapeHtml(category)}</p>
+      <p>${escapeHtml(description)}</p>
+      ${linkHtml}
+    `;
+    partnersRoot.appendChild(card);
+  });
+
+  bindImageFallback(partnersRoot.querySelectorAll('.partner-logo'));
+  initRevealAnimations(partnersRoot.querySelectorAll('.reveal'));
+}
+
+function getCurrentPageSlug() {
+  const filename = window.location.pathname.split('/').pop() || 'index.html';
+  return filename.replace(/\.html$/, '') || 'index';
+}
+
+async function initSimplePageContent() {
+  const payload = await fetchFirstJson(getStaticContentEndpoints(pagesContentPath));
+  const pages = payload && Array.isArray(payload.pages) ? payload.pages : [];
+  const page = pages.find((item) => item.slug === getCurrentPageSlug());
+
+  if (!page) {
+    return;
+  }
+
+  const title = page.title || '';
+  const content = page.content || '';
+  const image = resolveCmsMediaUrl(page.image || '');
+
+  const heroTitle = document.querySelector('.page-hero h1') || document.querySelector('.hero-content h1');
+  const heroText =
+    document.querySelector('.page-hero p:not(.hero-tag)') || document.querySelector('.hero-content .hero-tag + h1 + p');
+  const heroImage = document.querySelector('.hero-media img');
+
+  if (title && heroTitle) {
+    heroTitle.textContent = title;
+  }
+
+  if (content && heroText) {
+    heroText.textContent = content;
+  }
+
+  if (image && heroImage) {
+    heroImage.src = image;
+  }
 }
 
 function initMatchesCalendar() {
@@ -1231,9 +1497,13 @@ if (heroLogo) {
 setActiveNavLink();
 alignHashWithNavbarOffset();
 initRevealAnimations(revealElements);
+initSimplePageContent();
+initHomeNewsPreview();
+initGallery();
 initActualitesPage();
 initArticlePage();
 initBoutiquePage();
+initPartnersPage();
 initScorecoModules();
 initFormValidation(contactForm, {
   nameSelector: '#name',

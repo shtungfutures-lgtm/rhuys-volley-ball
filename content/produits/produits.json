@@ -1,0 +1,49 @@
+{
+  "produits": [
+    {
+      "nom": "Sweat RHUYS VOLLEY BALL",
+      "image": "https://images.pexels.com/photos/1002648/pexels-photo-1002648.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "prix": "45 €",
+      "tailles": "XS, S, M, L, XL",
+      "description": "Sweat club confortable et résistant, idéal pour les entraînements et les déplacements.",
+      "stripeLink": "",
+      "statut": "indisponible"
+    },
+    {
+      "nom": "T-shirt du club",
+      "image": "https://images.pexels.com/photos/4066293/pexels-photo-4066293.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "prix": "22 €",
+      "tailles": "XS, S, M, L, XL",
+      "description": "T-shirt respirant aux couleurs du RVB, parfait pour les entraînements réguliers.",
+      "stripeLink": "",
+      "statut": "indisponible"
+    },
+    {
+      "nom": "Maillot d'entraînement",
+      "image": "https://images.pexels.com/photos/920220/pexels-photo-920220.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "prix": "35 €",
+      "tailles": "S, M, L, XL",
+      "description": "Maillot technique léger conçu pour la pratique indoor et les matchs amicaux.",
+      "stripeLink": "",
+      "statut": "indisponible"
+    },
+    {
+      "nom": "Gourde club",
+      "image": "https://images.pexels.com/photos/4000098/pexels-photo-4000098.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "prix": "12 €",
+      "tailles": "Unique (750 ml)",
+      "description": "Gourde légère et pratique pour rester hydraté pendant les séances.",
+      "stripeLink": "",
+      "statut": "indisponible"
+    },
+    {
+      "nom": "Sac de sport",
+      "image": "https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "prix": "30 €",
+      "tailles": "Unique",
+      "description": "Sac robuste avec compartiments, idéal pour transporter tenue et matériel.",
+      "stripeLink": "",
+      "statut": "indisponible"
+    }
+  ]
+}

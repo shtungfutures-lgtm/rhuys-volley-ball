@@ -1111,6 +1111,14 @@ img {
   background: linear-gradient(180deg, rgba(244, 249, 255, 0.92) 0%, rgba(232, 241, 255, 0.9) 100%);
 }
 
+.partners-showcase img.partner-logo {
+  width: 86px;
+  height: 86px;
+  min-height: 0;
+  object-fit: contain;
+  padding: 0.75rem;
+}
+
 .partner-card p {
   margin: 0.7rem 0 0;
   color: var(--muted);

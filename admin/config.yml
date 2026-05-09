@@ -27,12 +27,96 @@ collections:
             fields:
               - { label: "Titre", name: "title", widget: "string" }
               - { label: "Date", name: "date", widget: "date", format: "YYYY-MM-DD" }
-              -
-                label: "Catégorie"
+              - label: "Catégorie"
                 name: "category"
                 widget: "select"
                 options: ["Matchs", "Club", "Événements", "Jeunes", "Annonces"]
-              - { label: "Image principale", name: "featured_image", widget: "image", required: false }
+              - { label: "Image", name: "featured_image", widget: "image", required: false }
               - { label: "Extrait", name: "excerpt", widget: "text" }
               - { label: "Contenu", name: "body", widget: "markdown" }
-              - { label: "Auteur", name: "author", widget: "string", default: "RHUYS VOLLEY BALL" }
+
+  - name: "galerie"
+    label: "Galerie"
+    label_singular: "Photo"
+    files:
+      - label: "Photos"
+        name: "galerie"
+        file: "content/galerie/galerie.json"
+        format: "json"
+        fields:
+          - label: "Photos"
+            name: "galerie"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Titre", name: "title", widget: "string" }
+              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Description", name: "description", widget: "text", required: false }
+
+  - name: "produits"
+    label: "Produits boutique"
+    label_singular: "Produit"
+    files:
+      - label: "Catalogue boutique"
+        name: "produits"
+        file: "content/produits/produits.json"
+        format: "json"
+        fields:
+          - label: "Produits"
+            name: "produits"
+            widget: "list"
+            summary: "{{fields.nom}} - {{fields.prix}}"
+            fields:
+              - { label: "Nom", name: "nom", widget: "string" }
+              - { label: "Image", name: "image", widget: "image", required: false }
+              - { label: "Prix", name: "prix", widget: "string" }
+              - { label: "Tailles disponibles", name: "tailles", widget: "string", required: false }
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Lien Stripe Payment Link", name: "stripeLink", widget: "string", required: false }
+              - label: "Statut"
+                name: "statut"
+                widget: "select"
+                options: ["disponible", "indisponible"]
+                default: "indisponible"
+
+  - name: "partenaires"
+    label: "Partenaires"
+    label_singular: "Partenaire"
+    files:
+      - label: "Liste des partenaires"
+        name: "partenaires"
+        file: "content/partenaires/partenaires.json"
+        format: "json"
+        fields:
+          - label: "Partenaires"
+            name: "partenaires"
+            widget: "list"
+            summary: "{{fields.nom}}"
+            fields:
+              - { label: "Nom", name: "nom", widget: "string" }
+              - { label: "Logo", name: "logo", widget: "image", required: false }
+              - label: "Catégorie"
+                name: "categorie"
+                widget: "select"
+                options: ["Partenaire principal", "Partenaire local", "Institutionnel", "Équipementier"]
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Lien site web", name: "lien", widget: "string", required: false }
+
+  - name: "pages"
+    label: "Pages simples"
+    label_singular: "Page"
+    files:
+      - label: "Contenus de pages"
+        name: "pages"
+        file: "content/pages/pages.json"
+        format: "json"
+        fields:
+          - label: "Pages"
+            name: "pages"
+            widget: "list"
+            summary: "{{fields.slug}} - {{fields.title}}"
+            fields:
+              - { label: "Identifiant de page", name: "slug", widget: "string", hint: "Exemples : index, club, actualites, boutique, partenaires" }
+              - { label: "Titre", name: "title", widget: "string" }
+              - { label: "Contenu", name: "content", widget: "markdown" }
+              - { label: "Image optionnelle", name: "image", widget: "image", required: false }

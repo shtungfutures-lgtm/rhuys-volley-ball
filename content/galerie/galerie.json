@@ -1,0 +1,19 @@
+{
+  "galerie": [
+    {
+      "title": "Entraînement jeunes à Sarzeau",
+      "image": "https://images.pexels.com/photos/6203578/pexels-photo-6203578.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Séance collective autour de la technique et du plaisir de jouer."
+    },
+    {
+      "title": "Match en salle",
+      "image": "https://images.pexels.com/photos/6203571/pexels-photo-6203571.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Ambiance de match pour les équipes du RHUYS VOLLEY BALL."
+    },
+    {
+      "title": "Cohésion adultes",
+      "image": "https://images.pexels.com/photos/6203648/pexels-photo-6203648.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Un groupe loisir et compétition engagé toute l'année."
+    }
+  ]
+}
