@@ -6,6 +6,16 @@ function getEnv(name: string) {
   return Netlify.env.get(name) || process.env[name] || "";
 }
 
+function getAdminConfig() {
+  const packed = getEnv("CMS_ADMIN_USERNAME").split("_");
+
+  return {
+    username: packed[0] || getEnv("CMS_USERNAME") || "admin",
+    password: getEnv("CMS_ADMIN_PASSWORD") || getEnv("CMS_PASSWORD") || packed[1] || "",
+    sessionSecret: getEnv("CMS_SESSION_SECRET") || getEnv("CMS_SECRET") || packed[2] || "",
+  };
+}
+
 function toBase64Url(value: string | Buffer) {
   return Buffer.from(value).toString("base64url");
 }
@@ -25,9 +35,11 @@ export default async (req: Request) => {
     return new Response("Method not allowed", { status: 405 });
   }
 
-  const expectedUsername = getEnv("CMS_ADMIN_USERNAME");
-  const expectedPassword = getEnv("CMS_ADMIN_PASSWORD");
-  const sessionSecret = getEnv("CMS_SESSION_SECRET");
+  const {
+    username: expectedUsername,
+    password: expectedPassword,
+    sessionSecret,
+  } = getAdminConfig();
 
   if (!expectedUsername || !expectedPassword || !sessionSecret) {
     return Response.json(

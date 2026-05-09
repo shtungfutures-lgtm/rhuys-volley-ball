@@ -12,8 +12,13 @@ function getEnv(name: string) {
   return Netlify.env.get(name) || process.env[name] || "";
 }
 
+function getSessionSecret() {
+  const packed = getEnv("CMS_ADMIN_USERNAME").split("_");
+  return getEnv("CMS_SESSION_SECRET") || getEnv("CMS_SECRET") || packed[2] || "";
+}
+
 function signPayload(payload: string) {
-  return createHmac("sha256", getEnv("CMS_SESSION_SECRET")).update(payload).digest("base64url");
+  return createHmac("sha256", getSessionSecret()).update(payload).digest("base64url");
 }
 
 function safeEqual(a: string, b: string) {
@@ -27,7 +32,7 @@ function verifyToken(req: Request) {
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
   const [payload, signature] = token.split(".");
 
-  if (!payload || !signature || !getEnv("CMS_SESSION_SECRET")) {
+  if (!payload || !signature || !getSessionSecret()) {
     return false;
   }
 
