@@ -18,11 +18,20 @@
   max-width: 480px;
   margin: 8vh auto 0;
   padding: 34px;
+  color: var(--blue-dark);
 }
 
 .admin-login h1,
 .admin-topbar h1 {
   margin: 8px 0 10px;
+}
+
+.admin-login p,
+.admin-list,
+.admin-editor,
+.admin-list h2,
+.admin-editor p {
+  color: var(--blue-dark);
 }
 
 .admin-form,
