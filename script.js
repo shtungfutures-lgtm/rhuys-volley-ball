@@ -288,6 +288,9 @@ const shopProducts = [
   }
 ];
 const cmsArticlesEndpoint = '/content/articles/articles.json';
+const githubArticlesEndpoint =
+  'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main/content/articles/articles.json';
+const githubMediaBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
 let resolvedArticlesCache = null;
 
 const monthFormatter = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' });
@@ -417,11 +420,36 @@ function toArticleSlug(value) {
     .replace(/^-+|-+$/g, '');
 }
 
+function isLocalPreview() {
+  return ['localhost', '127.0.0.1', ''].includes(window.location.hostname);
+}
+
+function getCmsArticleEndpoints() {
+  return isLocalPreview() ? [cmsArticlesEndpoint] : [githubArticlesEndpoint, cmsArticlesEndpoint];
+}
+
+function resolveCmsMediaUrl(value) {
+  if (!value) {
+    return imageFallbackSvg;
+  }
+
+  if (/^(https?:|data:|blob:)/i.test(value)) {
+    return value;
+  }
+
+  if (isLocalPreview()) {
+    return value;
+  }
+
+  const normalizedPath = value.startsWith('/') ? value : `/${value}`;
+  return `${githubMediaBaseUrl}${normalizedPath}`;
+}
+
 function normalizeArticleRecord(rawArticle, index) {
   const title = rawArticle.title || rawArticle.titre || 'Article';
   const category = rawArticle.category || rawArticle.categorie || 'Club';
   const date = rawArticle.date || new Date().toISOString().slice(0, 10);
-  const image = rawArticle.featured_image || rawArticle.image || '';
+  const image = resolveCmsMediaUrl(rawArticle.featured_image || rawArticle.image || '');
   const excerpt = rawArticle.excerpt || rawArticle.extrait || '';
   const body = rawArticle.body || rawArticle.contenu || '';
   const author = rawArticle.author || rawArticle.auteur || 'RHUYS VOLLEY BALL';
@@ -455,22 +483,24 @@ async function getResolvedArticles() {
 
   const fallbackArticles = normalizeArticlesList(articles);
 
-  try {
-    const response = await fetch(`${cmsArticlesEndpoint}?v=${Date.now()}`, { cache: 'no-store' });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
+  for (const endpoint of getCmsArticleEndpoints()) {
+    try {
+      const response = await fetch(`${endpoint}?v=${Date.now()}`, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
 
-    const payload = await response.json();
-    const cmsRawArticles = Array.isArray(payload) ? payload : payload && Array.isArray(payload.articles) ? payload.articles : [];
-    const cmsArticles = normalizeArticlesList(cmsRawArticles);
+      const payload = await response.json();
+      const cmsRawArticles = Array.isArray(payload) ? payload : payload && Array.isArray(payload.articles) ? payload.articles : [];
+      const cmsArticles = normalizeArticlesList(cmsRawArticles);
 
-    if (cmsArticles.length > 0) {
-      resolvedArticlesCache = cmsArticles;
-      return resolvedArticlesCache;
+      if (cmsArticles.length > 0) {
+        resolvedArticlesCache = cmsArticles;
+        return resolvedArticlesCache;
+      }
+    } catch (error) {
+      // On essaie la source suivante, puis les articles intégrés si tout échoue.
     }
-  } catch (error) {
-    // Fallback silencieux sur les articles locaux si le JSON CMS n'est pas accessible.
   }
 
   resolvedArticlesCache = fallbackArticles;

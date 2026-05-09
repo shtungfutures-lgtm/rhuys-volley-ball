@@ -1,12 +1,14 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: shtungfutures-lgtm/rhuys-volley-ball
   branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+  site_domain: rhuys-volley-ball-site.netlify.app
 
 local_backend: true
 media_folder: "uploads/images"
 public_folder: "/uploads/images"
-
-publish_mode: editorial_workflow
 
 collections:
   - name: "articles"
@@ -33,3 +35,4 @@ collections:
               - { label: "Image principale", name: "featured_image", widget: "image", required: false }
               - { label: "Extrait", name: "excerpt", widget: "text" }
               - { label: "Contenu", name: "body", widget: "markdown" }
+              - { label: "Auteur", name: "author", widget: "string", default: "RHUYS VOLLEY BALL" }
