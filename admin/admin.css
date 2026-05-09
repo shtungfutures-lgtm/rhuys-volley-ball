@@ -18,7 +18,7 @@
   max-width: 480px;
   margin: 8vh auto 0;
   padding: 34px;
-  color: var(--blue-dark);
+  color: var(--blue-900);
 }
 
 .admin-login h1,
@@ -31,7 +31,18 @@
 .admin-editor,
 .admin-list h2,
 .admin-editor p {
-  color: var(--blue-dark);
+  color: var(--blue-900);
+}
+
+.admin-body .card,
+.admin-body .card h1,
+.admin-body .card h2,
+.admin-body .card h3,
+.admin-body .card p,
+.admin-body .card label,
+.admin-body .card strong,
+.admin-body .card span {
+  color: var(--blue-900);
 }
 
 .admin-form,
@@ -44,7 +55,7 @@
 .admin-editor label {
   display: grid;
   gap: 8px;
-  color: var(--blue-dark);
+  color: var(--blue-900);
   font-weight: 700;
 }
 
@@ -58,8 +69,14 @@
   padding: 13px 14px;
   font: inherit;
   background: rgba(255, 255, 255, 0.92);
-  color: var(--blue-dark);
+  color: var(--blue-900);
   outline: none;
+}
+
+.admin-form input::placeholder,
+.admin-editor input::placeholder,
+.admin-editor textarea::placeholder {
+  color: var(--muted);
 }
 
 .admin-form input:focus,
@@ -107,7 +124,7 @@
   border-radius: 12px;
   padding: 12px;
   background: rgba(255, 255, 255, 0.82);
-  color: var(--blue-dark);
+  color: var(--blue-900);
   text-align: left;
   cursor: pointer;
   transition: transform 180ms ease-out, box-shadow 180ms ease-out;
@@ -125,7 +142,7 @@
 }
 
 .article-list-button span {
-  color: var(--blue-muted);
+  color: var(--muted);
   font-size: 0.9rem;
 }
 
@@ -157,7 +174,7 @@
 .admin-message {
   min-height: 1.4em;
   margin: 0;
-  color: var(--blue-dark);
+  color: var(--blue-900);
   font-weight: 700;
 }
 
