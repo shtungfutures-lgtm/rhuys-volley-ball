@@ -288,6 +288,7 @@ const shopProducts = [
   }
 ];
 const cmsArticlesEndpoint = '/content/articles/articles.json';
+const liveArticlesEndpoint = '/api/articles';
 const githubArticlesEndpoint =
   'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main/content/articles/articles.json';
 const githubMediaBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
@@ -425,7 +426,7 @@ function isLocalPreview() {
 }
 
 function getCmsArticleEndpoints() {
-  return isLocalPreview() ? [cmsArticlesEndpoint] : [githubArticlesEndpoint, cmsArticlesEndpoint];
+  return isLocalPreview() ? [cmsArticlesEndpoint] : [liveArticlesEndpoint, githubArticlesEndpoint, cmsArticlesEndpoint];
 }
 
 function resolveCmsMediaUrl(value) {

@@ -1,0 +1,6 @@
+[build]
+  command = "echo 'Static RHUYS site'"
+  publish = "."
+
+[functions]
+  directory = "netlify/functions"
