@@ -15,6 +15,21 @@ const imagePreview = document.getElementById('article-preview');
 let articles = [];
 let currentImage = '';
 
+function getArticleTime(article) {
+  const time = Date.parse(`${article.date || ''}T12:00:00`);
+  return Number.isNaN(time) ? 0 : time;
+}
+
+function sortArticlesByNewest(list) {
+  return [...list].sort((a, b) => {
+    const dateDiff = getArticleTime(b) - getArticleTime(a);
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+    return String(b.id || '').localeCompare(String(a.id || ''));
+  });
+}
+
 function getToken() {
   return localStorage.getItem(tokenKey) || '';
 }
@@ -91,8 +106,7 @@ function renderList(activeId = '') {
     return;
   }
 
-  [...articles]
-    .sort((a, b) => b.date.localeCompare(a.date))
+  sortArticlesByNewest(articles)
     .forEach((article) => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -113,10 +127,12 @@ async function fetchArticles() {
   }
 
   const payload = await response.json();
-  articles = Array.isArray(payload.articles) ? payload.articles : [];
+  articles = sortArticlesByNewest(Array.isArray(payload.articles) ? payload.articles : []);
 }
 
 async function saveArticles() {
+  articles = sortArticlesByNewest(articles);
+
   const response = await fetch('/api/admin/articles', {
     method: 'PUT',
     headers: {
@@ -136,7 +152,7 @@ async function bootEditor() {
   try {
     await fetchArticles();
     showEditor();
-    fillForm(articles[0] || emptyArticle());
+    fillForm(sortArticlesByNewest(articles)[0] || emptyArticle());
   } catch (error) {
     showLogin();
     setMessage(loginMessage, 'Connectez-vous pour accéder aux articles.', '');
@@ -180,6 +196,7 @@ articleForm.addEventListener('submit', async (event) => {
   } else {
     articles.push(article);
   }
+  articles = sortArticlesByNewest(articles);
 
   try {
     await saveArticles();
@@ -223,7 +240,7 @@ deleteArticleButton.addEventListener('click', async () => {
 
   try {
     await saveArticles();
-    fillForm(articles[0] || emptyArticle());
+    fillForm(sortArticlesByNewest(articles)[0] || emptyArticle());
     setMessage(editorMessage, 'Article supprimé.', 'success');
   } catch (error) {
     setMessage(editorMessage, error.message, 'error');

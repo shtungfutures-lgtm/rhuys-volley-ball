@@ -405,6 +405,21 @@ function formatArticleDate(dateString) {
   return capitalizeFirstLetter(articleDateFormatter.format(date));
 }
 
+function getArticleTime(article) {
+  const time = Date.parse(`${article.date || ''}T12:00:00`);
+  return Number.isNaN(time) ? 0 : time;
+}
+
+function sortArticlesByNewest(list) {
+  return [...list].sort((a, b) => {
+    const dateDiff = getArticleTime(b) - getArticleTime(a);
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+    return String(b.id || '').localeCompare(String(a.id || ''));
+  });
+}
+
 function normalizeText(value) {
   return value
     .toLowerCase()
@@ -474,7 +489,7 @@ function normalizeArticlesList(rawList) {
   if (!Array.isArray(rawList)) {
     return [];
   }
-  return rawList.map(normalizeArticleRecord).filter((article) => article.title && article.date);
+  return sortArticlesByNewest(rawList.map(normalizeArticleRecord).filter((article) => article.title && article.date));
 }
 
 async function getResolvedArticles() {
@@ -534,8 +549,7 @@ async function initActualitesPage() {
 
   let activeCategory = 'Tous';
 
-  const sourceArticles = await getResolvedArticles();
-  const sortedArticles = [...sourceArticles].sort((a, b) => b.date.localeCompare(a.date));
+  const sortedArticles = await getResolvedArticles();
 
   const renderCategoryButtons = () => {
     filtersRoot.innerHTML = '';

@@ -8,6 +8,21 @@ const ARTICLES_KEY = "articles";
 const FALLBACK_ARTICLES_URL =
   "https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main/content/articles/articles.json";
 
+type ArticleRecord = {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  featured_image: string;
+  excerpt: string;
+  body: string;
+  author: string;
+};
+
+type ArticlesPayload = {
+  articles: ArticleRecord[];
+};
+
 function getEnv(name: string) {
   return Netlify.env.get(name) || process.env[name] || "";
 }
@@ -48,12 +63,33 @@ function verifyToken(req: Request) {
   }
 }
 
+function getArticleTime(article: ArticleRecord) {
+  const time = Date.parse(`${article.date || ""}T12:00:00`);
+  return Number.isNaN(time) ? 0 : time;
+}
+
+function sortArticlesByNewest(articles: ArticleRecord[]) {
+  return [...articles].sort((a, b) => {
+    const dateDiff = getArticleTime(b) - getArticleTime(a);
+    if (dateDiff !== 0) {
+      return dateDiff;
+    }
+    return String(b.id || "").localeCompare(String(a.id || ""));
+  });
+}
+
+function sortedPayload(payload: ArticlesPayload): ArticlesPayload {
+  return {
+    articles: sortArticlesByNewest(payload.articles),
+  };
+}
+
 async function getStoredArticles() {
   const store = getStore(STORE_NAME, { consistency: "strong" });
   const stored = await store.get(ARTICLES_KEY, { type: "json" });
 
   if (stored) {
-    return stored;
+    return sortedPayload(normalizePayload(stored));
   }
 
   const fallback = await fetch(FALLBACK_ARTICLES_URL);
@@ -61,7 +97,7 @@ async function getStoredArticles() {
     return { articles: [] };
   }
 
-  return fallback.json();
+  return sortedPayload(normalizePayload(await fallback.json()));
 }
 
 function normalizePayload(payload: unknown) {
@@ -69,7 +105,7 @@ function normalizePayload(payload: unknown) {
     ? (payload as { articles: unknown[] }).articles
     : [];
 
-  return {
+  return sortedPayload({
     articles: articles.map((article, index) => ({
       id: String((article as { id?: string | number }).id || Date.now() + index),
       title: String((article as { title?: string }).title || "Article"),
@@ -80,7 +116,7 @@ function normalizePayload(payload: unknown) {
       body: String((article as { body?: string }).body || ""),
       author: String((article as { author?: string }).author || "RHUYS VOLLEY BALL"),
     })),
-  };
+  });
 }
 
 export default async (req: Request) => {
