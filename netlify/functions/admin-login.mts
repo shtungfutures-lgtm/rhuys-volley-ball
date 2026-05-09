@@ -20,14 +20,14 @@ function toBase64Url(value: string | Buffer) {
   return Buffer.from(value).toString("base64url");
 }
 
-function signPayload(payload: string) {
-  return createHmac("sha256", getEnv("CMS_SESSION_SECRET")).update(payload).digest("base64url");
-}
-
 function safeEqual(a: string, b: string) {
   const aBuffer = Buffer.from(a);
   const bBuffer = Buffer.from(b);
   return aBuffer.length === bBuffer.length && timingSafeEqual(aBuffer, bBuffer);
+}
+
+function signPayload(payload: string, sessionSecret: string) {
+  return createHmac("sha256", sessionSecret).update(payload).digest("base64url");
 }
 
 export default async (req: Request) => {
@@ -62,7 +62,7 @@ export default async (req: Request) => {
       exp: Date.now() + 1000 * 60 * 60 * 8,
     })
   );
-  const token = `${payload}.${signPayload(payload)}`;
+  const token = `${payload}.${signPayload(payload, sessionSecret)}`;
 
   return Response.json({ token });
 };
