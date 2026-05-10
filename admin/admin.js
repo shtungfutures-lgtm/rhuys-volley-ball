@@ -11,9 +11,13 @@ const newArticleButton = document.getElementById('new-article-button');
 const deleteArticleButton = document.getElementById('delete-article-button');
 const imageInput = document.getElementById('article-image');
 const imagePreview = document.getElementById('article-preview');
+const refreshOrdersButton = document.getElementById('refresh-orders-button');
+const ordersMessage = document.getElementById('orders-message');
+const ordersList = document.getElementById('orders-list');
 
 let articles = [];
 let currentImage = '';
+let orders = [];
 
 function getArticleTime(article) {
   const time = Date.parse(`${article.date || ''}T12:00:00`);
@@ -117,6 +121,66 @@ function renderList(activeId = '') {
     });
 }
 
+function formatOrderDate(isoDate) {
+  const timestamp = Date.parse(isoDate || '');
+  if (Number.isNaN(timestamp)) {
+    return 'Date inconnue';
+  }
+  return new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(timestamp));
+}
+
+function formatOrderAmount(amountTotal = 0, currency = 'eur') {
+  const normalizedCurrency = String(currency || 'eur').toUpperCase();
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: normalizedCurrency,
+  }).format(Number(amountTotal || 0) / 100);
+}
+
+function renderOrders() {
+  ordersList.innerHTML = '';
+
+  if (!Array.isArray(orders) || orders.length === 0) {
+    ordersList.innerHTML = '<p>Aucune commande pour le moment.</p>';
+    return;
+  }
+
+  orders.forEach((order) => {
+    const card = document.createElement('article');
+    card.className = 'order-item';
+
+    const lineItems = Array.isArray(order.lineItems)
+      ? order.lineItems
+          .map((item) => `${item.description || 'Produit'} x${item.quantity || 1}`)
+          .join(' • ')
+      : 'Détail produit indisponible';
+    const selectedOptions = order.selectedOptions || {};
+    const optionItems = [
+      selectedOptions.size ? `Taille: ${selectedOptions.size}` : '',
+      selectedOptions.color ? `Couleur: ${selectedOptions.color}` : '',
+      selectedOptions.quantity ? `Quantité: ${selectedOptions.quantity}` : '',
+    ].filter(Boolean);
+
+    card.innerHTML = `
+      <div>
+        <strong>${formatOrderAmount(order.amountTotal, order.currency)}</strong>
+        <p>${lineItems}</p>
+        <p>${optionItems.length ? optionItems.join(' • ') : 'Options non renseignées'}</p>
+      </div>
+      <div>
+        <p>${order.customerName || 'Client non renseigné'}</p>
+        <p>${order.customerEmail || 'Email non renseigné'}</p>
+        <p>${formatOrderDate(order.purchasedAt || order.createdAt)}</p>
+      </div>
+    `;
+
+    ordersList.appendChild(card);
+  });
+}
+
 async function fetchArticles() {
   const response = await fetch('/api/admin/articles', {
     headers: { Authorization: `Bearer ${getToken()}` },
@@ -128,6 +192,19 @@ async function fetchArticles() {
 
   const payload = await response.json();
   articles = sortArticlesByNewest(Array.isArray(payload.articles) ? payload.articles : []);
+}
+
+async function fetchOrders() {
+  const response = await fetch('/api/admin/orders', {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+
+  if (!response.ok) {
+    throw new Error('Impossible de charger les commandes.');
+  }
+
+  const payload = await response.json();
+  orders = Array.isArray(payload.orders) ? payload.orders : [];
 }
 
 async function saveArticles() {
@@ -150,9 +227,10 @@ async function saveArticles() {
 
 async function bootEditor() {
   try {
-    await fetchArticles();
+    await Promise.all([fetchArticles(), fetchOrders()]);
     showEditor();
     fillForm(sortArticlesByNewest(articles)[0] || emptyArticle());
+    renderOrders();
   } catch (error) {
     showLogin();
     setMessage(loginMessage, 'Connectez-vous pour accéder aux articles.', '');
@@ -244,6 +322,18 @@ deleteArticleButton.addEventListener('click', async () => {
     setMessage(editorMessage, 'Article supprimé.', 'success');
   } catch (error) {
     setMessage(editorMessage, error.message, 'error');
+  }
+});
+
+refreshOrdersButton.addEventListener('click', async () => {
+  setMessage(ordersMessage, 'Chargement des commandes...');
+
+  try {
+    await fetchOrders();
+    renderOrders();
+    setMessage(ordersMessage, `Dernier chargement: ${new Date().toLocaleTimeString('fr-FR')}`, 'success');
+  } catch (error) {
+    setMessage(ordersMessage, error.message || 'Erreur de chargement des commandes.', 'error');
   }
 });
 

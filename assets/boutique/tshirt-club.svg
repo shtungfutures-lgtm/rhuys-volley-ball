@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title desc">
+  <title id="title">T-shirt RHUYS VOLLEY BALL</title>
+  <desc id="desc">Illustration d'un t-shirt blanc et bleu du club.</desc>
+  <rect width="900" height="700" rx="56" fill="#f3f8ff"/>
+  <circle cx="170" cy="145" r="92" fill="#f8c836"/>
+  <path d="M285 180h330l92 92-82 88-58-48v252H333V312l-58 48-82-88 92-92z" fill="#0b2d52"/>
+  <path d="M333 312v252h234V312l58 48 31-34-68-68H312l-68 68 31 34 58-48z" fill="#ffffff"/>
+  <path d="M373 193c13 54 141 54 154 0" fill="none" stroke="#dce8f7" stroke-width="20" stroke-linecap="round"/>
+  <rect x="362" y="405" width="176" height="46" rx="23" fill="#f8c836"/>
+  <text x="450" y="437" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="26" font-weight="800" fill="#09233f">RHUYS</text>
+  <text x="450" y="620" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="46" font-weight="800" fill="#09233f">T-shirt officiel</text>
+</svg>

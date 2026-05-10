@@ -240,53 +240,84 @@ const articles = [
   }
 ];
 
-const shopProducts = [
+const products = [
   {
     id: 'sweat-rvb',
-    nom: 'Sweat RHUYS VOLLEY BALL',
-    prix: '45 €',
-    tailles: 'XS, S, M, L, XL',
-    description: 'Sweat club confortable et résistant, idéal pour les entraînements et les déplacements.',
-    image: 'https://images.pexels.com/photos/1002648/pexels-photo-1002648.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    stripeLink: ''
+    name: 'Sweat RHUYS VOLLEY BALL',
+    price: '45 €',
+    priceId: 'price_1TSKcP3OCDghhlsbO4GhVpHA',
+    image: 'assets/boutique/sweat-rvb.svg',
+    shortDescription: 'Sweat confortable aux couleurs du club pour les entraînements et les déplacements.',
+    detailedDescription:
+      'Un sweat chaud et polyvalent pensé pour accompagner les joueurs, parents et supporters du RHUYS VOLLEY BALL. Sa coupe confortable convient aux temps d’échauffement, aux trajets d’équipe et aux moments de vie du club.',
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    colors: ['Bleu marine', 'Jaune club'],
+    availability: 'Disponible en précommande',
+    stock: 'Stock test Stripe',
+    stripeTestLink: 'https://buy.stripe.com/test_8x28wIgn3deD0Ex6mm7ok08'
   },
   {
     id: 'tshirt-club',
-    nom: 'T-shirt du club',
-    prix: '22 €',
-    tailles: 'XS, S, M, L, XL',
-    description: 'T-shirt respirant aux couleurs du RVB, parfait pour les entraînements réguliers.',
-    image: 'https://images.pexels.com/photos/4066293/pexels-photo-4066293.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    stripeLink: ''
+    name: 'T-shirt du club',
+    price: '22 €',
+    priceId: 'price_1TVIJN3OCDghhlsbNVFVJ3rN',
+    image: 'assets/boutique/tshirt-club.svg',
+    shortDescription: 'T-shirt respirant pour représenter le RVB pendant les séances et événements.',
+    detailedDescription:
+      'Le t-shirt officiel du club est léger, facile à porter et adapté à une utilisation régulière. Il permet aux licenciés et supporters d’afficher les couleurs du RHUYS VOLLEY BALL au quotidien.',
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    colors: ['Blanc', 'Bleu marine'],
+    availability: 'Disponible en précommande',
+    stock: 'Stock test Stripe',
+    stripeTestLink: 'https://buy.stripe.com/test_cNidR27Qx7Ujevn4ee7ok09'
   },
   {
     id: 'maillot-entrainement',
-    nom: "Maillot d’entraînement",
-    prix: '35 €',
-    tailles: 'S, M, L, XL',
-    description: 'Maillot technique léger conçu pour la pratique indoor et les matchs amicaux.',
-    image: 'https://images.pexels.com/photos/920220/pexels-photo-920220.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    stripeLink: ''
+    name: 'Maillot d’entraînement',
+    price: '35 €',
+    priceId: 'price_1TVIJO3OCDghhlsbkjbbj2vd',
+    image: 'assets/boutique/maillot-entrainement.svg',
+    shortDescription: 'Maillot technique léger pour les séances indoor et les matchs amicaux.',
+    detailedDescription:
+      'Ce maillot d’entraînement accompagne les séances intensives avec une matière légère et une coupe sportive. Il est idéal pour les joueurs qui souhaitent une tenue dédiée à la pratique régulière du volley.',
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Bleu', 'Blanc'],
+    availability: 'Disponible en précommande',
+    stock: 'Stock test Stripe',
+    stripeTestLink: 'https://buy.stripe.com/test_aFabIUdaRcazaf7h107ok0a'
   },
   {
     id: 'gourde-club',
-    nom: 'Gourde club',
-    prix: '12 €',
-    tailles: 'Unique (750 ml)',
-    description: 'Gourde légère et pratique pour rester hydraté pendant les séances.',
-    image: 'https://images.pexels.com/photos/4000098/pexels-photo-4000098.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    stripeLink: ''
+    name: 'Gourde club',
+    price: '12 €',
+    priceId: 'price_1TVIJQ3OCDghhlsbt6IFwq4f',
+    image: 'assets/boutique/gourde-club.svg',
+    shortDescription: 'Gourde pratique pour rester hydraté pendant les entraînements.',
+    detailedDescription:
+      'La gourde club est pensée pour les séances hebdomadaires, les plateaux jeunes et les déplacements. Format pratique, prise en main simple et identité RHUYS VOLLEY BALL.',
+    sizes: ['Unique - 750 ml'],
+    colors: ['Bleu', 'Blanc'],
+    availability: 'Disponible en test',
+    stock: 'Stock test Stripe',
+    stripeTestLink: 'https://buy.stripe.com/test_cNiaEQb2J7Uj1IB8uu7ok0b'
   },
   {
     id: 'sac-sport',
-    nom: 'Sac de sport',
-    prix: '30 €',
-    tailles: 'Unique',
-    description: 'Sac robuste avec compartiments, idéal pour transporter tenue et matériel.',
-    image: 'https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    stripeLink: ''
+    name: 'Sac de sport',
+    price: '30 €',
+    priceId: 'price_1TVIJS3OCDghhlsbEhYNVgAB',
+    image: 'assets/boutique/sac-sport.svg',
+    shortDescription: 'Sac robuste pour transporter tenue, chaussures et accessoires.',
+    detailedDescription:
+      'Un sac de sport pratique pour les entraînements, les matchs et les déplacements. Il offre un format adapté au matériel de volley tout en gardant une identité sobre et sportive.',
+    sizes: ['Unique'],
+    colors: ['Bleu marine'],
+    availability: 'Disponible en précommande',
+    stock: 'Stock test Stripe',
+    stripeTestLink: 'https://buy.stripe.com/test_28EfZa6Mt7UjgDvbGG7ok0c'
   }
 ];
+
 
 const fallbackPartners = [
   {
@@ -886,81 +917,327 @@ async function initArticlePage() {
   initRevealAnimations(articleRoot.querySelectorAll('.reveal'));
 }
 
-function isActiveStripePaymentLink(link) {
-  if (typeof link !== 'string') {
-    return false;
-  }
-
-  const trimmed = link.trim();
-  if (!trimmed) {
-    return false;
-  }
-
-  const isStripeLink = /^https:\/\/buy\.stripe\.com\//i.test(trimmed);
-  const isPlaceholder = /exemple/i.test(trimmed);
-  return isStripeLink && !isPlaceholder;
-}
-
 function normalizeProduct(rawProduct) {
+  const sizes = rawProduct.sizes || rawProduct.tailles || [];
+  const colors = rawProduct.colors || rawProduct.couleurs || [];
+  const stripeTestLink = rawProduct.stripeTestLink || rawProduct.stripeLink || rawProduct.stripe_link || rawProduct.lienStripe || '';
+
   return {
-    id: rawProduct.id || toArticleSlug(rawProduct.nom || rawProduct.name || 'produit'),
-    nom: rawProduct.nom || rawProduct.name || 'Produit du club',
-    prix: rawProduct.prix || rawProduct.price || '',
-    tailles: rawProduct.tailles || rawProduct.sizes || 'Selon stock',
-    description: rawProduct.description || '',
+    id: rawProduct.id || toArticleSlug(rawProduct.name || rawProduct.nom || 'produit'),
+    name: rawProduct.name || rawProduct.nom || 'Produit du club',
+    price: rawProduct.price || rawProduct.prix || '',
+    priceId: rawProduct.priceId || rawProduct.price_id || '',
     image: resolveCmsMediaUrl(rawProduct.image || ''),
-    stripeLink: rawProduct.stripeLink || rawProduct.stripe_link || rawProduct.lienStripe || '',
-    statut: String(rawProduct.statut || rawProduct.status || 'indisponible').toLowerCase()
+    shortDescription: rawProduct.shortDescription || rawProduct.descriptionCourte || rawProduct.description || '',
+    detailedDescription:
+      rawProduct.detailedDescription || rawProduct.descriptionDetaillee || rawProduct.description || '',
+    sizes: Array.isArray(sizes)
+      ? sizes
+      : String(sizes || 'Selon stock')
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean),
+    colors: Array.isArray(colors)
+      ? colors
+      : String(colors || '')
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean),
+    availability: rawProduct.availability || rawProduct.disponibilite || rawProduct.stock || rawProduct.statut || 'Disponibilité à confirmer',
+    stock: rawProduct.stock || rawProduct.availability || rawProduct.disponibilite || '',
+    stripeTestLink,
+    stripeLink: stripeTestLink
   };
 }
 
 async function getResolvedProducts() {
   const payload = await fetchFirstJson(getStaticContentEndpoints(productsContentPath));
-  const rawProducts = payload && Array.isArray(payload.produits) ? payload.produits : shopProducts;
+  const rawProducts = payload && Array.isArray(payload.produits) && payload.produits.length > 0 ? payload.produits : products;
   return rawProducts.map(normalizeProduct);
+}
+
+function renderProductTags(items) {
+  if (!items || items.length === 0) {
+    return '<span class="product-tag">Non renseigné</span>';
+  }
+
+  return items.map((item) => `<span class="product-tag">${escapeHtml(item)}</span>`).join('');
+}
+
+function renderProductOptions(id, label, options, inputName) {
+  if (!options || options.length === 0) {
+    return '';
+  }
+
+  const safeId = `product-${id}-${inputName}`;
+  const optionsHtml = options
+    .map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+    .join('');
+
+  return `
+    <label class="product-option" for="${safeId}">
+      ${label}
+      <select id="${safeId}" name="${inputName}" required>
+        ${optionsHtml}
+      </select>
+    </label>
+  `;
 }
 
 async function initBoutiquePage() {
   const shopRoot = document.getElementById('shop-products');
+  const modal = document.getElementById('product-modal');
+  const modalContent = document.getElementById('product-modal-content');
+  const checkoutMessage = document.getElementById('shop-checkout-message');
+
   if (!shopRoot) {
     return;
   }
 
   shopRoot.innerHTML = '';
+  const checkoutStatus = new URLSearchParams(window.location.search).get('checkout');
 
-  const products = await getResolvedProducts();
+  if (checkoutMessage && checkoutStatus) {
+    checkoutMessage.hidden = false;
+    checkoutMessage.classList.toggle('is-success', checkoutStatus === 'success');
+    checkoutMessage.classList.toggle('is-error', checkoutStatus === 'cancel');
+    checkoutMessage.textContent =
+      checkoutStatus === 'success'
+        ? 'Paiement test confirmé. Le club reçoit la commande via Stripe.'
+        : 'Paiement annulé. Vous pouvez reprendre votre commande quand vous le souhaitez.';
+  }
 
-  products.forEach((product) => {
+  const resolvedProducts = await getResolvedProducts();
+  let lastFocusedElement = null;
+
+  const closeProductModal = () => {
+    if (!modal || !modalContent || modal.hidden) {
+      return;
+    }
+
+    modal.classList.remove('open');
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    modalContent.innerHTML = '';
+
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+    }
+  };
+
+  const openProductModal = (product) => {
+    if (!modal || !modalContent) {
+      return;
+    }
+
+    const canBuy = Boolean(product.priceId);
+    const buyAction = canBuy
+      ? `<button type="submit" class="btn btn-primary btn-xl">Payer avec Stripe</button>`
+      : `<button type="button" class="btn btn-primary btn-xl disabled" disabled aria-disabled="true">Paiement test bientôt disponible</button>`;
+
+    lastFocusedElement = document.activeElement;
+    modalContent.innerHTML = `
+      <div class="product-modal-layout">
+        <div class="product-modal-media">
+          <img
+            src="${product.image}"
+            alt="${escapeHtml(product.name)}"
+            loading="lazy"
+            decoding="async"
+            referrerpolicy="no-referrer"
+          />
+        </div>
+        <div class="product-modal-info">
+          <p class="hero-tag">Boutique test Stripe</p>
+          <h2 id="product-modal-title">${escapeHtml(product.name)}</h2>
+          <p class="product-modal-price">${escapeHtml(product.price)}</p>
+          <p>${escapeHtml(product.detailedDescription)}</p>
+          <div class="product-detail-block">
+            <h3>Tailles disponibles</h3>
+            <div class="product-tags">${renderProductTags(product.sizes)}</div>
+          </div>
+          <div class="product-detail-block">
+            <h3>Couleurs</h3>
+            <div class="product-tags">${renderProductTags(product.colors)}</div>
+          </div>
+          <div class="product-availability">
+            <strong>${escapeHtml(product.availability)}</strong>
+            <span>${escapeHtml(product.stock || 'Paiement en mode test Stripe')}</span>
+          </div>
+          <form class="product-checkout-form" data-product-id="${escapeHtml(product.id)}">
+            <div class="product-options-grid">
+              ${renderProductOptions(product.id, 'Taille', product.sizes, 'size')}
+              ${renderProductOptions(product.id, 'Couleur', product.colors, 'color')}
+              <label class="product-option" for="product-${escapeHtml(product.id)}-quantity">
+                Quantité
+                <input id="product-${escapeHtml(product.id)}-quantity" type="number" name="quantity" min="1" max="10" value="1" required />
+              </label>
+            </div>
+            <div class="payment-method-note">
+              <strong>Moyen de paiement</strong>
+              <span>Carte bancaire et moyens disponibles seront proposés directement sur Stripe Checkout.</span>
+            </div>
+            <div class="product-modal-actions">
+              ${buyAction}
+              <button type="button" class="btn btn-outline" data-close-product-modal>Continuer mes achats</button>
+            </div>
+            <p class="form-status product-checkout-status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    `;
+
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    window.requestAnimationFrame(() => modal.classList.add('open'));
+
+    const closeButton = modal.querySelector('.product-modal-close');
+    if (closeButton) {
+      closeButton.focus();
+    }
+
+    bindImageFallback(modalContent.querySelectorAll('img'));
+
+    const checkoutForm = modalContent.querySelector('.product-checkout-form');
+    if (checkoutForm) {
+      checkoutForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const submitButton = checkoutForm.querySelector('button[type="submit"]');
+        const status = checkoutForm.querySelector('.product-checkout-status');
+        const formData = new FormData(checkoutForm);
+        const quantity = Math.max(1, Math.min(10, Number(formData.get('quantity') || 1)));
+        const payload = {
+          productId: product.id,
+          productName: product.name,
+          priceId: product.priceId,
+          quantity,
+          size: String(formData.get('size') || ''),
+          color: String(formData.get('color') || '')
+        };
+
+        if (!product.priceId) {
+          if (status) {
+            status.className = 'form-status is-error product-checkout-status';
+            status.textContent = 'Prix Stripe manquant pour ce produit.';
+          }
+          return;
+        }
+
+        if (window.location.protocol === 'file:') {
+          if (status) {
+            status.className = 'form-status is-error product-checkout-status';
+            status.textContent =
+              'Le paiement Stripe nécessite Netlify Dev ou le site Netlify déployé. Le mode fichier ne peut pas appeler /api/create-checkout-session.';
+          }
+          return;
+        }
+
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Ouverture de Stripe...';
+        }
+
+        if (status) {
+          status.className = 'form-status product-checkout-status';
+          status.textContent = 'Création du paiement test Stripe...';
+        }
+
+        try {
+          const response = await fetch('/api/create-checkout-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const result = await response.json().catch(() => ({}));
+
+          if (!response.ok || !result.url) {
+            throw new Error(result.message || 'Impossible de créer le paiement Stripe.');
+          }
+
+          const checkoutLink = document.createElement('a');
+          checkoutLink.href = result.url;
+          checkoutLink.target = '_blank';
+          checkoutLink.rel = 'noopener noreferrer';
+          document.body.appendChild(checkoutLink);
+          checkoutLink.click();
+          checkoutLink.remove();
+
+          if (status) {
+            status.className = 'form-status is-success product-checkout-status';
+            status.textContent = 'Stripe Checkout est ouvert dans un nouvel onglet.';
+          }
+        } catch (error) {
+          if (status) {
+            status.className = 'form-status is-error product-checkout-status';
+            status.textContent =
+              error.message ||
+              'Paiement test indisponible. Lancez le site avec Netlify Dev et vérifiez STRIPE_SECRET_KEY.';
+          }
+        } finally {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Payer avec Stripe';
+          }
+        }
+      });
+    }
+  };
+
+  resolvedProducts.forEach((product) => {
     const card = document.createElement('article');
     card.className = 'product-card card reveal';
-
-    const canBuy = product.statut === 'disponible' && isActiveStripePaymentLink(product.stripeLink);
-    const actionHtml = canBuy
-      ? `<a href="${product.stripeLink}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Acheter</a>`
-      : `<button type="button" class="btn btn-primary disabled" disabled aria-disabled="true">Bientôt disponible</button>`;
 
     card.innerHTML = `
       <img
         class="product-image"
         src="${product.image}"
-        alt="${escapeHtml(product.nom)}"
+        alt="${escapeHtml(product.name)}"
         loading="lazy"
         decoding="async"
         referrerpolicy="no-referrer"
       />
-      <h3>${escapeHtml(product.nom)}</h3>
-      <p class="product-price">${escapeHtml(product.prix)}</p>
-      <p class="product-sizes">Tailles : ${escapeHtml(product.tailles)}</p>
-      <p>${escapeHtml(product.description)}</p>
-      ${actionHtml}
+      <div class="product-card-content">
+        <p class="product-status">${escapeHtml(product.availability)}</p>
+        <h3>${escapeHtml(product.name)}</h3>
+        <p class="product-price">${escapeHtml(product.price)}</p>
+        <p>${escapeHtml(product.shortDescription)}</p>
+      </div>
+      <button type="button" class="btn btn-primary product-view-button" aria-label="Voir le produit ${escapeHtml(product.name)}">Voir le produit</button>
     `;
+
+    card.addEventListener('click', () => openProductModal(product));
+    const viewButton = card.querySelector('.product-view-button');
+    if (viewButton) {
+      viewButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        openProductModal(product);
+      });
+    }
 
     shopRoot.appendChild(card);
   });
 
+  if (modal) {
+    modal.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLElement && event.target.hasAttribute('data-close-product-modal')) {
+        closeProductModal();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !modal.hidden) {
+        closeProductModal();
+      }
+    });
+  }
+
   bindImageFallback(shopRoot.querySelectorAll('.product-image'));
   initRevealAnimations(shopRoot.querySelectorAll('.reveal'));
 }
+
 
 function getPartnerInitials(name) {
   return String(name || 'RVB')

@@ -1,55 +1,119 @@
 {
   "produits": [
     {
-      "nom": "T-shirt du club",
-      "image": "https://images.pexels.com/photos/4066293/pexels-photo-4066293.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "prix": "22 €",
-      "tailles": "XS, S, M, L, XL",
-      "description": "T-shirt respirant aux couleurs du RVB, parfait pour les entraînements réguliers.",
-      "stripeLink": "",
-      "statut": "disponible"
-    },
-    {
-      "nom": "Sweat RHUYS VOLLEY BALL",
-      "image": "https://images.pexels.com/photos/1002648/pexels-photo-1002648.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "prix": "45 €",
-      "tailles": "XS, S, M, L, XL",
-      "description": "Sweat club confortable et résistant, idéal pour les entraînements et les déplacements.",
-      "stripeLink": "",
-      "statut": "indisponible"
-    },
-    {
-      "nom": "Maillot d'entraînement",
-      "image": "https://images.pexels.com/photos/920220/pexels-photo-920220.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "prix": "35 €",
-      "tailles": "S, M, L, XL",
-      "description": "Maillot technique léger conçu pour la pratique indoor et les matchs amicaux.",
-      "stripeLink": "",
-      "statut": "indisponible"
-    },
-    {
-      "nom": "Gourde club",
-      "image": "https://images.pexels.com/photos/4000098/pexels-photo-4000098.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "prix": "12 €",
-      "tailles": "Unique (750 ml)",
-      "description": "Gourde légère et pratique pour rester hydraté pendant les séances.",
-      "stripeLink": "",
-      "statut": "indisponible"
-    },
-    {
-      "nom": "Sac de sport",
-      "image": "https://images.pexels.com/photos/1478442/pexels-photo-1478442.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "prix": "30 €",
-      "tailles": "Unique",
-      "description": "Sac robuste avec compartiments, idéal pour transporter tenue et matériel.",
-      "stripeLink": "",
-      "statut": "indisponible"
-    },
-    {
+      "id": "sweat-rvb",
+      "name": "Sweat RHUYS VOLLEY BALL",
+      "price": "45 €",
+      "image": "assets/boutique/sweat-rvb.svg",
+      "shortDescription": "Sweat confortable aux couleurs du club pour les entraînements et les déplacements.",
+      "detailedDescription": "Un sweat chaud et polyvalent pensé pour accompagner les joueurs, parents et supporters du RHUYS VOLLEY BALL. Sa coupe confortable convient aux temps d’échauffement, aux trajets d’équipe et aux moments de vie du club.",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Bleu marine",
+        "Jaune club"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe",
+      "stripeTestLink": "https://buy.stripe.com/test_8x28wIgn3deD0Ex6mm7ok08",
+      "stripeLink": "https://buy.stripe.com/test_8x28wIgn3deD0Ex6mm7ok08",
       "statut": "disponible",
-      "nom": "stickers",
-      "prix": "3€",
-      "description": "ezfdscdc"
+      "priceId": "price_1TSKcP3OCDghhlsbO4GhVpHA"
+    },
+    {
+      "id": "tshirt-club",
+      "name": "T-shirt du club",
+      "price": "22 €",
+      "image": "assets/boutique/tshirt-club.svg",
+      "shortDescription": "T-shirt respirant pour représenter le RVB pendant les séances et événements.",
+      "detailedDescription": "Le t-shirt officiel du club est léger, facile à porter et adapté à une utilisation régulière. Il permet aux licenciés et supporters d’afficher les couleurs du RHUYS VOLLEY BALL au quotidien.",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Blanc",
+        "Bleu marine"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe",
+      "stripeTestLink": "https://buy.stripe.com/test_cNidR27Qx7Ujevn4ee7ok09",
+      "stripeLink": "https://buy.stripe.com/test_cNidR27Qx7Ujevn4ee7ok09",
+      "statut": "disponible",
+      "priceId": "price_1TVIJN3OCDghhlsbNVFVJ3rN"
+    },
+    {
+      "id": "maillot-entrainement",
+      "name": "Maillot d’entraînement",
+      "price": "35 €",
+      "image": "assets/boutique/maillot-entrainement.svg",
+      "shortDescription": "Maillot technique léger pour les séances indoor et les matchs amicaux.",
+      "detailedDescription": "Ce maillot d’entraînement accompagne les séances intensives avec une matière légère et une coupe sportive. Il est idéal pour les joueurs qui souhaitent une tenue dédiée à la pratique régulière du volley.",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "colors": [
+        "Bleu",
+        "Blanc"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe",
+      "stripeTestLink": "https://buy.stripe.com/test_aFabIUdaRcazaf7h107ok0a",
+      "stripeLink": "https://buy.stripe.com/test_aFabIUdaRcazaf7h107ok0a",
+      "statut": "disponible",
+      "priceId": "price_1TVIJO3OCDghhlsbkjbbj2vd"
+    },
+    {
+      "id": "gourde-club",
+      "name": "Gourde club",
+      "price": "12 €",
+      "image": "assets/boutique/gourde-club.svg",
+      "shortDescription": "Gourde pratique pour rester hydraté pendant les entraînements.",
+      "detailedDescription": "La gourde club est pensée pour les séances hebdomadaires, les plateaux jeunes et les déplacements. Format pratique, prise en main simple et identité RHUYS VOLLEY BALL.",
+      "sizes": [
+        "Unique - 750 ml"
+      ],
+      "colors": [
+        "Bleu",
+        "Blanc"
+      ],
+      "availability": "Disponible en test",
+      "stock": "Stock test Stripe",
+      "stripeTestLink": "https://buy.stripe.com/test_cNiaEQb2J7Uj1IB8uu7ok0b",
+      "stripeLink": "https://buy.stripe.com/test_cNiaEQb2J7Uj1IB8uu7ok0b",
+      "statut": "disponible",
+      "priceId": "price_1TVIJQ3OCDghhlsbt6IFwq4f"
+    },
+    {
+      "id": "sac-sport",
+      "name": "Sac de sport",
+      "price": "30 €",
+      "image": "assets/boutique/sac-sport.svg",
+      "shortDescription": "Sac robuste pour transporter tenue, chaussures et accessoires.",
+      "detailedDescription": "Un sac de sport pratique pour les entraînements, les matchs et les déplacements. Il offre un format adapté au matériel de volley tout en gardant une identité sobre et sportive.",
+      "sizes": [
+        "Unique"
+      ],
+      "colors": [
+        "Bleu marine"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe",
+      "stripeTestLink": "https://buy.stripe.com/test_28EfZa6Mt7UjgDvbGG7ok0c",
+      "stripeLink": "https://buy.stripe.com/test_28EfZa6Mt7UjgDvbGG7ok0c",
+      "statut": "disponible",
+      "priceId": "price_1TVIJS3OCDghhlsbEhYNVgAB"
     }
   ]
 }

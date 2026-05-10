@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title desc">
+  <title id="title">Maillot d'entrainement RHUYS VOLLEY BALL</title>
+  <desc id="desc">Illustration d'un maillot technique bleu.</desc>
+  <defs><linearGradient id="jersey" x1="0" x2="1"><stop offset="0" stop-color="#0b2d52"/><stop offset="1" stop-color="#0f68ad"/></linearGradient></defs>
+  <rect width="900" height="700" rx="56" fill="#0a2442"/>
+  <circle cx="710" cy="155" r="96" fill="#f8c836"/>
+  <path d="M290 168h320l92 108-70 78-54-40v250H322V314l-54 40-70-78 92-108z" fill="url(#jersey)"/>
+  <path d="M382 184c12 46 124 46 136 0" fill="none" stroke="#eaf3ff" stroke-width="18" stroke-linecap="round"/>
+  <path d="M330 260h240l-240 248z" fill="#ffffff" opacity=".16"/>
+  <path d="M570 260v248L330 508z" fill="#f8c836" opacity=".24"/>
+  <text x="450" y="420" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="64" font-weight="800" fill="#ffffff">RVB</text>
+  <text x="450" y="620" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="44" font-weight="800" fill="#ffffff">Maillot training</text>
+</svg>

@@ -67,13 +67,27 @@ collections:
           - label: "Produits"
             name: "produits"
             widget: "list"
-            summary: "{{fields.nom}} - {{fields.prix}}"
+            summary: "{{fields.name}} - {{fields.price}}"
             fields:
-              - { label: "Nom", name: "nom", widget: "string" }
+              - { label: "Nom", name: "name", widget: "string" }
+              - { label: "Prix", name: "price", widget: "string" }
+              - { label: "ID prix Stripe", name: "priceId", widget: "string", required: false }
               - { label: "Image", name: "image", widget: "image", required: false }
-              - { label: "Prix", name: "prix", widget: "string" }
-              - { label: "Tailles disponibles", name: "tailles", widget: "string", required: false }
-              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Description courte", name: "shortDescription", widget: "text" }
+              - { label: "Description détaillée", name: "detailedDescription", widget: "text" }
+              - label: "Tailles disponibles"
+                name: "sizes"
+                widget: "list"
+                required: false
+                field: { label: "Taille", name: "size", widget: "string" }
+              - label: "Couleurs disponibles"
+                name: "colors"
+                widget: "list"
+                required: false
+                field: { label: "Couleur", name: "color", widget: "string" }
+              - { label: "Disponibilité", name: "availability", widget: "string", required: false }
+              - { label: "Stock", name: "stock", widget: "string", required: false }
+              - { label: "Lien Stripe test", name: "stripeTestLink", widget: "string", required: false }
               - { label: "Lien Stripe Payment Link", name: "stripeLink", widget: "string", required: false }
               - label: "Statut"
                 name: "statut"

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title desc">
+  <title id="title">Sac de sport RHUYS VOLLEY BALL</title>
+  <desc id="desc">Illustration d'un sac de sport bleu marine.</desc>
+  <rect width="900" height="700" rx="56" fill="#08233f"/>
+  <circle cx="700" cy="150" r="92" fill="#f8c836"/>
+  <path d="M315 290c0-86 270-86 270 0" fill="none" stroke="#f8c836" stroke-width="34" stroke-linecap="round"/>
+  <rect x="210" y="270" width="480" height="250" rx="56" fill="#0f68ad"/>
+  <path d="M250 310h400v168H250z" fill="#0b2d52" opacity=".72"/>
+  <rect x="330" y="380" width="240" height="58" rx="29" fill="#f8c836"/>
+  <text x="450" y="420" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="32" font-weight="800" fill="#09233f">RHUYS VOLLEY</text>
+  <text x="450" y="620" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="46" font-weight="800" fill="#ffffff">Sac de sport</text>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" role="img" aria-labelledby="title desc">
+  <title id="title">Sweat RHUYS VOLLEY BALL</title>
+  <desc id="desc">Illustration d'un sweat bleu marine du club.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#08233f"/>
+      <stop offset="1" stop-color="#155da0"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="0" x2="1">
+      <stop offset="0" stop-color="#f8d25a"/>
+      <stop offset="1" stop-color="#f3b41b"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="700" rx="56" fill="url(#bg)"/>
+  <circle cx="705" cy="150" r="92" fill="url(#yellow)" opacity=".9"/>
+  <path d="M290 182h320l96 96-86 92-42-40v236H322V330l-42 40-86-92 96-96z" fill="#f7fbff"/>
+  <path d="M322 330v236h256V330l42 40 38-40-72-72H314l-72 72 38 40 42-40z" fill="#0b2d52"/>
+  <path d="M374 196c14 56 138 56 152 0" fill="none" stroke="#d9e7f6" stroke-width="20" stroke-linecap="round"/>
+  <rect x="362" y="400" width="176" height="44" rx="22" fill="url(#yellow)"/>
+  <text x="450" y="431" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="28" font-weight="800" fill="#09233f">RVB</text>
+  <text x="450" y="620" text-anchor="middle" font-family="Barlow, Arial, sans-serif" font-size="46" font-weight="800" fill="#ffffff">Sweat club</text>
+</svg>
