@@ -1,0 +1,40 @@
+{
+  "gallery": [
+    {
+      "title": "Entraînement jeunes à Sarzeau",
+      "image": "https://images.pexels.com/photos/6203578/pexels-photo-6203578.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Séance collective autour de la technique et du plaisir de jouer.",
+      "category": "Club"
+    },
+    {
+      "title": "Match en salle",
+      "image": "https://images.pexels.com/photos/6203571/pexels-photo-6203571.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Ambiance de match pour les équipes du RHUYS VOLLEY BALL.",
+      "category": "Club"
+    },
+    {
+      "title": "Cohésion adultes",
+      "image": "https://images.pexels.com/photos/6203648/pexels-photo-6203648.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Un groupe loisir et compétition engagé toute l'année.",
+      "category": "Club"
+    },
+    {
+      "title": "Préparation avant match",
+      "image": "https://images.pexels.com/photos/6203586/pexels-photo-6203586.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Concentration et échauffement avant une rencontre en salle.",
+      "category": "Club"
+    },
+    {
+      "title": "Atelier technique",
+      "image": "https://images.pexels.com/photos/6203569/pexels-photo-6203569.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Travail des fondamentaux pendant une séance encadrée.",
+      "category": "Club"
+    },
+    {
+      "title": "Vie du club",
+      "image": "https://images.pexels.com/photos/6203604/pexels-photo-6203604.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Des moments de partage qui font vivre le RHUYS VOLLEY BALL.",
+      "category": "Club"
+    }
+  ]
+}

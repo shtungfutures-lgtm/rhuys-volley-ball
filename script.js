@@ -388,10 +388,15 @@ const githubArticlesEndpoint =
   'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main/content/articles/articles.json';
 const githubMediaBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
 const githubContentBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
-const galleryContentPath = '/content/galerie/galerie.json';
-const productsContentPath = '/content/produits/produits.json';
-const partnersContentPath = '/content/partenaires/partenaires.json';
+const galleryContentPath = ['/content/gallery/gallery.json', '/content/galerie/galerie.json'];
+const productsContentPath = ['/content/products/products.json', '/content/produits/produits.json'];
+const partnersContentPath = ['/content/partners/partners.json', '/content/partenaires/partenaires.json'];
 const pagesContentPath = '/content/pages/pages.json';
+const pageContentFiles = {
+  index: '/content/pages/accueil.json',
+  club: '/content/pages/club.json',
+  contact: '/content/pages/contact.json'
+};
 let resolvedArticlesCache = null;
 
 const monthFormatter = new Intl.DateTimeFormat('fr-FR', { month: 'long', year: 'numeric' });
@@ -544,8 +549,14 @@ function getCmsArticleEndpoints() {
   return isLocalPreview() ? [cmsArticlesEndpoint] : [githubArticlesEndpoint, liveArticlesEndpoint, cmsArticlesEndpoint];
 }
 
-function getStaticContentEndpoints(path) {
-  return isLocalPreview() ? [path] : [`${githubContentBaseUrl}${path}`, path];
+function getStaticContentEndpoints(pathOrPaths) {
+  const paths = Array.isArray(pathOrPaths) ? pathOrPaths : [pathOrPaths];
+
+  if (isLocalPreview()) {
+    return paths;
+  }
+
+  return paths.flatMap((path) => [`${githubContentBaseUrl}${path}`, path]);
 }
 
 async function fetchFirstJson(endpoints) {
@@ -843,8 +854,9 @@ async function initGallery() {
   }
 
   const payload = await fetchFirstJson(getStaticContentEndpoints(galleryContentPath));
+  const resolvedGallery = payload && (payload.gallery || payload.galerie);
   const galleryItems =
-    payload && Array.isArray(payload.galerie) && payload.galerie.length > 0 ? payload.galerie : fallbackGalleryItems;
+    Array.isArray(resolvedGallery) && resolvedGallery.length > 0 ? resolvedGallery : fallbackGalleryItems;
 
   galleryRoot.innerHTML = '';
 
@@ -943,7 +955,13 @@ function normalizeProduct(rawProduct) {
           .split(',')
           .map((item) => item.trim())
           .filter(Boolean),
-    availability: rawProduct.availability || rawProduct.disponibilite || rawProduct.stock || rawProduct.statut || 'Disponibilité à confirmer',
+    availability:
+      rawProduct.availability ||
+      rawProduct.disponibilite ||
+      rawProduct.stock ||
+      rawProduct.status ||
+      rawProduct.statut ||
+      'Disponibilité à confirmer',
     stock: rawProduct.stock || rawProduct.availability || rawProduct.disponibilite || '',
     stripeTestLink,
     stripeLink: stripeTestLink
@@ -952,7 +970,8 @@ function normalizeProduct(rawProduct) {
 
 async function getResolvedProducts() {
   const payload = await fetchFirstJson(getStaticContentEndpoints(productsContentPath));
-  const rawProducts = payload && Array.isArray(payload.produits) && payload.produits.length > 0 ? payload.produits : products;
+  const resolvedProducts = payload && (payload.products || payload.produits);
+  const rawProducts = Array.isArray(resolvedProducts) && resolvedProducts.length > 0 ? resolvedProducts : products;
   return rawProducts.map(normalizeProduct);
 }
 
@@ -1255,9 +1274,10 @@ async function initPartnersPage() {
   }
 
   const payload = await fetchFirstJson(getStaticContentEndpoints(partnersContentPath));
+  const resolvedPartners = payload && (payload.partners || payload.partenaires);
   const partners =
-    payload && Array.isArray(payload.partenaires) && payload.partenaires.length > 0
-      ? payload.partenaires
+    Array.isArray(resolvedPartners) && resolvedPartners.length > 0
+      ? resolvedPartners
       : fallbackPartners;
 
   partnersRoot.innerHTML = '';
@@ -1267,7 +1287,7 @@ async function initPartnersPage() {
     const logo = resolveCmsMediaUrl(partner.logo || '');
     const category = partner.categorie || partner.category || 'Partenaire local';
     const description = partner.description || '';
-    const link = partner.lien || partner.url || partner.site || '';
+    const link = partner.website || partner.lien || partner.url || partner.site || '';
     const brand = partner.logo
       ? `<img src="${logo}" alt="Logo ${escapeHtml(name)}" class="partner-logo" loading="lazy" decoding="async" />`
       : `<div class="partner-brand">${escapeHtml(getPartnerInitials(name))}</div>`;
@@ -1295,10 +1315,34 @@ function getCurrentPageSlug() {
   return filename.replace(/\.html$/, '') || 'index';
 }
 
+function normalizePageContent(payload, slug) {
+  if (!payload || typeof payload !== 'object') {
+    return null;
+  }
+
+  if (payload.title || payload.content || payload.image) {
+    return {
+      slug,
+      title: payload.title || '',
+      content: payload.content || '',
+      image: payload.image || ''
+    };
+  }
+
+  return null;
+}
+
 async function initSimplePageContent() {
-  const payload = await fetchFirstJson(getStaticContentEndpoints(pagesContentPath));
-  const pages = payload && Array.isArray(payload.pages) ? payload.pages : [];
-  const page = pages.find((item) => item.slug === getCurrentPageSlug());
+  const slug = getCurrentPageSlug();
+  const pageFile = pageContentFiles[slug];
+  const directPayload = pageFile ? await fetchFirstJson(getStaticContentEndpoints(pageFile)) : null;
+  let page = normalizePageContent(directPayload, slug);
+
+  if (!page) {
+    const payload = await fetchFirstJson(getStaticContentEndpoints(pagesContentPath));
+    const pages = payload && Array.isArray(payload.pages) ? payload.pages : [];
+    page = pages.find((item) => item.slug === slug);
+  }
 
   if (!page) {
     return;

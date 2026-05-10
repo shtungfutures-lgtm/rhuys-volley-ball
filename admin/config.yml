@@ -1,10 +1,6 @@
 backend:
-  name: github
-  repo: shtungfutures-lgtm/rhuys-volley-ball
+  name: git-gateway
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
-  site_domain: rhuys-volley-ball-site.netlify.app
 
 local_backend: true
 site_url: "https://rhuys-volley-ball-site.netlify.app"
@@ -33,106 +29,116 @@ collections:
                 name: "category"
                 widget: "select"
                 options: ["Matchs", "Club", "Événements", "Jeunes", "Annonces"]
-              - { label: "Image", name: "image", widget: "image", required: false }
+              - { label: "Image principale", name: "image", widget: "image", required: false }
               - { label: "Extrait", name: "excerpt", widget: "text" }
               - { label: "Contenu", name: "body", widget: "markdown" }
+              - { label: "Auteur", name: "author", widget: "string", required: false, default: "RHUYS VOLLEY BALL" }
 
-  - name: "galerie"
-    label: "Galerie"
+  - name: "gallery"
+    label: "Galerie photos"
     label_singular: "Photo"
     files:
       - label: "Photos"
-        name: "galerie"
-        file: "content/galerie/galerie.json"
+        name: "gallery"
+        file: "content/gallery/gallery.json"
         format: "json"
         fields:
           - label: "Photos"
-            name: "galerie"
+            name: "gallery"
             widget: "list"
             summary: "{{fields.title}}"
             fields:
               - { label: "Titre", name: "title", widget: "string" }
               - { label: "Image", name: "image", widget: "image" }
               - { label: "Description", name: "description", widget: "text", required: false }
+              - label: "Catégorie"
+                name: "category"
+                widget: "select"
+                options: ["Club", "Matchs", "Jeunes", "Événements", "Entraînements"]
+                default: "Club"
 
-  - name: "produits"
+  - name: "products"
     label: "Produits boutique"
     label_singular: "Produit"
     files:
       - label: "Catalogue boutique"
-        name: "produits"
-        file: "content/produits/produits.json"
+        name: "products"
+        file: "content/products/products.json"
         format: "json"
         fields:
           - label: "Produits"
-            name: "produits"
+            name: "products"
             widget: "list"
             summary: "{{fields.name}} - {{fields.price}}"
             fields:
               - { label: "Nom", name: "name", widget: "string" }
-              - { label: "Prix", name: "price", widget: "string" }
-              - { label: "ID prix Stripe", name: "priceId", widget: "string", required: false }
               - { label: "Image", name: "image", widget: "image", required: false }
-              - { label: "Description courte", name: "shortDescription", widget: "text" }
-              - { label: "Description détaillée", name: "detailedDescription", widget: "text" }
-              - label: "Tailles disponibles"
+              - { label: "Prix", name: "price", widget: "string" }
+              - label: "Tailles"
                 name: "sizes"
                 widget: "list"
                 required: false
                 field: { label: "Taille", name: "size", widget: "string" }
-              - label: "Couleurs disponibles"
-                name: "colors"
-                widget: "list"
-                required: false
-                field: { label: "Couleur", name: "color", widget: "string" }
-              - { label: "Disponibilité", name: "availability", widget: "string", required: false }
-              - { label: "Stock", name: "stock", widget: "string", required: false }
-              - { label: "Lien Stripe test", name: "stripeTestLink", widget: "string", required: false }
-              - { label: "Lien Stripe Payment Link", name: "stripeLink", widget: "string", required: false }
+              - { label: "Description courte", name: "shortDescription", widget: "text" }
+              - { label: "Description complète", name: "detailedDescription", widget: "markdown" }
+              - { label: "Lien Stripe", name: "stripeLink", widget: "string", required: false }
+              - { label: "ID prix Stripe", name: "priceId", widget: "string", required: false, hint: "Nécessaire pour le paiement Stripe Checkout dynamique." }
               - label: "Statut"
-                name: "statut"
+                name: "status"
                 widget: "select"
-                options: ["disponible", "indisponible"]
+                options:
+                  - { label: "Disponible", value: "disponible" }
+                  - { label: "Indisponible", value: "indisponible" }
                 default: "indisponible"
 
-  - name: "partenaires"
+  - name: "partners"
     label: "Partenaires"
     label_singular: "Partenaire"
     files:
       - label: "Liste des partenaires"
-        name: "partenaires"
-        file: "content/partenaires/partenaires.json"
+        name: "partners"
+        file: "content/partners/partners.json"
         format: "json"
         fields:
           - label: "Partenaires"
-            name: "partenaires"
+            name: "partners"
             widget: "list"
-            summary: "{{fields.nom}}"
+            summary: "{{fields.name}}"
             fields:
-              - { label: "Nom", name: "nom", widget: "string" }
+              - { label: "Nom", name: "name", widget: "string" }
               - { label: "Logo", name: "logo", widget: "image", required: false }
               - label: "Catégorie"
-                name: "categorie"
+                name: "category"
                 widget: "select"
                 options: ["Partenaire principal", "Partenaire local", "Institutionnel", "Équipementier"]
               - { label: "Description", name: "description", widget: "text" }
-              - { label: "Lien site web", name: "lien", widget: "string", required: false }
+              - { label: "Lien du site", name: "website", widget: "string", required: false }
 
   - name: "pages"
-    label: "Pages simples"
+    label: "Contenus du site"
     label_singular: "Page"
     files:
-      - label: "Contenus de pages"
-        name: "pages"
-        file: "content/pages/pages.json"
+      - label: "Accueil"
+        name: "accueil"
+        file: "content/pages/accueil.json"
         format: "json"
         fields:
-          - label: "Pages"
-            name: "pages"
-            widget: "list"
-            summary: "{{fields.slug}} - {{fields.title}}"
-            fields:
-              - { label: "Identifiant de page", name: "slug", widget: "string", hint: "Exemples : index, club, actualites, boutique, partenaires" }
-              - { label: "Titre", name: "title", widget: "string" }
-              - { label: "Contenu", name: "content", widget: "markdown" }
-              - { label: "Image optionnelle", name: "image", widget: "image", required: false }
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Le club"
+        name: "club"
+        file: "content/pages/club.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Contact"
+        name: "contact"
+        file: "content/pages/contact.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }

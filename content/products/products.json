@@ -1,0 +1,114 @@
+{
+  "products": [
+    {
+      "id": "sweat-rvb",
+      "name": "Sweat RHUYS VOLLEY BALL",
+      "image": "assets/boutique/sweat-rvb.svg",
+      "price": "45 €",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "shortDescription": "Sweat confortable aux couleurs du club pour les entraînements et les déplacements.",
+      "detailedDescription": "Un sweat chaud et polyvalent pensé pour accompagner les joueurs, parents et supporters du RHUYS VOLLEY BALL. Sa coupe confortable convient aux temps d’échauffement, aux trajets d’équipe et aux moments de vie du club.",
+      "stripeLink": "https://buy.stripe.com/test_8x28wIgn3deD0Ex6mm7ok08",
+      "priceId": "price_1TSKcP3OCDghhlsbO4GhVpHA",
+      "status": "disponible",
+      "colors": [
+        "Bleu marine",
+        "Jaune club"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe"
+    },
+    {
+      "id": "tshirt-club",
+      "name": "T-shirt du club",
+      "image": "assets/boutique/tshirt-club.svg",
+      "price": "22 €",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "shortDescription": "T-shirt respirant pour représenter le RVB pendant les séances et événements.",
+      "detailedDescription": "Le t-shirt officiel du club est léger, facile à porter et adapté à une utilisation régulière. Il permet aux licenciés et supporters d’afficher les couleurs du RHUYS VOLLEY BALL au quotidien.",
+      "stripeLink": "https://buy.stripe.com/test_cNidR27Qx7Ujevn4ee7ok09",
+      "priceId": "price_1TVIJN3OCDghhlsbNVFVJ3rN",
+      "status": "disponible",
+      "colors": [
+        "Blanc",
+        "Bleu marine"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe"
+    },
+    {
+      "id": "maillot-entrainement",
+      "name": "Maillot d’entraînement",
+      "image": "assets/boutique/maillot-entrainement.svg",
+      "price": "35 €",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "shortDescription": "Maillot technique léger pour les séances indoor et les matchs amicaux.",
+      "detailedDescription": "Ce maillot d’entraînement accompagne les séances intensives avec une matière légère et une coupe sportive. Il est idéal pour les joueurs qui souhaitent une tenue dédiée à la pratique régulière du volley.",
+      "stripeLink": "https://buy.stripe.com/test_aFabIUdaRcazaf7h107ok0a",
+      "priceId": "price_1TVIJO3OCDghhlsbkjbbj2vd",
+      "status": "disponible",
+      "colors": [
+        "Bleu",
+        "Blanc"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe"
+    },
+    {
+      "id": "gourde-club",
+      "name": "Gourde club",
+      "image": "assets/boutique/gourde-club.svg",
+      "price": "12 €",
+      "sizes": [
+        "Unique - 750 ml"
+      ],
+      "shortDescription": "Gourde pratique pour rester hydraté pendant les entraînements.",
+      "detailedDescription": "La gourde club est pensée pour les séances hebdomadaires, les plateaux jeunes et les déplacements. Format pratique, prise en main simple et identité RHUYS VOLLEY BALL.",
+      "stripeLink": "https://buy.stripe.com/test_cNiaEQb2J7Uj1IB8uu7ok0b",
+      "priceId": "price_1TVIJQ3OCDghhlsbt6IFwq4f",
+      "status": "disponible",
+      "colors": [
+        "Bleu",
+        "Blanc"
+      ],
+      "availability": "Disponible en test",
+      "stock": "Stock test Stripe"
+    },
+    {
+      "id": "sac-sport",
+      "name": "Sac de sport",
+      "image": "assets/boutique/sac-sport.svg",
+      "price": "30 €",
+      "sizes": [
+        "Unique"
+      ],
+      "shortDescription": "Sac robuste pour transporter tenue, chaussures et accessoires.",
+      "detailedDescription": "Un sac de sport pratique pour les entraînements, les matchs et les déplacements. Il offre un format adapté au matériel de volley tout en gardant une identité sobre et sportive.",
+      "stripeLink": "https://buy.stripe.com/test_28EfZa6Mt7UjgDvbGG7ok0c",
+      "priceId": "price_1TVIJS3OCDghhlsbEhYNVgAB",
+      "status": "disponible",
+      "colors": [
+        "Bleu marine"
+      ],
+      "availability": "Disponible en précommande",
+      "stock": "Stock test Stripe"
+    }
+  ]
+}
