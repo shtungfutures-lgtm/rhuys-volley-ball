@@ -360,17 +360,45 @@ function renderGallery(activeId = '') {
     state.gallery,
     activeId,
     (photo) => photo.title,
-    (photo) => photo.category || 'Club',
+    (photo) => `${photo.category || 'Club'} - ${photo.image ? 'image ajoutée' : 'image manquante'}`,
     fillPhoto
   );
 }
 
 function fillPage(page) {
+  const pageNames = {
+    index: 'Accueil',
+    club: 'Le club',
+    contact: 'Contact',
+    equipes: 'Équipes',
+    calendrier: 'Calendrier',
+    classements: 'Classements',
+    actualites: 'Actualités',
+    boutique: 'Boutique',
+    partenaires: 'Partenaires',
+  };
+  const pageHelps = {
+    index: 'Modifiez le message principal de la page d’accueil.',
+    club: 'Modifiez le texte de présentation du club et son visuel.',
+    contact: 'Modifiez le texte d’introduction de la page contact.',
+    equipes: 'Modifiez l’introduction de la page des équipes.',
+    calendrier: 'Modifiez le texte de présentation du calendrier.',
+    classements: 'Modifiez le texte de présentation des classements.',
+    actualites: 'Modifiez le texte d’introduction des actualités.',
+    boutique: 'Modifiez le texte d’introduction de la boutique.',
+    partenaires: 'Modifiez le texte d’introduction des partenaires.',
+  };
+  const label = pageNames[page.slug] || page.slug;
+
   setValue('#page-slug', page.slug);
-  setValue('#page-label', page.slug === 'index' ? 'Accueil' : page.slug);
+  setValue('#page-label', label);
   setValue('#page-title', page.title);
   setValue('#page-content', page.content);
   setValue('#page-image', page.image);
+  const editorTitle = qs('#page-editor-title');
+  const editorHelp = qs('#page-editor-help');
+  if (editorTitle) editorTitle.textContent = `Modifier la page ${label}`;
+  if (editorHelp) editorHelp.textContent = pageHelps[page.slug] || 'Modifiez les textes principaux de cette page.';
   state.currentImages.page = page.image || '';
   const input = qs('#page-image-file');
   if (input) input.value = '';
@@ -388,12 +416,24 @@ function readPage() {
 }
 
 function renderPages(activeSlug = '') {
+  const pageNames = {
+    index: 'Accueil',
+    club: 'Le club',
+    contact: 'Contact',
+    equipes: 'Équipes',
+    calendrier: 'Calendrier',
+    classements: 'Classements',
+    actualites: 'Actualités',
+    boutique: 'Boutique',
+    partenaires: 'Partenaires',
+  };
+
   renderGenericList(
     '#pages-list',
     state.pages,
     activeSlug,
-    (page) => (page.slug === 'index' ? 'Accueil' : page.slug.charAt(0).toUpperCase() + page.slug.slice(1)),
-    (page) => page.title,
+    (page) => pageNames[page.slug] || page.slug.charAt(0).toUpperCase() + page.slug.slice(1),
+    (page) => page.title || 'Titre à compléter',
     fillPage
   );
 }
