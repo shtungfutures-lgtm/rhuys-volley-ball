@@ -48,7 +48,7 @@
         <nav class="admin-tabs" aria-label="Rubriques d’administration">
           <button type="button" class="admin-tab active" data-tab="articles">Actualités</button>
           <button type="button" class="admin-tab" data-tab="teams">Équipes</button>
-          <button type="button" class="admin-tab" data-tab="products">Boutique &amp; commandes</button>
+          <button type="button" class="admin-tab" data-tab="products">Boutique</button>
           <button type="button" class="admin-tab" data-tab="partners">Partenaires</button>
           <button type="button" class="admin-tab" data-tab="gallery">Photos</button>
           <button type="button" class="admin-tab" data-tab="pages">Pages</button>
@@ -160,16 +160,16 @@
             <div class="admin-section-intro card">
               <div>
                 <p class="admin-kicker">Boutique</p>
-                <h2>Produits et commandes au même endroit</h2>
+                <h2>Produits de la boutique</h2>
                 <p>
-                  Créez les produits visibles sur la boutique, renseignez leur prix Stripe, puis consultez les
-                  commandes reçues plus bas.
+                  Créez les produits visibles sur le site et renseignez leur prix Stripe. Le suivi des commandes se
+                  fait directement depuis votre tableau de bord Stripe.
                 </p>
               </div>
               <div class="admin-mini-steps" aria-label="Étapes boutique">
                 <span>1. Produit</span>
                 <span>2. Prix Stripe</span>
-                <span>3. Commande</span>
+                <span>3. Enregistrer</span>
               </div>
             </div>
 
@@ -223,18 +223,6 @@
               </form>
             </div>
 
-            <section class="admin-orders card">
-              <div class="admin-orders-head">
-                <div>
-                  <p class="admin-kicker">Commandes</p>
-                  <h2>Commandes boutique</h2>
-                  <p>Les commandes payées via Stripe apparaissent ici avec les options choisies.</p>
-                </div>
-                <button type="button" class="btn btn-outline" id="refresh-orders-button">Rafraîchir</button>
-              </div>
-              <p class="admin-message" id="orders-message" aria-live="polite"></p>
-              <div id="orders-list" class="orders-list"></div>
-            </section>
           </div>
         </section>
 

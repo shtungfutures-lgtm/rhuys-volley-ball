@@ -6,7 +6,6 @@ const state = {
   partners: [],
   gallery: [],
   pages: [],
-  orders: [],
   currentImages: {
     article: '',
     product: '',
@@ -554,66 +553,15 @@ function renderPages(activeSlug = '') {
   );
 }
 
-function formatOrderDate(isoDate) {
-  const timestamp = Date.parse(isoDate || '');
-  return Number.isNaN(timestamp)
-    ? 'Date inconnue'
-    : new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(timestamp));
-}
-
-function formatOrderAmount(amountTotal = 0, currency = 'eur') {
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: String(currency || 'eur').toUpperCase() }).format(
-    Number(amountTotal || 0) / 100
-  );
-}
-
-function renderOrders() {
-  const root = qs('#orders-list');
-  if (!root) return;
-  root.innerHTML = '';
-
-  if (!state.orders.length) {
-    root.innerHTML = '<p>Aucune commande pour le moment.</p>';
-    return;
-  }
-
-  state.orders.forEach((order) => {
-    const card = document.createElement('article');
-    card.className = 'order-item';
-    const lineItems = Array.isArray(order.lineItems)
-      ? order.lineItems.map((item) => `${item.description || 'Produit'} x${item.quantity || 1}`).join(' • ')
-      : 'Détail produit indisponible';
-    const selected = order.selectedOptions || {};
-    const options = [selected.size && `Taille: ${selected.size}`, selected.color && `Couleur: ${selected.color}`, selected.quantity && `Quantité: ${selected.quantity}`]
-      .filter(Boolean)
-      .join(' • ');
-
-    card.innerHTML = `
-      <div>
-        <strong>${formatOrderAmount(order.amountTotal, order.currency)}</strong>
-        <p>${lineItems}</p>
-        <p>${options || 'Options non renseignées'}</p>
-      </div>
-      <div>
-        <p>${order.customerName || 'Client non renseigné'}</p>
-        <p>${order.customerEmail || 'Email non renseigné'}</p>
-        <p>${formatOrderDate(order.purchasedAt || order.createdAt)}</p>
-      </div>
-    `;
-    root.appendChild(card);
-  });
-}
-
 async function loadDashboard() {
   setMessage(dashboardMessage, 'Chargement des contenus...');
-  const [articles, products, teams, partners, gallery, pages, orders] = await Promise.all([
+  const [articles, products, teams, partners, gallery, pages] = await Promise.all([
     apiRequest('/api/admin/articles'),
     apiRequest('/api/admin/products'),
     apiRequest('/api/admin/teams'),
     apiRequest('/api/admin/partners'),
     apiRequest('/api/admin/gallery'),
     apiRequest('/api/admin/pages'),
-    apiRequest('/api/admin/orders').catch(() => ({ orders: [] })),
   ]);
 
   state.articles = sortArticlesByNewest(articles.articles || []);
@@ -626,8 +574,6 @@ async function loadDashboard() {
     { slug: 'club', title: 'Le club', content: '', image: '' },
     { slug: 'contact', title: 'Contact', content: '', image: '' },
   ];
-  state.orders = orders.orders || [];
-
   showEditor();
   fillArticle(state.articles[0] || emptyArticle());
   fillProduct(state.products[0] || emptyProduct());
@@ -635,7 +581,6 @@ async function loadDashboard() {
   fillPartner(state.partners[0] || emptyPartner());
   fillPhoto(state.gallery[0] || emptyPhoto());
   fillPage(state.pages[0]);
-  renderOrders();
   setMessage(dashboardMessage, 'Contenus chargés.', 'success');
 }
 
@@ -846,18 +791,6 @@ qs('#delete-photo-button').addEventListener('click', async () => {
   state.gallery = state.gallery.filter((entry) => entry.id !== id);
   await saveContent('gallery', { gallery: state.gallery });
   fillPhoto(state.gallery[0] || emptyPhoto());
-});
-
-qs('#refresh-orders-button').addEventListener('click', async () => {
-  setMessage(qs('#orders-message'), 'Chargement des commandes...');
-  try {
-    const payload = await apiRequest('/api/admin/orders');
-    state.orders = payload.orders || [];
-    renderOrders();
-    setMessage(qs('#orders-message'), `Dernier chargement: ${new Date().toLocaleTimeString('fr-FR')}`, 'success');
-  } catch (error) {
-    setMessage(qs('#orders-message'), error.message, 'error');
-  }
 });
 
 if (getToken()) {
