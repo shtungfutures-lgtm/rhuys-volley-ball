@@ -388,9 +388,9 @@ const githubArticlesEndpoint =
   'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main/content/articles/articles.json';
 const githubMediaBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
 const githubContentBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
-const galleryContentPath = ['/content/gallery/gallery.json', '/content/galerie/galerie.json'];
-const productsContentPath = ['/content/products/products.json', '/content/produits/produits.json'];
-const partnersContentPath = ['/content/partners/partners.json', '/content/partenaires/partenaires.json'];
+const galleryContentPath = ['/api/gallery', '/content/gallery/gallery.json', '/content/galerie/galerie.json'];
+const productsContentPath = ['/api/products', '/content/products/products.json', '/content/produits/produits.json'];
+const partnersContentPath = ['/api/partners', '/content/partners/partners.json', '/content/partenaires/partenaires.json'];
 const pagesContentPath = '/content/pages/pages.json';
 const pageContentFiles = {
   index: '/content/pages/accueil.json',
@@ -546,7 +546,7 @@ function isLocalPreview() {
 }
 
 function getCmsArticleEndpoints() {
-  return isLocalPreview() ? [cmsArticlesEndpoint] : [githubArticlesEndpoint, liveArticlesEndpoint, cmsArticlesEndpoint];
+  return isLocalPreview() ? [liveArticlesEndpoint, cmsArticlesEndpoint] : [liveArticlesEndpoint, githubArticlesEndpoint, cmsArticlesEndpoint];
 }
 
 function getStaticContentEndpoints(pathOrPaths) {
@@ -556,7 +556,7 @@ function getStaticContentEndpoints(pathOrPaths) {
     return paths;
   }
 
-  return paths.flatMap((path) => [`${githubContentBaseUrl}${path}`, path]);
+  return paths.flatMap((path) => (path.startsWith('/api/') ? [path] : [`${githubContentBaseUrl}${path}`, path]));
 }
 
 async function fetchFirstJson(endpoints) {
@@ -963,6 +963,7 @@ function normalizeProduct(rawProduct) {
       rawProduct.statut ||
       'Disponibilité à confirmer',
     stock: rawProduct.stock || rawProduct.availability || rawProduct.disponibilite || '',
+    status: rawProduct.status || rawProduct.statut || 'disponible',
     stripeTestLink,
     stripeLink: stripeTestLink
   };
@@ -1050,7 +1051,7 @@ async function initBoutiquePage() {
       return;
     }
 
-    const canBuy = Boolean(product.priceId);
+    const canBuy = Boolean(product.priceId) && product.status !== 'indisponible';
     const buyAction = canBuy
       ? `<button type="submit" class="btn btn-primary btn-xl">Payer avec Stripe</button>`
       : `<button type="button" class="btn btn-primary btn-xl disabled" disabled aria-disabled="true">Paiement test bientôt disponible</button>`;
@@ -1335,7 +1336,10 @@ function normalizePageContent(payload, slug) {
 async function initSimplePageContent() {
   const slug = getCurrentPageSlug();
   const pageFile = pageContentFiles[slug];
-  const directPayload = pageFile ? await fetchFirstJson(getStaticContentEndpoints(pageFile)) : null;
+  const pagesPayload = await fetchFirstJson(getStaticContentEndpoints('/api/pages'));
+  const dynamicPages = pagesPayload && Array.isArray(pagesPayload.pages) ? pagesPayload.pages : [];
+  const dynamicPage = dynamicPages.find((item) => item.slug === slug);
+  const directPayload = dynamicPage || (pageFile ? await fetchFirstJson(getStaticContentEndpoints(pageFile)) : null);
   let page = normalizePageContent(directPayload, slug);
 
   if (!page) {

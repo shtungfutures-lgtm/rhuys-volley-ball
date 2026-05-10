@@ -19,7 +19,7 @@
       <section class="admin-login card" id="login-panel">
         <p class="hero-tag">Administration</p>
         <h1>Connexion RHUYS VOLLEY BALL</h1>
-        <p>Connectez-vous avec l’identifiant et le mot de passe du club pour gérer les actualités et les commandes.</p>
+        <p>Connectez-vous avec l’identifiant et le mot de passe du club pour gérer le site.</p>
 
         <form class="admin-form" id="login-form">
           <label>
@@ -38,76 +38,213 @@
       <section class="admin-panel" id="editor-panel" hidden>
         <div class="admin-topbar">
           <div>
-            <p class="hero-tag">Actualités</p>
-            <h1>Gestion des articles</h1>
+            <p class="hero-tag">Tableau de bord</p>
+            <h1>Gestion du site RHUYS VOLLEY BALL</h1>
+            <p>Modifiez les actualités, produits, partenaires, photos et textes principaux du site.</p>
           </div>
           <button type="button" class="btn btn-outline" id="logout-button">Déconnexion</button>
         </div>
 
-        <div class="admin-layout">
-          <aside class="admin-list card">
-            <div class="admin-list-head">
-              <h2>Articles</h2>
-              <button type="button" class="btn btn-primary" id="new-article-button">Nouvel article</button>
-            </div>
-            <div id="articles-list" class="articles-list"></div>
-          </aside>
+        <nav class="admin-tabs" aria-label="Rubriques d’administration">
+          <button type="button" class="admin-tab active" data-tab="articles">Actualités</button>
+          <button type="button" class="admin-tab" data-tab="products">Boutique</button>
+          <button type="button" class="admin-tab" data-tab="partners">Partenaires</button>
+          <button type="button" class="admin-tab" data-tab="gallery">Photos</button>
+          <button type="button" class="admin-tab" data-tab="pages">Pages</button>
+          <button type="button" class="admin-tab" data-tab="orders">Commandes</button>
+        </nav>
 
-          <form class="admin-editor card" id="article-form">
-            <input type="hidden" id="article-id" />
-            <label>
-              Titre
-              <input type="text" id="article-title" required />
-            </label>
-            <div class="admin-grid">
-              <label>
-                Date
-                <input type="date" id="article-date" required />
-              </label>
+        <p class="admin-message dashboard-message" id="dashboard-message" aria-live="polite"></p>
+
+        <section class="admin-section active" id="section-articles" data-section="articles">
+          <div class="admin-layout">
+            <aside class="admin-list card">
+              <div class="admin-list-head">
+                <h2>Actualités</h2>
+                <button type="button" class="btn btn-primary" id="new-article-button">Nouvel article</button>
+              </div>
+              <div id="articles-list" class="admin-item-list"></div>
+            </aside>
+
+            <form class="admin-editor card" id="article-form">
+              <input type="hidden" id="article-id" />
+              <label>Titre <input type="text" id="article-title" required /></label>
+              <div class="admin-grid">
+                <label>Date <input type="date" id="article-date" required /></label>
+                <label>
+                  Catégorie
+                  <select id="article-category" required>
+                    <option>Matchs</option>
+                    <option>Club</option>
+                    <option>Événements</option>
+                    <option>Jeunes</option>
+                    <option>Annonces</option>
+                  </select>
+                </label>
+              </div>
+              <label>Auteur <input type="text" id="article-author" /></label>
+              <label>Image <input type="file" id="article-image" accept="image/*" /></label>
+              <img src="" alt="" class="admin-preview" id="article-preview" hidden />
+              <label>Extrait <textarea id="article-excerpt" rows="3" required></textarea></label>
+              <label>Contenu complet <textarea id="article-body" rows="9" required></textarea></label>
+              <div class="admin-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer l’article</button>
+                <button type="button" class="btn btn-outline danger" id="delete-article-button">Supprimer</button>
+              </div>
+              <p class="admin-message" id="editor-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="admin-section" id="section-products" data-section="products">
+          <div class="admin-layout">
+            <aside class="admin-list card">
+              <div class="admin-list-head">
+                <h2>Produits boutique</h2>
+                <button type="button" class="btn btn-primary" id="new-product-button">Nouveau produit</button>
+              </div>
+              <div id="products-list" class="admin-item-list"></div>
+            </aside>
+
+            <form class="admin-editor card" id="product-form">
+              <input type="hidden" id="product-id" />
+              <label>Nom <input type="text" id="product-name" required /></label>
+              <div class="admin-grid">
+                <label>Prix <input type="text" id="product-price" placeholder="45 €" required /></label>
+                <label>
+                  Statut
+                  <select id="product-status">
+                    <option value="disponible">Disponible</option>
+                    <option value="indisponible">Indisponible</option>
+                  </select>
+                </label>
+              </div>
+              <label>Image <input type="file" id="product-image-file" accept="image/*" /></label>
+              <label>Image actuelle ou URL <input type="text" id="product-image" placeholder="/uploads/images/produit.jpg" /></label>
+              <img src="" alt="" class="admin-preview" id="product-preview" hidden />
+              <div class="admin-grid">
+                <label>Tailles <input type="text" id="product-sizes" placeholder="XS, S, M, L, XL" /></label>
+                <label>Couleurs <input type="text" id="product-colors" placeholder="Bleu, Blanc" /></label>
+              </div>
+              <label>Description courte <textarea id="product-short" rows="3"></textarea></label>
+              <label>Description complète <textarea id="product-detail" rows="7"></textarea></label>
+              <label>Lien Stripe Payment Link <input type="url" id="product-stripe-link" placeholder="https://buy.stripe.com/..." /></label>
+              <label>ID prix Stripe <input type="text" id="product-price-id" placeholder="price_..." /></label>
+              <div class="admin-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer le produit</button>
+                <button type="button" class="btn btn-outline danger" id="delete-product-button">Supprimer</button>
+              </div>
+              <p class="admin-message" id="product-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="admin-section" id="section-partners" data-section="partners">
+          <div class="admin-layout">
+            <aside class="admin-list card">
+              <div class="admin-list-head">
+                <h2>Partenaires</h2>
+                <button type="button" class="btn btn-primary" id="new-partner-button">Nouveau partenaire</button>
+              </div>
+              <div id="partners-list" class="admin-item-list"></div>
+            </aside>
+
+            <form class="admin-editor card" id="partner-form">
+              <input type="hidden" id="partner-id" />
+              <label>Nom <input type="text" id="partner-name" required /></label>
               <label>
                 Catégorie
-                <select id="article-category" required>
-                  <option>Matchs</option>
-                  <option>Club</option>
-                  <option>Événements</option>
-                  <option>Jeunes</option>
-                  <option>Annonces</option>
+                <select id="partner-category">
+                  <option>Partenaire principal</option>
+                  <option>Partenaire local</option>
+                  <option>Institutionnel</option>
+                  <option>Équipementier</option>
                 </select>
               </label>
-            </div>
-            <label>
-              Auteur
-              <input type="text" id="article-author" />
-            </label>
-            <label>
-              Image
-              <input type="file" id="article-image" accept="image/*" />
-            </label>
-            <img src="" alt="" class="admin-preview" id="article-preview" hidden />
-            <label>
-              Extrait
-              <textarea id="article-excerpt" rows="3" required></textarea>
-            </label>
-            <label>
-              Contenu complet
-              <textarea id="article-body" rows="9" required></textarea>
-            </label>
-
-            <div class="admin-actions">
-              <button type="submit" class="btn btn-primary">Publier les modifications</button>
-              <button type="button" class="btn btn-outline danger" id="delete-article-button">Supprimer</button>
-            </div>
-            <p class="admin-message" id="editor-message" aria-live="polite"></p>
-          </form>
-        </div>
-
-        <section class="admin-orders card">
-          <div class="admin-orders-head">
-            <h2>Commandes boutique</h2>
-            <button type="button" class="btn btn-outline" id="refresh-orders-button">Rafraîchir</button>
+              <label>Logo <input type="file" id="partner-logo-file" accept="image/*" /></label>
+              <label>Logo actuel ou URL <input type="text" id="partner-logo" /></label>
+              <img src="" alt="" class="admin-preview" id="partner-preview" hidden />
+              <label>Description <textarea id="partner-description" rows="5"></textarea></label>
+              <label>Lien du site <input type="url" id="partner-website" placeholder="https://..." /></label>
+              <div class="admin-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer le partenaire</button>
+                <button type="button" class="btn btn-outline danger" id="delete-partner-button">Supprimer</button>
+              </div>
+              <p class="admin-message" id="partner-message" aria-live="polite"></p>
+            </form>
           </div>
-          <p class="admin-message" id="orders-message" aria-live="polite"></p>
-          <div id="orders-list" class="orders-list"></div>
+        </section>
+
+        <section class="admin-section" id="section-gallery" data-section="gallery">
+          <div class="admin-layout">
+            <aside class="admin-list card">
+              <div class="admin-list-head">
+                <h2>Photos du site</h2>
+                <button type="button" class="btn btn-primary" id="new-photo-button">Nouvelle photo</button>
+              </div>
+              <div id="gallery-list" class="admin-item-list"></div>
+            </aside>
+
+            <form class="admin-editor card" id="gallery-form">
+              <input type="hidden" id="photo-id" />
+              <label>Titre <input type="text" id="photo-title" required /></label>
+              <label>
+                Catégorie
+                <select id="photo-category">
+                  <option>Club</option>
+                  <option>Matchs</option>
+                  <option>Jeunes</option>
+                  <option>Événements</option>
+                  <option>Entraînements</option>
+                </select>
+              </label>
+              <label>Image <input type="file" id="photo-image-file" accept="image/*" /></label>
+              <label>Image actuelle ou URL <input type="text" id="photo-image" /></label>
+              <img src="" alt="" class="admin-preview" id="photo-preview" hidden />
+              <label>Description <textarea id="photo-description" rows="5"></textarea></label>
+              <div class="admin-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer la photo</button>
+                <button type="button" class="btn btn-outline danger" id="delete-photo-button">Supprimer</button>
+              </div>
+              <p class="admin-message" id="gallery-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="admin-section" id="section-pages" data-section="pages">
+          <div class="admin-layout">
+            <aside class="admin-list card">
+              <div class="admin-list-head">
+                <h2>Textes des pages</h2>
+              </div>
+              <div id="pages-list" class="admin-item-list"></div>
+            </aside>
+
+            <form class="admin-editor card" id="page-form">
+              <input type="hidden" id="page-slug" />
+              <label>Page <input type="text" id="page-label" disabled /></label>
+              <label>Titre principal <input type="text" id="page-title" required /></label>
+              <label>Texte d’introduction <textarea id="page-content" rows="6"></textarea></label>
+              <label>Image <input type="file" id="page-image-file" accept="image/*" /></label>
+              <label>Image actuelle ou URL <input type="text" id="page-image" /></label>
+              <img src="" alt="" class="admin-preview" id="page-preview" hidden />
+              <div class="admin-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer la page</button>
+              </div>
+              <p class="admin-message" id="page-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="admin-section" id="section-orders" data-section="orders">
+          <section class="admin-orders card">
+            <div class="admin-orders-head">
+              <h2>Commandes boutique</h2>
+              <button type="button" class="btn btn-outline" id="refresh-orders-button">Rafraîchir</button>
+            </div>
+            <p class="admin-message" id="orders-message" aria-live="polite"></p>
+            <div id="orders-list" class="orders-list"></div>
+          </section>
         </section>
       </section>
     </main>
