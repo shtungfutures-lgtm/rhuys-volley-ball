@@ -6,13 +6,58 @@ declare const Netlify: { env: { get(name: string): string | undefined } };
 const STORE_NAME = "rhuys-cms";
 const GITHUB_BASE = "https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main";
 
-type ContentType = "gallery" | "products" | "partners" | "pages";
+type ContentType = "gallery" | "products" | "partners" | "pages" | "teams";
 
 type PageRecord = {
   slug: string;
   title: string;
   content: string;
   image: string;
+};
+
+const defaultTeams = {
+  teams: [
+    {
+      id: "ecole-volley",
+      name: "École de Volley",
+      age: "8 à 11 ans",
+      schedule: "Mercredi 16h00 - 17h30",
+      location: "Sarzeau",
+      image: "https://images.pexels.com/photos/6203648/pexels-photo-6203648.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      description: "Découverte du volley dans une ambiance ludique, progressive et collective.",
+      highlights: ["Découverte du volley", "Motricité et coordination", "Approche ludique et collective"],
+    },
+    {
+      id: "volley-jeunes",
+      name: "Volley Jeunes",
+      age: "12 à 17 ans",
+      schedule: "Mercredi 18h00 - 19h30",
+      location: "Sarzeau",
+      image: "https://images.pexels.com/photos/6203569/pexels-photo-6203569.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      description: "Un groupe pour progresser techniquement, gagner en confiance et préparer les rencontres.",
+      highlights: ["Perfectionnement technique", "Travail tactique", "Préparation aux rencontres"],
+    },
+    {
+      id: "adultes-competition",
+      name: "Loisir Adultes - Compétition",
+      age: "Adultes",
+      schedule: "Mercredi 20h30 - 22h30",
+      location: "Surzur",
+      image: "https://images.pexels.com/photos/6203586/pexels-photo-6203586.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      description: "Une pratique plus engagée pour les joueurs souhaitant évoluer dans un cadre compétitif.",
+      highlights: ["Rythme soutenu", "Objectifs de performance", "Participation championnat"],
+    },
+    {
+      id: "adultes-tous-niveaux",
+      name: "Loisir Adultes - Tous niveaux",
+      age: "Adultes",
+      schedule: "Mardi 20h00 - 22h00",
+      location: "Sarzeau",
+      image: "https://images.pexels.com/photos/6203635/pexels-photo-6203635.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      description: "Une section conviviale ouverte aux débutants comme aux joueurs déjà expérimentés.",
+      highlights: ["Séances conviviales", "Intégration des débutants", "Progression individualisée"],
+    },
+  ],
 };
 
 const contentConfig: Record<ContentType, { key: string; primaryField: string; fallbackUrls: string[] }> = {
@@ -30,6 +75,11 @@ const contentConfig: Record<ContentType, { key: string; primaryField: string; fa
     key: "partners",
     primaryField: "partners",
     fallbackUrls: [`${GITHUB_BASE}/content/partners/partners.json`, `${GITHUB_BASE}/content/partenaires/partenaires.json`],
+  },
+  teams: {
+    key: "teams",
+    primaryField: "teams",
+    fallbackUrls: [`${GITHUB_BASE}/content/teams/teams.json`],
   },
   pages: {
     key: "pages",
@@ -96,7 +146,7 @@ function getContentType(req: Request): ContentType | null {
   const pathname = new URL(req.url).pathname;
   const segment = pathname.split("/").filter(Boolean).pop() || "";
 
-  if (["gallery", "products", "partners", "pages"].includes(segment)) {
+  if (["gallery", "products", "partners", "pages", "teams"].includes(segment)) {
     return segment as ContentType;
   }
 
@@ -180,6 +230,28 @@ function normalizePartners(payload: unknown) {
   };
 }
 
+function normalizeTeams(payload: unknown) {
+  const raw = payload as { teams?: unknown[]; equipes?: unknown[] };
+  const items = Array.isArray(raw.teams) ? raw.teams : Array.isArray(raw.equipes) ? raw.equipes : [];
+
+  return {
+    teams: items.map((item, index) => {
+      const team = item as Record<string, unknown>;
+      const name = String(team.name || team.nom || `Équipe ${index + 1}`);
+      return {
+        id: String(team.id || toSlug(name) || `equipe-${index + 1}`),
+        name,
+        age: String(team.age || team.ages || team.category || ""),
+        schedule: String(team.schedule || team.horaire || team.horaires || ""),
+        location: String(team.location || team.lieu || ""),
+        image: String(team.image || ""),
+        description: String(team.description || ""),
+        highlights: asStringArray(team.highlights || team.points || team.atouts),
+      };
+    }),
+  };
+}
+
 function normalizePages(payload: unknown) {
   const raw = payload as Record<string, unknown>;
   let items: unknown[] = [];
@@ -207,11 +279,22 @@ function normalizePayload(type: ContentType, payload: unknown) {
   if (type === "gallery") return normalizeGallery(payload);
   if (type === "products") return normalizeProducts(payload);
   if (type === "partners") return normalizePartners(payload);
+  if (type === "teams") return normalizeTeams(payload);
   return normalizePages(payload);
 }
 
 async function fetchFallback(type: ContentType) {
   const config = contentConfig[type];
+
+  if (type === "teams") {
+    for (const url of config.fallbackUrls) {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      return normalizePayload(type, await response.json());
+    }
+
+    return normalizeTeams(defaultTeams);
+  }
 
   if (type === "pages") {
     const pages: PageRecord[] = [];
@@ -283,10 +366,12 @@ export const config = {
     "/api/gallery",
     "/api/products",
     "/api/partners",
+    "/api/teams",
     "/api/pages",
     "/api/admin/gallery",
     "/api/admin/products",
     "/api/admin/partners",
+    "/api/admin/teams",
     "/api/admin/pages",
   ],
 };

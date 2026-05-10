@@ -473,6 +473,11 @@ img {
   font-weight: 700;
 }
 
+.team-content .team-description {
+  color: #355171;
+  font-weight: 600;
+}
+
 .team-content ul {
   margin: 0;
   padding-left: 1.15rem;

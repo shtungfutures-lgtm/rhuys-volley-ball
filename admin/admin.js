@@ -2,6 +2,7 @@ const tokenKey = 'rvb-admin-token';
 const state = {
   articles: [],
   products: [],
+  teams: [],
   partners: [],
   gallery: [],
   pages: [],
@@ -9,6 +10,7 @@ const state = {
   currentImages: {
     article: '',
     product: '',
+    team: '',
     partner: '',
     photo: '',
     page: '',
@@ -285,6 +287,63 @@ function renderProducts(activeId = '') {
   );
 }
 
+function emptyTeam() {
+  return {
+    id: String(Date.now()),
+    name: '',
+    age: '',
+    schedule: '',
+    location: '',
+    image: '',
+    description: '',
+    highlights: [],
+  };
+}
+
+function fillTeam(team) {
+  setValue('#team-id', team.id);
+  setValue('#team-name', team.name);
+  setValue('#team-age', team.age);
+  setValue('#team-schedule', team.schedule);
+  setValue('#team-location', team.location);
+  setValue('#team-image', team.image);
+  setValue('#team-description', team.description);
+  setValue('#team-highlights', Array.isArray(team.highlights) ? team.highlights.join('\n') : joinList(team.highlights));
+  state.currentImages.team = team.image || '';
+  const input = qs('#team-image-file');
+  if (input) input.value = '';
+  setPreview('#team-preview', state.currentImages.team, team.name);
+  renderTeams(team.id);
+}
+
+function readTeam() {
+  const name = getValue('#team-name');
+  return {
+    id: getValue('#team-id') || toSlug(name) || String(Date.now()),
+    name,
+    age: getValue('#team-age'),
+    schedule: getValue('#team-schedule'),
+    location: getValue('#team-location'),
+    image: getValue('#team-image') || state.currentImages.team,
+    description: getValue('#team-description'),
+    highlights: getValue('#team-highlights')
+      .split(/\n|,/)
+      .map((item) => item.trim())
+      .filter(Boolean),
+  };
+}
+
+function renderTeams(activeId = '') {
+  renderGenericList(
+    '#teams-list',
+    state.teams,
+    activeId,
+    (team) => team.name,
+    (team) => `${team.age || 'Âge non renseigné'} - ${team.location || 'Lieu non renseigné'}`,
+    fillTeam
+  );
+}
+
 function emptyPartner() {
   return { id: String(Date.now()), name: '', logo: '', category: 'Partenaire local', description: '', website: '' };
 }
@@ -490,9 +549,10 @@ function renderOrders() {
 
 async function loadDashboard() {
   setMessage(dashboardMessage, 'Chargement des contenus...');
-  const [articles, products, partners, gallery, pages, orders] = await Promise.all([
+  const [articles, products, teams, partners, gallery, pages, orders] = await Promise.all([
     apiRequest('/api/admin/articles'),
     apiRequest('/api/admin/products'),
+    apiRequest('/api/admin/teams'),
     apiRequest('/api/admin/partners'),
     apiRequest('/api/admin/gallery'),
     apiRequest('/api/admin/pages'),
@@ -501,6 +561,7 @@ async function loadDashboard() {
 
   state.articles = sortArticlesByNewest(articles.articles || []);
   state.products = products.products || [];
+  state.teams = teams.teams || [];
   state.partners = partners.partners || [];
   state.gallery = gallery.gallery || [];
   state.pages = pages.pages && pages.pages.length ? pages.pages : [
@@ -513,6 +574,7 @@ async function loadDashboard() {
   showEditor();
   fillArticle(state.articles[0] || emptyArticle());
   fillProduct(state.products[0] || emptyProduct());
+  fillTeam(state.teams[0] || emptyTeam());
   fillPartner(state.partners[0] || emptyPartner());
   fillPhoto(state.gallery[0] || emptyPhoto());
   fillPage(state.pages[0]);
@@ -554,6 +616,7 @@ qsa('.admin-tab').forEach((button) => button.addEventListener('click', () => act
 
 qs('#new-article-button').addEventListener('click', () => fillArticle(emptyArticle()));
 qs('#new-product-button').addEventListener('click', () => fillProduct(emptyProduct()));
+qs('#new-team-button').addEventListener('click', () => fillTeam(emptyTeam()));
 qs('#new-partner-button').addEventListener('click', () => fillPartner(emptyPartner()));
 qs('#new-photo-button').addEventListener('click', () => fillPhoto(emptyPhoto()));
 
@@ -565,6 +628,11 @@ qs('#product-image-file').addEventListener('change', () => readImageFile('#produ
   state.currentImages.product = src;
   setValue('#product-image', src);
   setPreview('#product-preview', src, getValue('#product-name'));
+}));
+qs('#team-image-file').addEventListener('change', () => readImageFile('#team-image-file', (src) => {
+  state.currentImages.team = src;
+  setValue('#team-image', src);
+  setPreview('#team-preview', src, getValue('#team-name'));
 }));
 qs('#partner-logo-file').addEventListener('change', () => readImageFile('#partner-logo-file', (src) => {
   state.currentImages.partner = src;
@@ -605,6 +673,19 @@ qs('#product-form').addEventListener('submit', async (event) => {
     setMessage(qs('#product-message'), 'Produit enregistré. La boutique est mise à jour.', 'success');
   } catch (error) {
     setMessage(qs('#product-message'), error.message, 'error');
+  }
+});
+
+qs('#team-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const item = readTeam();
+  upsertItem(state.teams, item);
+  try {
+    await saveContent('teams', { teams: state.teams });
+    fillTeam(item);
+    setMessage(qs('#team-message'), 'Équipe enregistrée. La page Équipes est mise à jour.', 'success');
+  } catch (error) {
+    setMessage(qs('#team-message'), error.message, 'error');
   }
 });
 
@@ -663,6 +744,15 @@ qs('#delete-product-button').addEventListener('click', async () => {
   state.products = state.products.filter((entry) => entry.id !== id);
   await saveContent('products', { products: state.products });
   fillProduct(state.products[0] || emptyProduct());
+});
+
+qs('#delete-team-button').addEventListener('click', async () => {
+  const id = getValue('#team-id');
+  const item = state.teams.find((entry) => entry.id === id);
+  if (!item || !window.confirm(`Supprimer l’équipe "${item.name}" ?`)) return;
+  state.teams = state.teams.filter((entry) => entry.id !== id);
+  await saveContent('teams', { teams: state.teams });
+  fillTeam(state.teams[0] || emptyTeam());
 });
 
 qs('#delete-partner-button').addEventListener('click', async () => {

@@ -1,0 +1,60 @@
+{
+  "teams": [
+    {
+      "id": "ecole-volley",
+      "name": "École de Volley",
+      "age": "8 à 11 ans",
+      "schedule": "Mercredi 16h00 - 17h30",
+      "location": "Sarzeau",
+      "image": "https://images.pexels.com/photos/6203648/pexels-photo-6203648.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Découverte du volley dans une ambiance ludique, progressive et collective.",
+      "highlights": [
+        "Découverte du volley",
+        "Motricité et coordination",
+        "Approche ludique et collective"
+      ]
+    },
+    {
+      "id": "volley-jeunes",
+      "name": "Volley Jeunes",
+      "age": "12 à 17 ans",
+      "schedule": "Mercredi 18h00 - 19h30",
+      "location": "Sarzeau",
+      "image": "https://images.pexels.com/photos/6203569/pexels-photo-6203569.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Un groupe pour progresser techniquement, gagner en confiance et préparer les rencontres.",
+      "highlights": [
+        "Perfectionnement technique",
+        "Travail tactique",
+        "Préparation aux rencontres"
+      ]
+    },
+    {
+      "id": "adultes-competition",
+      "name": "Loisir Adultes - Compétition",
+      "age": "Adultes",
+      "schedule": "Mercredi 20h30 - 22h30",
+      "location": "Surzur",
+      "image": "https://images.pexels.com/photos/6203586/pexels-photo-6203586.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Une pratique plus engagée pour les joueurs souhaitant évoluer dans un cadre compétitif.",
+      "highlights": [
+        "Rythme soutenu",
+        "Objectifs de performance",
+        "Participation championnat"
+      ]
+    },
+    {
+      "id": "adultes-tous-niveaux",
+      "name": "Loisir Adultes - Tous niveaux",
+      "age": "Adultes",
+      "schedule": "Mardi 20h00 - 22h00",
+      "location": "Sarzeau",
+      "image": "https://images.pexels.com/photos/6203635/pexels-photo-6203635.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "description": "Une section conviviale ouverte aux débutants comme aux joueurs déjà expérimentés.",
+      "highlights": [
+        "Séances conviviales",
+        "Intégration des débutants",
+        "Progression individualisée"
+      ]
+    }
+  ]
+}

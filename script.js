@@ -382,6 +382,49 @@ const fallbackGalleryItems = [
   }
 ];
 
+const fallbackTeams = [
+  {
+    id: 'ecole-volley',
+    name: 'École de Volley',
+    age: '8 à 11 ans',
+    schedule: 'Mercredi 16h00 - 17h30',
+    location: 'Sarzeau',
+    image: 'https://images.pexels.com/photos/6203648/pexels-photo-6203648.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'Découverte du volley dans une ambiance ludique, progressive et collective.',
+    highlights: ['Découverte du volley', 'Motricité et coordination', 'Approche ludique et collective']
+  },
+  {
+    id: 'volley-jeunes',
+    name: 'Volley Jeunes',
+    age: '12 à 17 ans',
+    schedule: 'Mercredi 18h00 - 19h30',
+    location: 'Sarzeau',
+    image: 'https://images.pexels.com/photos/6203569/pexels-photo-6203569.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'Un groupe pour progresser techniquement, gagner en confiance et préparer les rencontres.',
+    highlights: ['Perfectionnement technique', 'Travail tactique', 'Préparation aux rencontres']
+  },
+  {
+    id: 'adultes-competition',
+    name: 'Loisir Adultes - Compétition',
+    age: 'Adultes',
+    schedule: 'Mercredi 20h30 - 22h30',
+    location: 'Surzur',
+    image: 'https://images.pexels.com/photos/6203586/pexels-photo-6203586.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'Une pratique plus engagée pour les joueurs souhaitant évoluer dans un cadre compétitif.',
+    highlights: ['Rythme soutenu', 'Objectifs de performance', 'Participation championnat']
+  },
+  {
+    id: 'adultes-tous-niveaux',
+    name: 'Loisir Adultes - Tous niveaux',
+    age: 'Adultes',
+    schedule: 'Mardi 20h00 - 22h00',
+    location: 'Sarzeau',
+    image: 'https://images.pexels.com/photos/6203635/pexels-photo-6203635.jpeg?auto=compress&cs=tinysrgb&w=1200',
+    description: 'Une section conviviale ouverte aux débutants comme aux joueurs déjà expérimentés.',
+    highlights: ['Séances conviviales', 'Intégration des débutants', 'Progression individualisée']
+  }
+];
+
 const cmsArticlesEndpoint = '/content/articles/articles.json';
 const liveArticlesEndpoint = '/api/articles';
 const githubArticlesEndpoint =
@@ -391,6 +434,7 @@ const githubContentBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lg
 const galleryContentPath = ['/api/gallery', '/content/gallery/gallery.json', '/content/galerie/galerie.json'];
 const productsContentPath = ['/api/products', '/content/products/products.json', '/content/produits/produits.json'];
 const partnersContentPath = ['/api/partners', '/content/partners/partners.json', '/content/partenaires/partenaires.json'];
+const teamsContentPath = ['/api/teams', '/content/teams/teams.json'];
 const pagesContentPath = '/content/pages/pages.json';
 const pageContentFiles = {
   index: '/content/pages/accueil.json',
@@ -878,6 +922,82 @@ async function initGallery() {
 
   bindImageFallback(galleryRoot.querySelectorAll('img'));
   initRevealAnimations(galleryRoot.querySelectorAll('.reveal'));
+}
+
+function normalizeTeam(rawTeam, index) {
+  const highlights = rawTeam.highlights || rawTeam.points || rawTeam.atouts || [];
+
+  return {
+    id: rawTeam.id || toArticleSlug(rawTeam.name || rawTeam.nom || `equipe-${index + 1}`),
+    name: rawTeam.name || rawTeam.nom || `Équipe ${index + 1}`,
+    age: rawTeam.age || rawTeam.ages || rawTeam.category || '',
+    schedule: rawTeam.schedule || rawTeam.horaire || rawTeam.horaires || '',
+    location: rawTeam.location || rawTeam.lieu || '',
+    image: resolveCmsMediaUrl(rawTeam.image || ''),
+    description: rawTeam.description || '',
+    highlights: Array.isArray(highlights)
+      ? highlights
+      : String(highlights || '')
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean)
+  };
+}
+
+async function getResolvedTeams() {
+  const payload = await fetchFirstJson(getStaticContentEndpoints(teamsContentPath));
+  const resolvedTeams = payload && (payload.teams || payload.equipes);
+  const rawTeams = Array.isArray(resolvedTeams) && resolvedTeams.length > 0 ? resolvedTeams : fallbackTeams;
+  return rawTeams.map(normalizeTeam);
+}
+
+function renderTeamCard(team) {
+  const details = [team.age, team.schedule, team.location].filter(Boolean).join(' • ');
+  const highlightsHtml = team.highlights.length
+    ? `<ul>${team.highlights.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+    : '';
+
+  return `
+    <article class="team-card reveal">
+      <img
+        src="${team.image}"
+        alt="${escapeHtml(team.name)}"
+        loading="lazy"
+        decoding="async"
+        referrerpolicy="no-referrer"
+      />
+      <div class="team-content">
+        <h3>${escapeHtml(team.name)}</h3>
+        <p>${escapeHtml(details || team.description)}</p>
+        ${team.description ? `<p class="team-description">${escapeHtml(team.description)}</p>` : ''}
+        ${highlightsHtml}
+      </div>
+    </article>
+  `;
+}
+
+async function initTeamsPage() {
+  const teamsRoot = document.getElementById('teams-grid');
+  if (!teamsRoot) {
+    return;
+  }
+
+  const teams = await getResolvedTeams();
+  teamsRoot.innerHTML = teams.map(renderTeamCard).join('');
+  bindImageFallback(teamsRoot.querySelectorAll('img'));
+  initRevealAnimations(teamsRoot.querySelectorAll('.reveal'));
+}
+
+async function initHomeTeamsPreview() {
+  const previewRoot = document.getElementById('home-teams-preview');
+  if (!previewRoot) {
+    return;
+  }
+
+  const teams = (await getResolvedTeams()).slice(0, 2);
+  previewRoot.innerHTML = teams.map(renderTeamCard).join('');
+  bindImageFallback(previewRoot.querySelectorAll('img'));
+  initRevealAnimations(previewRoot.querySelectorAll('.reveal'));
 }
 
 async function initArticlePage() {
@@ -1874,7 +1994,9 @@ alignHashWithNavbarOffset();
 initRevealAnimations(revealElements);
 initSimplePageContent();
 initHomeNewsPreview();
+initHomeTeamsPreview();
 initGallery();
+initTeamsPage();
 initActualitesPage();
 initArticlePage();
 initBoutiquePage();

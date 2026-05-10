@@ -47,6 +47,7 @@
 
         <nav class="admin-tabs" aria-label="Rubriques d’administration">
           <button type="button" class="admin-tab active" data-tab="articles">Actualités</button>
+          <button type="button" class="admin-tab" data-tab="teams">Équipes</button>
           <button type="button" class="admin-tab" data-tab="products">Boutique &amp; commandes</button>
           <button type="button" class="admin-tab" data-tab="partners">Partenaires</button>
           <button type="button" class="admin-tab" data-tab="gallery">Photos</button>
@@ -91,6 +92,64 @@
                 <button type="button" class="btn btn-outline danger" id="delete-article-button">Supprimer</button>
               </div>
               <p class="admin-message" id="editor-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="admin-section" id="section-teams" data-section="teams">
+          <div class="admin-section-intro card">
+            <div>
+              <p class="admin-kicker">Équipes</p>
+              <h2>Fiches équipes de la page Équipes</h2>
+              <p>
+                Modifiez chaque groupe du club : image, âge, horaire, lieu, description et points forts. Les
+                changements sont aussi repris dans l’aperçu de la page d’accueil.
+              </p>
+            </div>
+            <div class="admin-mini-steps" aria-label="Étapes équipes">
+              <span>1. Choisir</span>
+              <span>2. Modifier la fiche</span>
+              <span>3. Enregistrer</span>
+            </div>
+          </div>
+
+          <div class="admin-layout">
+            <aside class="admin-list card">
+              <div class="admin-list-head">
+                <h2>Équipes enregistrées</h2>
+                <p>Cliquez sur une équipe pour modifier son image et son contenu.</p>
+                <button type="button" class="btn btn-primary" id="new-team-button">Nouvelle équipe</button>
+              </div>
+              <div id="teams-list" class="admin-item-list"></div>
+            </aside>
+
+            <form class="admin-editor card" id="team-form">
+              <input type="hidden" id="team-id" />
+              <div class="admin-form-heading">
+                <p class="admin-kicker">Fiche équipe</p>
+                <h2>Modifier une équipe</h2>
+                <p>Chaque fiche correspond à une carte visible sur la page Équipes.</p>
+              </div>
+              <label>Nom de l’équipe <input type="text" id="team-name" required /></label>
+              <div class="admin-grid">
+                <label>Âge ou niveau <input type="text" id="team-age" placeholder="8 à 11 ans" /></label>
+                <label>Lieu <input type="text" id="team-location" placeholder="Sarzeau" /></label>
+              </div>
+              <label>Horaire <input type="text" id="team-schedule" placeholder="Mercredi 16h00 - 17h30" /></label>
+              <div class="admin-field-help">
+                <strong>Image de l’équipe</strong>
+                <span>Importez une photo différente pour chaque équipe ou collez une URL existante.</span>
+              </div>
+              <label>Importer une image <input type="file" id="team-image-file" accept="image/*" /></label>
+              <label>Image actuelle ou URL <input type="text" id="team-image" /></label>
+              <img src="" alt="" class="admin-preview" id="team-preview" hidden />
+              <label>Description <textarea id="team-description" rows="4"></textarea></label>
+              <label>Points forts <textarea id="team-highlights" rows="4" placeholder="Un point fort par ligne"></textarea></label>
+              <div class="admin-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer l’équipe</button>
+                <button type="button" class="btn btn-outline danger" id="delete-team-button">Supprimer</button>
+              </div>
+              <p class="admin-message" id="team-message" aria-live="polite"></p>
             </form>
           </div>
         </section>
