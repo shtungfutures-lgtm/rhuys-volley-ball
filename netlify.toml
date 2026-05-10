@@ -2,6 +2,9 @@
   command = "echo 'Static RHUYS site'"
   publish = "."
 
+[build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
 [functions]
   directory = "netlify/functions"
 
