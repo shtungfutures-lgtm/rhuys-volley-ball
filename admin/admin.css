@@ -30,9 +30,24 @@
 .admin-list,
 .admin-editor,
 .admin-list h2,
-.admin-editor p,
-.admin-topbar p {
+.admin-editor p {
   color: var(--blue-900);
+}
+
+.admin-topbar h1 {
+  color: #ffffff;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.22);
+}
+
+.admin-topbar p:not(.hero-tag) {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 800;
+}
+
+.admin-topbar .hero-tag {
+  border-color: rgba(249, 190, 36, 0.62);
+  background: rgba(249, 190, 36, 0.12);
+  color: #ffe58a;
 }
 
 .admin-body .card,
@@ -133,8 +148,8 @@
 .admin-field-help span,
 .admin-list-head p {
   margin: 0;
-  color: #526a86;
-  font-weight: 650;
+  color: #25476c;
+  font-weight: 750;
 }
 
 .admin-kicker {
@@ -219,8 +234,15 @@
 }
 
 .dashboard-message {
+  width: fit-content;
+  min-height: auto;
   margin-bottom: 14px;
-  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0.55rem 0.82rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
 }
 
 .admin-list,
@@ -264,8 +286,9 @@
 }
 
 .article-list-button span {
-  color: var(--muted);
+  color: #355171;
   font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .admin-grid {
@@ -333,14 +356,111 @@
 }
 
 .admin-message.error {
-  color: #a51d1d;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.52rem 0.75rem;
+  background: rgba(185, 28, 28, 0.1);
+  color: #8f1515;
 }
 
 .admin-message.success {
-  color: #17643a;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.52rem 0.75rem;
+  background: rgba(18, 127, 72, 0.12);
+  color: #0f6539;
+}
+
+.dashboard-message.success {
+  background: rgba(18, 127, 72, 0.26);
+  color: #ecfff4;
+}
+
+.dashboard-message.error {
+  background: rgba(185, 28, 28, 0.28);
+  color: #fff5f5;
+}
+
+.admin-toast {
+  position: fixed;
+  right: 24px;
+  top: 24px;
+  z-index: 999;
+  max-width: min(380px, calc(100% - 32px));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  background:
+    linear-gradient(135deg, rgba(12, 92, 58, 0.96), rgba(4, 45, 72, 0.96));
+  color: #ffffff;
+  box-shadow: 0 22px 56px rgba(4, 19, 42, 0.34);
+  font-weight: 900;
+  transform: translateY(-14px) scale(0.96);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.admin-toast.show {
+  animation: adminToastIn 2.8s ease-out both;
+}
+
+.admin-toast.error {
+  background:
+    linear-gradient(135deg, rgba(154, 26, 26, 0.96), rgba(88, 22, 22, 0.96));
+}
+
+.admin-toast[hidden] {
+  display: none;
+}
+
+.admin-saved-pulse {
+  animation: adminSavedPulse 1.2s ease-out;
+}
+
+@keyframes adminToastIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.96);
+  }
+
+  12%,
+  82% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+@keyframes adminSavedPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(249, 190, 36, 0);
+  }
+
+  35% {
+    box-shadow:
+      0 0 0 5px rgba(249, 190, 36, 0.34),
+      0 24px 52px rgba(5, 35, 58, 0.18);
+    transform: translateY(-2px);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(249, 190, 36, 0);
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 860px) {
+  .admin-toast {
+    top: 14px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+
   .admin-topbar {
     align-items: flex-start;
     flex-direction: column;

@@ -31,6 +31,8 @@ const loginForm = qs('#login-form');
 const logoutButton = qs('#logout-button');
 const dashboardMessage = qs('#dashboard-message');
 const loginMessage = qs('#login-message');
+const adminToast = qs('#admin-toast');
+let toastTimer = null;
 
 function getToken() {
   return localStorage.getItem(tokenKey) || '';
@@ -40,6 +42,61 @@ function setMessage(element, text, type = '') {
   if (!element) return;
   element.textContent = text;
   element.className = `admin-message ${type}`.trim();
+}
+
+function showToast(text, type = 'success') {
+  if (!adminToast) return;
+  window.clearTimeout(toastTimer);
+  adminToast.hidden = false;
+  adminToast.textContent = text;
+  adminToast.className = `admin-toast ${type} show`.trim();
+  toastTimer = window.setTimeout(() => {
+    adminToast.classList.remove('show');
+    adminToast.hidden = true;
+  }, 2900);
+}
+
+function flashSaved(element) {
+  if (!element) return;
+  element.classList.remove('admin-saved-pulse');
+  // Force a reflow so repeated saves replay the confirmation animation.
+  void element.offsetWidth;
+  element.classList.add('admin-saved-pulse');
+}
+
+function setButtonLoading(button, isLoading) {
+  if (!button) return;
+  if (isLoading) {
+    button.dataset.originalText = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Enregistrement...';
+  } else {
+    button.disabled = false;
+    button.textContent = button.dataset.originalText || button.textContent;
+  }
+}
+
+function markButtonSaved(button) {
+  if (!button) return;
+  const originalText = button.dataset.originalText || button.textContent;
+  button.disabled = false;
+  button.textContent = 'Enregistré ✓';
+  window.setTimeout(() => {
+    button.textContent = originalText;
+  }, 1300);
+}
+
+function showSaveFeedback(messageElement, text, savedElement, button) {
+  setMessage(messageElement, text, 'success');
+  showToast(`✓ ${text}`, 'success');
+  flashSaved(savedElement);
+  markButtonSaved(button);
+}
+
+function showErrorFeedback(messageElement, error) {
+  const text = error?.message || 'Une erreur est survenue.';
+  setMessage(messageElement, text, 'error');
+  showToast(text, 'error');
 }
 
 function showEditor() {
@@ -652,79 +709,97 @@ qs('#page-image-file').addEventListener('change', () => readImageFile('#page-ima
 
 qs('#article-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const submitButton = event.submitter;
+  setButtonLoading(submitButton, true);
   const item = readArticle();
   upsertItem(state.articles, item);
   try {
     await saveArticles();
     fillArticle(item);
-    setMessage(qs('#editor-message'), 'Article enregistré. Il est visible sur le site.', 'success');
+    showSaveFeedback(qs('#editor-message'), 'Article enregistré. Il est visible sur le site.', qs('#article-form'), submitButton);
   } catch (error) {
-    setMessage(qs('#editor-message'), error.message, 'error');
+    showErrorFeedback(qs('#editor-message'), error);
+    setButtonLoading(submitButton, false);
   }
 });
 
 qs('#product-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const submitButton = event.submitter;
+  setButtonLoading(submitButton, true);
   const item = readProduct();
   upsertItem(state.products, item);
   try {
     await saveContent('products', { products: state.products });
     fillProduct(item);
-    setMessage(qs('#product-message'), 'Produit enregistré. La boutique est mise à jour.', 'success');
+    showSaveFeedback(qs('#product-message'), 'Produit enregistré. La boutique est mise à jour.', qs('#product-form'), submitButton);
   } catch (error) {
-    setMessage(qs('#product-message'), error.message, 'error');
+    showErrorFeedback(qs('#product-message'), error);
+    setButtonLoading(submitButton, false);
   }
 });
 
 qs('#team-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const submitButton = event.submitter;
+  setButtonLoading(submitButton, true);
   const item = readTeam();
   upsertItem(state.teams, item);
   try {
     await saveContent('teams', { teams: state.teams });
     fillTeam(item);
-    setMessage(qs('#team-message'), 'Équipe enregistrée. La page Équipes est mise à jour.', 'success');
+    showSaveFeedback(qs('#team-message'), 'Équipe enregistrée. La page Équipes est mise à jour.', qs('#team-form'), submitButton);
   } catch (error) {
-    setMessage(qs('#team-message'), error.message, 'error');
+    showErrorFeedback(qs('#team-message'), error);
+    setButtonLoading(submitButton, false);
   }
 });
 
 qs('#partner-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const submitButton = event.submitter;
+  setButtonLoading(submitButton, true);
   const item = readPartner();
   upsertItem(state.partners, item);
   try {
     await saveContent('partners', { partners: state.partners });
     fillPartner(item);
-    setMessage(qs('#partner-message'), 'Partenaire enregistré.', 'success');
+    showSaveFeedback(qs('#partner-message'), 'Partenaire enregistré.', qs('#partner-form'), submitButton);
   } catch (error) {
-    setMessage(qs('#partner-message'), error.message, 'error');
+    showErrorFeedback(qs('#partner-message'), error);
+    setButtonLoading(submitButton, false);
   }
 });
 
 qs('#gallery-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const submitButton = event.submitter;
+  setButtonLoading(submitButton, true);
   const item = readPhoto();
   upsertItem(state.gallery, item);
   try {
     await saveContent('gallery', { gallery: state.gallery });
     fillPhoto(item);
-    setMessage(qs('#gallery-message'), 'Photo enregistrée.', 'success');
+    showSaveFeedback(qs('#gallery-message'), 'Photo enregistrée.', qs('#gallery-form'), submitButton);
   } catch (error) {
-    setMessage(qs('#gallery-message'), error.message, 'error');
+    showErrorFeedback(qs('#gallery-message'), error);
+    setButtonLoading(submitButton, false);
   }
 });
 
 qs('#page-form').addEventListener('submit', async (event) => {
   event.preventDefault();
+  const submitButton = event.submitter;
+  setButtonLoading(submitButton, true);
   const item = readPage();
   upsertItem(state.pages, item, 'slug');
   try {
     await saveContent('pages', { pages: state.pages });
     fillPage(item);
-    setMessage(qs('#page-message'), 'Page enregistrée.', 'success');
+    showSaveFeedback(qs('#page-message'), 'Page enregistrée.', qs('#page-form'), submitButton);
   } catch (error) {
-    setMessage(qs('#page-message'), error.message, 'error');
+    showErrorFeedback(qs('#page-message'), error);
+    setButtonLoading(submitButton, false);
   }
 });
 
