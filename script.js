@@ -1180,7 +1180,7 @@ async function initTrainingPage() {
   const tableBody = document.getElementById('training-table-body');
   const summaryRoot = document.getElementById('training-summary');
 
-  if (!gridRoot || !tableBody) {
+  if (!gridRoot) {
     return;
   }
 
@@ -1212,19 +1212,21 @@ async function initTrainingPage() {
     )
     .join('');
 
-  tableBody.innerHTML = trainingSlots
-    .map(
-      (slot) => `
-        <tr>
-          <td data-label="Équipe">${escapeHtml(slot.team)}</td>
-          <td data-label="Âge / niveau">${escapeHtml(slot.age || 'Tous niveaux')}</td>
-          <td data-label="Jour">${escapeHtml(slot.day)}</td>
-          <td data-label="Horaire">${escapeHtml(slot.time)}</td>
-          <td data-label="Lieu">${escapeHtml([slot.venue, slot.location].filter(Boolean).join(' - '))}</td>
-        </tr>
-      `
-    )
-    .join('');
+  if (tableBody) {
+    tableBody.innerHTML = trainingSlots
+      .map(
+        (slot) => `
+          <tr>
+            <td data-label="Équipe">${escapeHtml(slot.team)}</td>
+            <td data-label="Âge / niveau">${escapeHtml(slot.age || 'Tous niveaux')}</td>
+            <td data-label="Jour">${escapeHtml(slot.day)}</td>
+            <td data-label="Horaire">${escapeHtml(slot.time)}</td>
+            <td data-label="Lieu">${escapeHtml([slot.venue, slot.location].filter(Boolean).join(' - '))}</td>
+          </tr>
+        `
+      )
+      .join('');
+  }
 
   initRevealAnimations(gridRoot.querySelectorAll('.reveal'));
 }
