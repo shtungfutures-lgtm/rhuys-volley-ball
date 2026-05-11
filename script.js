@@ -489,6 +489,75 @@ function setActiveNavLink() {
   });
 }
 
+const breadcrumbLabels = {
+  'index.html': 'Accueil',
+  'club.html': 'Le club',
+  'equipes.html': 'Équipes',
+  'calendrier.html': 'Calendrier',
+  'classements.html': 'Classements',
+  'actualites.html': 'Actualités',
+  'article.html': 'Article',
+  'partenaires.html': 'Partenaires',
+  'boutique.html': 'Boutique',
+  'contact.html': 'Contact',
+};
+
+function getCurrentPageName() {
+  return window.location.pathname.split('/').pop() || 'index.html';
+}
+
+function updateBreadcrumbCurrent(label) {
+  const current = document.querySelector('.site-breadcrumb [aria-current="page"]');
+  if (current && label) {
+    current.textContent = label;
+  }
+}
+
+function initBreadcrumb() {
+  const header = document.querySelector('.header');
+  const currentPage = getCurrentPageName();
+  const currentLabel = breadcrumbLabels[currentPage];
+
+  if (!header || !nav || !currentLabel || currentPage === 'index.html') {
+    return;
+  }
+
+  const trail = [{ label: 'Accueil', href: 'index.html' }];
+
+  if (currentPage === 'article.html') {
+    trail.push({ label: 'Actualités', href: 'actualites.html' });
+  }
+
+  trail.push({ label: currentLabel });
+
+  const breadcrumb = document.createElement('nav');
+  breadcrumb.className = 'site-breadcrumb container';
+  breadcrumb.setAttribute('aria-label', "Fil d'Ariane");
+
+  const list = document.createElement('ol');
+  breadcrumb.appendChild(list);
+
+  trail.forEach((item) => {
+    const listItem = document.createElement('li');
+
+    if (item.href) {
+      const link = document.createElement('a');
+      link.href = item.href;
+      link.textContent = item.label;
+      listItem.appendChild(link);
+    } else {
+      const current = document.createElement('span');
+      current.setAttribute('aria-current', 'page');
+      current.textContent = item.label;
+      listItem.appendChild(current);
+    }
+
+    list.appendChild(listItem);
+  });
+
+  nav.insertAdjacentElement('afterend', breadcrumb);
+}
+
 function closeMenu(shouldFocusToggle = false) {
   if (!menuToggle || !navLinks) {
     return;
@@ -1058,6 +1127,7 @@ async function initArticlePage() {
   }
 
   document.title = `RHUYS VOLLEY BALL | ${article.title}`;
+  updateBreadcrumbCurrent(article.title);
 
   articleRoot.innerHTML = `
     <article class="article-layout card reveal">
@@ -2028,6 +2098,7 @@ if (heroLogo) {
 }
 
 setActiveNavLink();
+initBreadcrumb();
 alignHashWithNavbarOffset();
 initRevealAnimations(revealElements);
 initSimplePageContent();

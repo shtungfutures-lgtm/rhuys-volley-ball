@@ -152,6 +152,69 @@ img {
   transform: scaleX(1);
 }
 
+.site-breadcrumb {
+  position: absolute;
+  top: clamp(4.7rem, 8vw, 5.35rem);
+  left: 50%;
+  z-index: 30;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.site-breadcrumb ol {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  max-width: 100%;
+  margin: 0;
+  padding: 0.42rem 0.7rem;
+  list-style: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(4, 19, 42, 0.34);
+  box-shadow: 0 10px 22px rgba(5, 19, 40, 0.12);
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+}
+
+.site-breadcrumb li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.site-breadcrumb li + li::before {
+  content: "/";
+  color: rgba(248, 200, 54, 0.78);
+  font-weight: 800;
+}
+
+.site-breadcrumb a {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  transition: color 0.2s var(--hover-ease), opacity 0.2s var(--hover-ease);
+}
+
+.site-breadcrumb a:hover,
+.site-breadcrumb a:focus-visible {
+  color: var(--yellow);
+}
+
+.site-breadcrumb [aria-current="page"] {
+  display: inline-block;
+  max-width: min(56vw, 420px);
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.94);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .menu-toggle {
   display: none;
   border: 0;
@@ -1958,6 +2021,23 @@ textarea:focus {
 @media (max-width: 760px) {
   .nav {
     padding: 0.85rem 0.6rem;
+  }
+
+  .site-breadcrumb {
+    top: 4.85rem;
+  }
+
+  .site-breadcrumb ol {
+    max-width: 100%;
+    padding: 0.36rem 0.58rem;
+  }
+
+  .site-breadcrumb li {
+    font-size: 0.76rem;
+  }
+
+  .site-breadcrumb [aria-current="page"] {
+    max-width: 46vw;
   }
 
   .hero {
