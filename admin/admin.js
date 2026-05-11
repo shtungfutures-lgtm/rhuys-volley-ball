@@ -178,9 +178,23 @@ async function saveContent(type, payload) {
   });
 }
 
+function getArticleDateKey(value) {
+  const match = String(value || '').match(/\d{4}-\d{2}-\d{2}/);
+  if (match) {
+    return match[0];
+  }
+
+  const timestamp = Date.parse(value || '');
+  if (Number.isNaN(timestamp)) {
+    return '';
+  }
+
+  return new Date(timestamp).toISOString().slice(0, 10);
+}
+
 function getArticleTime(article) {
-  const time = Date.parse(`${article.date || ''}T12:00:00`);
-  return Number.isNaN(time) ? 0 : time;
+  const dateKey = getArticleDateKey(article.date);
+  return dateKey ? Date.parse(`${dateKey}T12:00:00`) : 0;
 }
 
 function sortArticlesByNewest(list) {
@@ -250,7 +264,7 @@ function readArticle() {
   return {
     id: getValue('#article-id') || String(Date.now()),
     title: getValue('#article-title'),
-    date: getValue('#article-date'),
+    date: getArticleDateKey(getValue('#article-date')) || new Date().toISOString().slice(0, 10),
     category: getValue('#article-category'),
     featured_image: state.currentImages.article,
     excerpt: getValue('#article-excerpt'),

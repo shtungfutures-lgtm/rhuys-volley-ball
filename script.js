@@ -549,14 +549,36 @@ function capitalizeFirstLetter(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function getArticleDateKey(value) {
+  const match = String(value || '').match(/\d{4}-\d{2}-\d{2}/);
+  if (match) {
+    return match[0];
+  }
+
+  const timestamp = Date.parse(value || '');
+  if (Number.isNaN(timestamp)) {
+    return '';
+  }
+
+  return new Date(timestamp).toISOString().slice(0, 10);
+}
+
+function getArticleTimestamp(value) {
+  const dateKey = getArticleDateKey(value);
+  return dateKey ? Date.parse(`${dateKey}T12:00:00`) : 0;
+}
+
 function formatArticleDate(dateString) {
-  const date = new Date(`${dateString}T12:00:00`);
-  return capitalizeFirstLetter(articleDateFormatter.format(date));
+  const timestamp = getArticleTimestamp(dateString);
+  if (!timestamp) {
+    return '';
+  }
+
+  return capitalizeFirstLetter(articleDateFormatter.format(new Date(timestamp)));
 }
 
 function getArticleTime(article) {
-  const time = Date.parse(`${article.date || ''}T12:00:00`);
-  return Number.isNaN(time) ? 0 : time;
+  return getArticleTimestamp(article.date);
 }
 
 function sortArticlesByNewest(list) {
@@ -698,7 +720,7 @@ function markdownToPlainText(value) {
 function normalizeArticleRecord(rawArticle, index) {
   const title = rawArticle.title || rawArticle.titre || 'Article';
   const category = rawArticle.category || rawArticle.categorie || 'Club';
-  const date = rawArticle.date || new Date().toISOString().slice(0, 10);
+  const date = getArticleDateKey(rawArticle.date) || new Date().toISOString().slice(0, 10);
   const image = resolveCmsMediaUrl(rawArticle.featured_image || rawArticle.image || '');
   const excerpt = rawArticle.excerpt || rawArticle.extrait || '';
   const body = rawArticle.body || rawArticle.contenu || '';

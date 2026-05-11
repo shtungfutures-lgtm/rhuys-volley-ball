@@ -63,9 +63,23 @@ function verifyToken(req: Request) {
   }
 }
 
+function getArticleDateKey(value: unknown) {
+  const match = String(value || "").match(/\d{4}-\d{2}-\d{2}/);
+  if (match) {
+    return match[0];
+  }
+
+  const timestamp = Date.parse(String(value || ""));
+  if (Number.isNaN(timestamp)) {
+    return "";
+  }
+
+  return new Date(timestamp).toISOString().slice(0, 10);
+}
+
 function getArticleTime(article: ArticleRecord) {
-  const time = Date.parse(`${article.date || ""}T12:00:00`);
-  return Number.isNaN(time) ? 0 : time;
+  const dateKey = getArticleDateKey(article.date);
+  return dateKey ? Date.parse(`${dateKey}T12:00:00`) : 0;
 }
 
 function sortArticlesByNewest(articles: ArticleRecord[]) {
@@ -109,7 +123,7 @@ function normalizePayload(payload: unknown) {
     articles: articles.map((article, index) => ({
       id: String((article as { id?: string | number }).id || Date.now() + index),
       title: String((article as { title?: string }).title || "Article"),
-      date: String((article as { date?: string }).date || new Date().toISOString().slice(0, 10)),
+      date: getArticleDateKey((article as { date?: string }).date) || new Date().toISOString().slice(0, 10),
       category: String((article as { category?: string }).category || "Club"),
       featured_image: String((article as { featured_image?: string }).featured_image || ""),
       excerpt: String((article as { excerpt?: string }).excerpt || ""),
