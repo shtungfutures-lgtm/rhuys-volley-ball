@@ -518,11 +518,11 @@ function initBreadcrumb() {
   const currentPage = getCurrentPageName();
   const currentLabel = breadcrumbLabels[currentPage];
 
-  if (!header || !nav || !currentLabel) {
+  if (!header || !nav || !currentLabel || currentPage === 'index.html') {
     return;
   }
 
-  const trail = currentPage === 'index.html' ? [] : [{ label: 'Accueil', href: 'index.html' }];
+  const trail = [{ label: 'Accueil', href: 'index.html' }];
 
   if (currentPage === 'article.html') {
     trail.push({ label: 'Actualités', href: 'actualites.html' });
