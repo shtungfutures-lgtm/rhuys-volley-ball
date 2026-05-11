@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RHUYS VOLLEY BALL | Contact</title>
-    <meta name="description" content="Contactez le RHUYS VOLLEY BALL pour les inscriptions, essais et informations club." />
+    <title>RHUYS VOLLEY BALL | Horaires d'entraînement</title>
+    <meta name="description" content="Horaires et lieux des entraînements du RHUYS VOLLEY BALL à Sarzeau et Surzur." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" />
@@ -29,60 +29,50 @@
         </ul>
       </nav>
       <section class="page-hero container reveal visible">
-        <p class="hero-tag">Contact</p>
-        <h1>Contactez le RHUYS VOLLEY BALL</h1>
-        <p>Nous vous répondons rapidement pour toute demande d'information ou d'inscription.</p>
+        <p class="hero-tag">Horaires d'entraînement</p>
+        <h1>Les créneaux du RHUYS VOLLEY BALL</h1>
+        <p>Retrouvez les jours, horaires et lieux d'entraînement de chaque groupe du club.</p>
       </section>
     </header>
 
     <main>
-      <section class="section container" id="contact-form-section">
+      <section class="section container">
         <div class="section-head reveal">
-          <h2>Coordonnées</h2>
-          <p>Une question ? Écrivez-nous ou passez nous voir au gymnase.</p>
+          <h2>Planning des entraînements</h2>
+          <p>Les informations sont mises à jour par le club depuis l’administration.</p>
         </div>
-        <div class="contact-layout">
-          <article class="contact-info card reveal">
-            <h3>RHUYS VOLLEY BALL</h3>
-            <p><strong>Lieux :</strong> Gymnases de SARZEAU et SURZUR</p>
-            <p><strong>Président :</strong> Damien Medigue</p>
-            <p><strong>Trésorier :</strong> Benjamin Boissier</p>
-            <p><strong>E-mail :</strong> <a href="mailto:tresorier@rhuysvolley.fr">tresorier@rhuysvolley.fr</a></p>
-            <p><strong>Secrétaire :</strong> Emmanuelle Tillon</p>
-            <p><strong>E-mail :</strong> <a href="mailto:secretaire@rhuysvolley.fr">secretaire@rhuysvolley.fr</a></p>
-            <p><strong>Téléphone :</strong> <a href="tel:+33600000000">06 00 00 00 00</a></p>
-          </article>
 
-          <form class="contact-form card reveal">
-            <h3>Formulaire de contact</h3>
-            <div class="form-grid">
-              <div>
-                <label for="name">Nom complet</label>
-                <input type="text" id="name" name="name" placeholder="Votre nom" required />
-              </div>
-              <div>
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="Votre e-mail" required />
-              </div>
-            </div>
-            <div class="form-grid">
-              <div>
-                <label for="phone">Téléphone</label>
-                <input type="tel" id="phone" name="phone" placeholder="Votre numéro" />
-              </div>
-              <div>
-                <label for="topic">Sujet</label>
-                <select id="topic" name="topic">
-                  <option value="inscription">Inscription</option>
-                  <option value="essai">Séance d'essai</option>
-                  <option value="infos">Informations générales</option>
-                </select>
-              </div>
-            </div>
-            <label for="message">Message</label>
-            <textarea id="message" name="message" rows="5" placeholder="Votre message" required></textarea>
-            <button type="submit" class="btn btn-primary">Envoyer le message</button>
-          </form>
+        <div class="training-summary reveal" id="training-summary" aria-live="polite"></div>
+        <div class="training-grid" id="training-grid" aria-live="polite"></div>
+
+        <div class="schedule-card training-table-card reveal">
+          <table class="schedule training-table">
+            <caption>Horaires hebdomadaires des entraînements</caption>
+            <thead>
+              <tr>
+                <th scope="col">Équipe</th>
+                <th scope="col">Âge / niveau</th>
+                <th scope="col">Jour</th>
+                <th scope="col">Horaire</th>
+                <th scope="col">Lieu</th>
+              </tr>
+            </thead>
+            <tbody id="training-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container join-box reveal">
+          <div>
+            <p class="hero-tag">Essai gratuit</p>
+            <h2>Vous souhaitez rejoindre un créneau ?</h2>
+            <p>Contactez le club pour vérifier le groupe le plus adapté et organiser une séance d’essai.</p>
+          </div>
+          <div class="join-actions">
+            <a href="contact.html" class="btn btn-primary">Demander une séance d’essai</a>
+            <a href="equipes.html" class="btn btn-outline">Voir les équipes</a>
+          </div>
         </div>
       </section>
     </main>
@@ -98,7 +88,7 @@
       </div>
     </footer>
 
-    <a href="#contact-form-section" class="floating-cta" aria-label="Aller au formulaire d'inscription">S'inscrire</a>
+    <a href="contact.html" class="floating-cta" aria-label="Aller à la page d'inscription">S'inscrire</a>
     <script src="script.js"></script>
   </body>
 </html>

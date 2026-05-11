@@ -770,6 +770,85 @@ img {
   color: var(--blue-900);
 }
 
+.training-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1.1rem;
+}
+
+.training-summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(248, 200, 54, 0.35);
+  border-radius: 999px;
+  background: rgba(248, 200, 54, 0.13);
+  color: var(--blue-900);
+  padding: 0.45rem 0.75rem;
+  font-weight: 700;
+}
+
+.training-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.training-card {
+  display: grid;
+  gap: 0.65rem;
+  min-height: 100%;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(238, 244, 252, 0.86));
+}
+
+.training-card h3 {
+  margin: 0;
+  color: var(--blue-900);
+}
+
+.training-day,
+.training-time {
+  margin: 0;
+  font-weight: 800;
+}
+
+.training-day {
+  color: var(--yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.82rem;
+}
+
+.training-time {
+  color: var(--blue-700);
+  font-size: 1.22rem;
+}
+
+.training-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.training-meta span {
+  border-radius: 999px;
+  background: rgba(31, 90, 150, 0.1);
+  color: var(--blue-900);
+  padding: 0.28rem 0.55rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.training-table caption {
+  padding: 0.9rem;
+  color: var(--blue-900);
+  font-weight: 800;
+  text-align: left;
+}
+
 .calendar-layout {
   display: grid;
   grid-template-columns: minmax(250px, 310px) 1fr;
@@ -1906,6 +1985,10 @@ textarea:focus {
     grid-template-columns: 1fr 1fr;
   }
 
+  .training-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .partner-benefits-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -1946,6 +2029,21 @@ textarea:focus {
   .nav-links a {
     font-size: 0.9rem;
     padding: 0.38rem 0.5rem;
+  }
+}
+
+@media (max-width: 1240px) {
+  .logo {
+    font-size: 1.05rem;
+  }
+
+  .nav-links {
+    gap: 0.22rem;
+  }
+
+  .nav-links a {
+    font-size: 0.88rem;
+    padding: 0.36rem 0.42rem;
   }
 }
 
@@ -2051,6 +2149,7 @@ textarea:focus {
   .gallery-grid,
   .partners-grid,
   .partners-showcase,
+  .training-grid,
   .partner-benefits-grid,
   .partner-offers-grid,
   .shop-grid {

@@ -425,6 +425,49 @@ const fallbackTeams = [
   }
 ];
 
+const fallbackTraining = [
+  {
+    id: 'ecole-volley',
+    team: 'École de Volley',
+    age: '8 à 11 ans',
+    day: 'Mercredi',
+    time: '16h00 - 17h30',
+    location: 'Sarzeau',
+    venue: 'Gymnase de Sarzeau',
+    description: 'Découverte du volley dans une ambiance ludique et progressive.'
+  },
+  {
+    id: 'volley-jeunes',
+    team: 'Volley Jeunes',
+    age: '12 à 17 ans',
+    day: 'Mercredi',
+    time: '18h00 - 19h30',
+    location: 'Sarzeau',
+    venue: 'Gymnase de Sarzeau',
+    description: 'Perfectionnement technique, jeu collectif et progression sur la saison.'
+  },
+  {
+    id: 'loisir-adultes-competition',
+    team: 'Loisir adultes compétition',
+    age: 'Adultes',
+    day: 'Mercredi',
+    time: '20h30 - 22h30',
+    location: 'Surzur',
+    venue: 'Gymnase de Surzur',
+    description: 'Créneau adulte orienté compétition pour les joueurs souhaitant un rythme plus soutenu.'
+  },
+  {
+    id: 'loisir-adultes-tous-niveaux',
+    team: 'Loisir adultes tous niveaux',
+    age: 'Adultes',
+    day: 'Mardi',
+    time: '20h00 - 22h00',
+    location: 'Sarzeau',
+    venue: 'Gymnase de Sarzeau',
+    description: 'Créneau convivial ouvert aux débutants comme aux joueurs déjà expérimentés.'
+  }
+];
+
 const cmsArticlesEndpoint = '/content/articles/articles.json';
 const liveArticlesEndpoint = '/api/articles';
 const githubArticlesEndpoint =
@@ -435,10 +478,12 @@ const galleryContentPath = ['/api/gallery', '/content/gallery/gallery.json', '/c
 const productsContentPath = ['/api/products', '/content/products/products.json', '/content/produits/produits.json'];
 const partnersContentPath = ['/api/partners', '/content/partners/partners.json', '/content/partenaires/partenaires.json'];
 const teamsContentPath = ['/api/teams', '/content/teams/teams.json'];
+const trainingContentPath = ['/api/training', '/content/training/training.json'];
 const pagesContentPath = '/content/pages/pages.json';
 const pageContentFiles = {
   index: '/content/pages/accueil.json',
   club: '/content/pages/club.json',
+  horaires: '/content/pages/horaires.json',
   contact: '/content/pages/contact.json'
 };
 let resolvedArticlesCache = null;
@@ -493,6 +538,7 @@ const breadcrumbLabels = {
   'index.html': 'Accueil',
   'club.html': 'Le club',
   'equipes.html': 'Équipes',
+  'horaires.html': "Horaires d'entraînement",
   'calendrier.html': 'Calendrier',
   'classements.html': 'Classements',
   'actualites.html': 'Actualités',
@@ -1105,6 +1151,82 @@ async function initHomeTeamsPreview() {
   previewRoot.innerHTML = teams.map(renderTeamCard).join('');
   bindImageFallback(previewRoot.querySelectorAll('img'));
   initRevealAnimations(previewRoot.querySelectorAll('.reveal'));
+}
+
+function normalizeTrainingSlot(rawSlot, index) {
+  const team = rawSlot.team || rawSlot.equipe || rawSlot.name || rawSlot.nom || `Créneau ${index + 1}`;
+
+  return {
+    id: rawSlot.id || toArticleSlug(team) || `creneau-${index + 1}`,
+    team,
+    age: rawSlot.age || rawSlot.ages || rawSlot.level || rawSlot.niveau || '',
+    day: rawSlot.day || rawSlot.jour || '',
+    time: rawSlot.time || rawSlot.horaire || rawSlot.horaires || '',
+    location: rawSlot.location || rawSlot.lieu || rawSlot.ville || '',
+    venue: rawSlot.venue || rawSlot.salle || rawSlot.gymnase || '',
+    description: rawSlot.description || ''
+  };
+}
+
+async function getResolvedTrainingSlots() {
+  const payload = await fetchFirstJson(getStaticContentEndpoints(trainingContentPath));
+  const resolvedTraining = payload && (payload.training || payload.horaires || payload.schedules);
+  const rawTraining = Array.isArray(resolvedTraining) && resolvedTraining.length > 0 ? resolvedTraining : fallbackTraining;
+  return rawTraining.map(normalizeTrainingSlot);
+}
+
+async function initTrainingPage() {
+  const gridRoot = document.getElementById('training-grid');
+  const tableBody = document.getElementById('training-table-body');
+  const summaryRoot = document.getElementById('training-summary');
+
+  if (!gridRoot || !tableBody) {
+    return;
+  }
+
+  const trainingSlots = await getResolvedTrainingSlots();
+
+  if (summaryRoot) {
+    const locations = [...new Set(trainingSlots.map((slot) => slot.location).filter(Boolean))];
+    summaryRoot.innerHTML = `
+      <span><strong>${trainingSlots.length}</strong> créneaux hebdomadaires</span>
+      <span><strong>${locations.join(' et ') || 'Sarzeau et Surzur'}</strong></span>
+    `;
+  }
+
+  gridRoot.innerHTML = trainingSlots
+    .map(
+      (slot) => `
+        <article class="training-card card reveal">
+          <p class="training-day">${escapeHtml(slot.day)}</p>
+          <h3>${escapeHtml(slot.team)}</h3>
+          <p class="training-time">${escapeHtml(slot.time)}</p>
+          <div class="training-meta">
+            ${slot.age ? `<span>${escapeHtml(slot.age)}</span>` : ''}
+            ${slot.location ? `<span>${escapeHtml(slot.location)}</span>` : ''}
+            ${slot.venue ? `<span>${escapeHtml(slot.venue)}</span>` : ''}
+          </div>
+          ${slot.description ? `<p>${escapeHtml(slot.description)}</p>` : ''}
+        </article>
+      `
+    )
+    .join('');
+
+  tableBody.innerHTML = trainingSlots
+    .map(
+      (slot) => `
+        <tr>
+          <td data-label="Équipe">${escapeHtml(slot.team)}</td>
+          <td data-label="Âge / niveau">${escapeHtml(slot.age || 'Tous niveaux')}</td>
+          <td data-label="Jour">${escapeHtml(slot.day)}</td>
+          <td data-label="Horaire">${escapeHtml(slot.time)}</td>
+          <td data-label="Lieu">${escapeHtml([slot.venue, slot.location].filter(Boolean).join(' - '))}</td>
+        </tr>
+      `
+    )
+    .join('');
+
+  initRevealAnimations(gridRoot.querySelectorAll('.reveal'));
 }
 
 async function initArticlePage() {
@@ -2104,6 +2226,7 @@ initRevealAnimations(revealElements);
 initSimplePageContent();
 initHomeNewsPreview();
 initHomeTeamsPreview();
+initTrainingPage();
 initGallery();
 initTeamsPage();
 initActualitesPage();

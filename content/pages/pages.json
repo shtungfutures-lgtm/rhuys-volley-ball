@@ -19,6 +19,12 @@
       "image": ""
     },
     {
+      "slug": "horaires",
+      "title": "Les créneaux du RHUYS VOLLEY BALL",
+      "content": "Retrouvez les jours, horaires et lieux d'entraînement de chaque groupe du club.",
+      "image": ""
+    },
+    {
       "slug": "calendrier",
       "title": "Calendrier des matchs",
       "content": "Retrouvez les prochains matchs du club, mis à jour automatiquement via Score’n’co.",

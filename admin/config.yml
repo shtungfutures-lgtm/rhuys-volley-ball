@@ -57,6 +57,31 @@ collections:
                 options: ["Club", "Matchs", "Jeunes", "Événements", "Entraînements"]
                 default: "Club"
 
+  - name: "training"
+    label: "Horaires entraînement"
+    label_singular: "Créneau"
+    files:
+      - label: "Planning des entraînements"
+        name: "training"
+        file: "content/training/training.json"
+        format: "json"
+        fields:
+          - label: "Créneaux"
+            name: "training"
+            widget: "list"
+            summary: "{{fields.team}} - {{fields.day}} {{fields.time}}"
+            fields:
+              - { label: "Équipe", name: "team", widget: "string" }
+              - { label: "Âge / niveau", name: "age", widget: "string", required: false }
+              - label: "Jour"
+                name: "day"
+                widget: "select"
+                options: ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+              - { label: "Horaire", name: "time", widget: "string", hint: "Exemple : 16h00 - 17h30" }
+              - { label: "Ville", name: "location", widget: "string", hint: "Exemple : Sarzeau" }
+              - { label: "Lieu précis", name: "venue", widget: "string", required: false, hint: "Exemple : Gymnase de Sarzeau" }
+              - { label: "Description", name: "description", widget: "text", required: false }
+
   - name: "products"
     label: "Produits boutique"
     label_singular: "Produit"
@@ -129,6 +154,14 @@ collections:
       - label: "Le club"
         name: "club"
         file: "content/pages/club.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Horaires"
+        name: "horaires"
+        file: "content/pages/horaires.json"
         format: "json"
         fields:
           - { label: "Titre", name: "title", widget: "string" }

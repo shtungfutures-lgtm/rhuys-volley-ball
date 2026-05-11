@@ -1,0 +1,44 @@
+{
+  "training": [
+    {
+      "id": "ecole-volley",
+      "team": "École de Volley",
+      "age": "8 à 11 ans",
+      "day": "Mercredi",
+      "time": "16h00 - 17h30",
+      "location": "Sarzeau",
+      "venue": "Gymnase de Sarzeau",
+      "description": "Découverte du volley dans une ambiance ludique et progressive."
+    },
+    {
+      "id": "volley-jeunes",
+      "team": "Volley Jeunes",
+      "age": "12 à 17 ans",
+      "day": "Mercredi",
+      "time": "18h00 - 19h30",
+      "location": "Sarzeau",
+      "venue": "Gymnase de Sarzeau",
+      "description": "Perfectionnement technique, jeu collectif et progression sur la saison."
+    },
+    {
+      "id": "loisir-adultes-competition",
+      "team": "Loisir adultes compétition",
+      "age": "Adultes",
+      "day": "Mercredi",
+      "time": "20h30 - 22h30",
+      "location": "Surzur",
+      "venue": "Gymnase de Surzur",
+      "description": "Créneau adulte orienté compétition pour les joueurs souhaitant un rythme plus soutenu."
+    },
+    {
+      "id": "loisir-adultes-tous-niveaux",
+      "team": "Loisir adultes tous niveaux",
+      "age": "Adultes",
+      "day": "Mardi",
+      "time": "20h00 - 22h00",
+      "location": "Sarzeau",
+      "venue": "Gymnase de Sarzeau",
+      "description": "Créneau convivial ouvert aux débutants comme aux joueurs déjà expérimentés."
+    }
+  ]
+}

@@ -6,7 +6,7 @@ declare const Netlify: { env: { get(name: string): string | undefined } };
 const STORE_NAME = "rhuys-cms";
 const GITHUB_BASE = "https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main";
 
-type ContentType = "gallery" | "products" | "partners" | "pages" | "teams";
+type ContentType = "gallery" | "products" | "partners" | "pages" | "teams" | "training";
 
 type PageRecord = {
   slug: string;
@@ -60,6 +60,51 @@ const defaultTeams = {
   ],
 };
 
+const defaultTraining = {
+  training: [
+    {
+      id: "ecole-volley",
+      team: "École de Volley",
+      age: "8 à 11 ans",
+      day: "Mercredi",
+      time: "16h00 - 17h30",
+      location: "Sarzeau",
+      venue: "Gymnase de Sarzeau",
+      description: "Découverte du volley dans une ambiance ludique et progressive.",
+    },
+    {
+      id: "volley-jeunes",
+      team: "Volley Jeunes",
+      age: "12 à 17 ans",
+      day: "Mercredi",
+      time: "18h00 - 19h30",
+      location: "Sarzeau",
+      venue: "Gymnase de Sarzeau",
+      description: "Perfectionnement technique, jeu collectif et progression sur la saison.",
+    },
+    {
+      id: "loisir-adultes-competition",
+      team: "Loisir adultes compétition",
+      age: "Adultes",
+      day: "Mercredi",
+      time: "20h30 - 22h30",
+      location: "Surzur",
+      venue: "Gymnase de Surzur",
+      description: "Créneau adulte orienté compétition pour les joueurs souhaitant un rythme plus soutenu.",
+    },
+    {
+      id: "loisir-adultes-tous-niveaux",
+      team: "Loisir adultes tous niveaux",
+      age: "Adultes",
+      day: "Mardi",
+      time: "20h00 - 22h00",
+      location: "Sarzeau",
+      venue: "Gymnase de Sarzeau",
+      description: "Créneau convivial ouvert aux débutants comme aux joueurs déjà expérimentés.",
+    },
+  ],
+};
+
 const contentConfig: Record<ContentType, { key: string; primaryField: string; fallbackUrls: string[] }> = {
   gallery: {
     key: "gallery",
@@ -81,12 +126,18 @@ const contentConfig: Record<ContentType, { key: string; primaryField: string; fa
     primaryField: "teams",
     fallbackUrls: [`${GITHUB_BASE}/content/teams/teams.json`],
   },
+  training: {
+    key: "training",
+    primaryField: "training",
+    fallbackUrls: [`${GITHUB_BASE}/content/training/training.json`],
+  },
   pages: {
     key: "pages",
     primaryField: "pages",
     fallbackUrls: [
       `${GITHUB_BASE}/content/pages/accueil.json`,
       `${GITHUB_BASE}/content/pages/club.json`,
+      `${GITHUB_BASE}/content/pages/horaires.json`,
       `${GITHUB_BASE}/content/pages/contact.json`,
       `${GITHUB_BASE}/content/pages/pages.json`,
     ],
@@ -146,7 +197,7 @@ function getContentType(req: Request): ContentType | null {
   const pathname = new URL(req.url).pathname;
   const segment = pathname.split("/").filter(Boolean).pop() || "";
 
-  if (["gallery", "products", "partners", "pages", "teams"].includes(segment)) {
+  if (["gallery", "products", "partners", "pages", "teams", "training"].includes(segment)) {
     return segment as ContentType;
   }
 
@@ -252,6 +303,34 @@ function normalizeTeams(payload: unknown) {
   };
 }
 
+function normalizeTraining(payload: unknown) {
+  const raw = payload as { training?: unknown[]; horaires?: unknown[]; schedules?: unknown[] };
+  const items = Array.isArray(raw.training)
+    ? raw.training
+    : Array.isArray(raw.horaires)
+      ? raw.horaires
+      : Array.isArray(raw.schedules)
+        ? raw.schedules
+        : [];
+
+  return {
+    training: items.map((item, index) => {
+      const slot = item as Record<string, unknown>;
+      const team = String(slot.team || slot.equipe || slot.name || slot.nom || `Créneau ${index + 1}`);
+      return {
+        id: String(slot.id || toSlug(team) || `creneau-${index + 1}`),
+        team,
+        age: String(slot.age || slot.ages || slot.level || slot.niveau || ""),
+        day: String(slot.day || slot.jour || ""),
+        time: String(slot.time || slot.horaire || slot.horaires || ""),
+        location: String(slot.location || slot.lieu || slot.ville || ""),
+        venue: String(slot.venue || slot.salle || slot.gymnase || ""),
+        description: String(slot.description || ""),
+      };
+    }),
+  };
+}
+
 function normalizePages(payload: unknown) {
   const raw = payload as Record<string, unknown>;
   let items: unknown[] = [];
@@ -265,7 +344,7 @@ function normalizePages(payload: unknown) {
   const pages = items.map((item, index) => {
     const page = item as Record<string, unknown>;
     return {
-      slug: String(page.slug || ["index", "club", "contact"][index] || `page-${index + 1}`),
+      slug: String(page.slug || ["index", "club", "horaires", "contact"][index] || `page-${index + 1}`),
       title: String(page.title || page.titre || ""),
       content: String(page.content || page.contenu || ""),
       image: String(page.image || ""),
@@ -280,6 +359,7 @@ function normalizePayload(type: ContentType, payload: unknown) {
   if (type === "products") return normalizeProducts(payload);
   if (type === "partners") return normalizePartners(payload);
   if (type === "teams") return normalizeTeams(payload);
+  if (type === "training") return normalizeTraining(payload);
   return normalizePages(payload);
 }
 
@@ -296,9 +376,19 @@ async function fetchFallback(type: ContentType) {
     return normalizeTeams(defaultTeams);
   }
 
+  if (type === "training") {
+    for (const url of config.fallbackUrls) {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      return normalizePayload(type, await response.json());
+    }
+
+    return normalizeTraining(defaultTraining);
+  }
+
   if (type === "pages") {
     const pages: PageRecord[] = [];
-    const slugs = ["index", "club", "contact"];
+    const slugs = ["index", "club", "horaires", "contact"];
 
     for (let index = 0; index < config.fallbackUrls.length; index += 1) {
       const response = await fetch(config.fallbackUrls[index]);
@@ -367,11 +457,13 @@ export const config = {
     "/api/products",
     "/api/partners",
     "/api/teams",
+    "/api/training",
     "/api/pages",
     "/api/admin/gallery",
     "/api/admin/products",
     "/api/admin/partners",
     "/api/admin/teams",
+    "/api/admin/training",
     "/api/admin/pages",
   ],
 };

@@ -3,6 +3,7 @@ const state = {
   articles: [],
   products: [],
   teams: [],
+  training: [],
   partners: [],
   gallery: [],
   pages: [],
@@ -445,6 +446,56 @@ function renderTeams(activeId = '') {
   );
 }
 
+function emptyTrainingSlot() {
+  return {
+    id: String(Date.now()),
+    team: '',
+    age: '',
+    day: 'Mercredi',
+    time: '',
+    location: '',
+    venue: '',
+    description: '',
+  };
+}
+
+function fillTrainingSlot(slot) {
+  setValue('#training-id', slot.id);
+  setValue('#training-team', slot.team);
+  setValue('#training-age', slot.age);
+  setValue('#training-day', slot.day || 'Mercredi');
+  setValue('#training-time', slot.time);
+  setValue('#training-location', slot.location);
+  setValue('#training-venue', slot.venue);
+  setValue('#training-description', slot.description);
+  renderTraining(slot.id);
+}
+
+function readTrainingSlot() {
+  const team = getValue('#training-team');
+  return {
+    id: getValue('#training-id') || toSlug(team) || String(Date.now()),
+    team,
+    age: getValue('#training-age'),
+    day: getValue('#training-day'),
+    time: getValue('#training-time'),
+    location: getValue('#training-location'),
+    venue: getValue('#training-venue'),
+    description: getValue('#training-description'),
+  };
+}
+
+function renderTraining(activeId = '') {
+  renderGenericList(
+    '#training-list',
+    state.training,
+    activeId,
+    (slot) => slot.team,
+    (slot) => `${slot.day || 'Jour non renseigné'} ${slot.time || ''} - ${slot.location || 'Lieu non renseigné'}`,
+    fillTrainingSlot
+  );
+}
+
 function emptyPartner() {
   return { id: String(Date.now()), name: '', logo: '', category: 'Partenaire local', description: '', website: '' };
 }
@@ -531,6 +582,7 @@ function fillPage(page) {
     club: 'Le club',
     contact: 'Contact',
     equipes: 'Équipes',
+    horaires: 'Horaires',
     calendrier: 'Calendrier',
     classements: 'Classements',
     actualites: 'Actualités',
@@ -542,6 +594,7 @@ function fillPage(page) {
     club: 'Modifiez le texte de présentation du club et son visuel.',
     contact: 'Modifiez le texte d’introduction de la page contact.',
     equipes: 'Modifiez l’introduction de la page des équipes.',
+    horaires: 'Modifiez le titre et l’introduction de la page des horaires d’entraînement.',
     calendrier: 'Modifiez le texte de présentation du calendrier.',
     classements: 'Modifiez le texte de présentation des classements.',
     actualites: 'Modifiez le texte d’introduction des actualités.',
@@ -581,6 +634,7 @@ function renderPages(activeSlug = '') {
     club: 'Le club',
     contact: 'Contact',
     equipes: 'Équipes',
+    horaires: 'Horaires',
     calendrier: 'Calendrier',
     classements: 'Classements',
     actualites: 'Actualités',
@@ -600,10 +654,11 @@ function renderPages(activeSlug = '') {
 
 async function loadDashboard() {
   setMessage(dashboardMessage, 'Chargement des contenus...');
-  const [articles, products, teams, partners, gallery, pages] = await Promise.all([
+  const [articles, products, teams, training, partners, gallery, pages] = await Promise.all([
     apiRequest('/api/admin/articles'),
     apiRequest('/api/admin/products'),
     apiRequest('/api/admin/teams'),
+    apiRequest('/api/admin/training'),
     apiRequest('/api/admin/partners'),
     apiRequest('/api/admin/gallery'),
     apiRequest('/api/admin/pages'),
@@ -612,17 +667,20 @@ async function loadDashboard() {
   state.articles = sortArticlesByNewest(articles.articles || []);
   state.products = products.products || [];
   state.teams = teams.teams || [];
+  state.training = training.training || [];
   state.partners = partners.partners || [];
   state.gallery = gallery.gallery || [];
   state.pages = pages.pages && pages.pages.length ? pages.pages : [
     { slug: 'index', title: 'Accueil', content: '', image: '' },
     { slug: 'club', title: 'Le club', content: '', image: '' },
+    { slug: 'horaires', title: 'Horaires', content: '', image: '' },
     { slug: 'contact', title: 'Contact', content: '', image: '' },
   ];
   showEditor();
   fillArticle(state.articles[0] || emptyArticle());
   fillProduct(state.products[0] || emptyProduct());
   fillTeam(state.teams[0] || emptyTeam());
+  fillTrainingSlot(state.training[0] || emptyTrainingSlot());
   fillPartner(state.partners[0] || emptyPartner());
   fillPhoto(state.gallery[0] || emptyPhoto());
   fillPage(state.pages[0]);
@@ -664,6 +722,7 @@ qsa('.admin-tab').forEach((button) => button.addEventListener('click', () => act
 qs('#new-article-button').addEventListener('click', () => fillArticle(emptyArticle()));
 qs('#new-product-button').addEventListener('click', () => fillProduct(emptyProduct()));
 qs('#new-team-button').addEventListener('click', () => fillTeam(emptyTeam()));
+qs('#new-training-button').addEventListener('click', () => fillTrainingSlot(emptyTrainingSlot()));
 qs('#new-partner-button').addEventListener('click', () => fillPartner(emptyPartner()));
 qs('#new-photo-button').addEventListener('click', () => fillPhoto(emptyPhoto()));
 
@@ -745,6 +804,22 @@ qs('#team-form').addEventListener('submit', async (event) => {
   }
 });
 
+qs('#training-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const submitButton = event.submitter;
+  setButtonLoading(submitButton, true);
+  const item = readTrainingSlot();
+  upsertItem(state.training, item);
+  try {
+    await saveContent('training', { training: state.training });
+    fillTrainingSlot(item);
+    showSaveFeedback(qs('#training-message'), 'Créneau enregistré. La page Horaires est mise à jour.', qs('#training-form'), submitButton);
+  } catch (error) {
+    showErrorFeedback(qs('#training-message'), error);
+    setButtonLoading(submitButton, false);
+  }
+});
+
 qs('#partner-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   const submitButton = event.submitter;
@@ -818,6 +893,15 @@ qs('#delete-team-button').addEventListener('click', async () => {
   state.teams = state.teams.filter((entry) => entry.id !== id);
   await saveContent('teams', { teams: state.teams });
   fillTeam(state.teams[0] || emptyTeam());
+});
+
+qs('#delete-training-button').addEventListener('click', async () => {
+  const id = getValue('#training-id');
+  const item = state.training.find((entry) => entry.id === id);
+  if (!item || !window.confirm(`Supprimer le créneau "${item.team}" ?`)) return;
+  state.training = state.training.filter((entry) => entry.id !== id);
+  await saveContent('training', { training: state.training });
+  fillTrainingSlot(state.training[0] || emptyTrainingSlot());
 });
 
 qs('#delete-partner-button').addEventListener('click', async () => {

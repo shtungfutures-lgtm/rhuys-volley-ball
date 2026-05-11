@@ -40,7 +40,7 @@
           <div>
             <p class="hero-tag">Tableau de bord</p>
             <h1>Gestion du site RHUYS VOLLEY BALL</h1>
-            <p>Modifiez les actualités, la boutique, les partenaires, les photos et les textes clés du site.</p>
+            <p>Modifiez les actualités, les équipes, les horaires, la boutique, les partenaires, les photos et les textes clés du site.</p>
           </div>
           <button type="button" class="btn btn-outline" id="logout-button">Déconnexion</button>
         </div>
@@ -48,6 +48,7 @@
         <nav class="admin-tabs" aria-label="Rubriques d’administration">
           <button type="button" class="admin-tab active" data-tab="articles">Actualités</button>
           <button type="button" class="admin-tab" data-tab="teams">Équipes</button>
+          <button type="button" class="admin-tab" data-tab="training">Horaires</button>
           <button type="button" class="admin-tab" data-tab="products">Boutique</button>
           <button type="button" class="admin-tab" data-tab="partners">Partenaires</button>
           <button type="button" class="admin-tab" data-tab="gallery">Photos</button>
@@ -151,6 +152,71 @@
                 <button type="button" class="btn btn-outline danger" id="delete-team-button">Supprimer</button>
               </div>
               <p class="admin-message" id="team-message" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section class="admin-section" id="section-training" data-section="training">
+          <div class="admin-section-intro card">
+            <div>
+              <p class="admin-kicker">Horaires</p>
+              <h2>Créneaux d’entraînement</h2>
+              <p>
+                Modifiez les jours, horaires et lieux visibles sur la page Horaires. Chaque créneau correspond à une
+                ligne du tableau public et à une carte de présentation.
+              </p>
+            </div>
+            <div class="admin-mini-steps" aria-label="Étapes horaires">
+              <span>1. Choisir</span>
+              <span>2. Modifier le créneau</span>
+              <span>3. Enregistrer</span>
+            </div>
+          </div>
+
+          <div class="admin-layout">
+            <aside class="admin-list card">
+              <div class="admin-list-head">
+                <h2>Créneaux enregistrés</h2>
+                <p>Cliquez sur un créneau pour modifier son jour, son horaire ou son lieu.</p>
+                <button type="button" class="btn btn-primary" id="new-training-button">Nouveau créneau</button>
+              </div>
+              <div id="training-list" class="admin-item-list"></div>
+            </aside>
+
+            <form class="admin-editor card" id="training-form">
+              <input type="hidden" id="training-id" />
+              <div class="admin-form-heading">
+                <p class="admin-kicker">Créneau</p>
+                <h2>Modifier un entraînement</h2>
+                <p>Renseignez les informations telles qu’elles doivent apparaître sur le site.</p>
+              </div>
+              <label>Équipe <input type="text" id="training-team" required /></label>
+              <div class="admin-grid">
+                <label>Âge ou niveau <input type="text" id="training-age" placeholder="8 à 11 ans" /></label>
+                <label>
+                  Jour
+                  <select id="training-day" required>
+                    <option>Lundi</option>
+                    <option>Mardi</option>
+                    <option>Mercredi</option>
+                    <option>Jeudi</option>
+                    <option>Vendredi</option>
+                    <option>Samedi</option>
+                    <option>Dimanche</option>
+                  </select>
+                </label>
+              </div>
+              <div class="admin-grid">
+                <label>Horaire <input type="text" id="training-time" placeholder="16h00 - 17h30" required /></label>
+                <label>Ville <input type="text" id="training-location" placeholder="Sarzeau" required /></label>
+              </div>
+              <label>Lieu précis <input type="text" id="training-venue" placeholder="Gymnase de Sarzeau" /></label>
+              <label>Description <textarea id="training-description" rows="4"></textarea></label>
+              <div class="admin-actions">
+                <button type="submit" class="btn btn-primary">Enregistrer le créneau</button>
+                <button type="button" class="btn btn-outline danger" id="delete-training-button">Supprimer</button>
+              </div>
+              <p class="admin-message" id="training-message" aria-live="polite"></p>
             </form>
           </div>
         </section>
