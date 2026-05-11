@@ -197,8 +197,29 @@ function getArticleTime(article) {
   return dateKey ? Date.parse(`${dateKey}T12:00:00`) : 0;
 }
 
+function getArticleAddedTime(article) {
+  const createdAt = Date.parse(article.created_at || article.createdAt || '');
+  if (!Number.isNaN(createdAt)) {
+    return createdAt;
+  }
+
+  const numericId = Number(article.id);
+  if (Number.isFinite(numericId) && numericId > 0) {
+    return numericId;
+  }
+
+  return getArticleTime(article);
+}
+
 function sortArticlesByNewest(list) {
-  return [...list].sort((a, b) => getArticleTime(b) - getArticleTime(a));
+  return [...list].sort((a, b) => {
+    const addedDiff = getArticleAddedTime(b) - getArticleAddedTime(a);
+    if (addedDiff !== 0) {
+      return addedDiff;
+    }
+
+    return getArticleTime(b) - getArticleTime(a);
+  });
 }
 
 function createListButton({ title, meta, active, onClick }) {
@@ -233,6 +254,8 @@ function renderGenericList(rootSelector, items, activeId, getTitle, getMeta, onC
 }
 
 function emptyArticle() {
+  const now = new Date().toISOString();
+
   return {
     id: String(Date.now()),
     title: '',
@@ -242,6 +265,8 @@ function emptyArticle() {
     excerpt: '',
     body: '',
     author: 'RHUYS VOLLEY BALL',
+    created_at: now,
+    updated_at: now,
   };
 }
 
@@ -261,8 +286,12 @@ function fillArticle(article) {
 }
 
 function readArticle() {
+  const id = getValue('#article-id') || String(Date.now());
+  const existingArticle = state.articles.find((article) => article.id === id);
+  const now = new Date().toISOString();
+
   return {
-    id: getValue('#article-id') || String(Date.now()),
+    id,
     title: getValue('#article-title'),
     date: getArticleDateKey(getValue('#article-date')) || new Date().toISOString().slice(0, 10),
     category: getValue('#article-category'),
@@ -270,6 +299,8 @@ function readArticle() {
     excerpt: getValue('#article-excerpt'),
     body: getValue('#article-body'),
     author: getValue('#article-author') || 'RHUYS VOLLEY BALL',
+    created_at: existingArticle?.created_at || existingArticle?.createdAt || now,
+    updated_at: now,
   };
 }
 

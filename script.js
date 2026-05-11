@@ -581,13 +581,28 @@ function getArticleTime(article) {
   return getArticleTimestamp(article.date);
 }
 
+function getArticleAddedTime(article) {
+  const createdAt = Date.parse(article.created_at || article.createdAt || '');
+  if (!Number.isNaN(createdAt)) {
+    return createdAt;
+  }
+
+  const numericId = Number(article.id);
+  if (Number.isFinite(numericId) && numericId > 0) {
+    return numericId;
+  }
+
+  return getArticleTime(article);
+}
+
 function sortArticlesByNewest(list) {
   return [...list].sort((a, b) => {
-    const dateDiff = getArticleTime(b) - getArticleTime(a);
-    if (dateDiff !== 0) {
-      return dateDiff;
+    const addedDiff = getArticleAddedTime(b) - getArticleAddedTime(a);
+    if (addedDiff !== 0) {
+      return addedDiff;
     }
-    return String(b.id || '').localeCompare(String(a.id || ''));
+
+    return getArticleTime(b) - getArticleTime(a);
   });
 }
 
@@ -737,7 +752,8 @@ function normalizeArticleRecord(rawArticle, index) {
     image,
     excerpt,
     body,
-    author
+    author,
+    created_at: rawArticle.created_at || rawArticle.createdAt || ''
   };
 }
 

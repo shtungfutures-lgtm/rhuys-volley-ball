@@ -17,6 +17,8 @@ type ArticleRecord = {
   excerpt: string;
   body: string;
   author: string;
+  created_at?: string;
+  updated_at?: string;
 };
 
 type ArticlesPayload = {
@@ -82,13 +84,28 @@ function getArticleTime(article: ArticleRecord) {
   return dateKey ? Date.parse(`${dateKey}T12:00:00`) : 0;
 }
 
+function getArticleAddedTime(article: ArticleRecord) {
+  const createdAt = Date.parse(article.created_at || "");
+  if (!Number.isNaN(createdAt)) {
+    return createdAt;
+  }
+
+  const numericId = Number(article.id);
+  if (Number.isFinite(numericId) && numericId > 0) {
+    return numericId;
+  }
+
+  return getArticleTime(article);
+}
+
 function sortArticlesByNewest(articles: ArticleRecord[]) {
   return [...articles].sort((a, b) => {
-    const dateDiff = getArticleTime(b) - getArticleTime(a);
-    if (dateDiff !== 0) {
-      return dateDiff;
+    const addedDiff = getArticleAddedTime(b) - getArticleAddedTime(a);
+    if (addedDiff !== 0) {
+      return addedDiff;
     }
-    return String(b.id || "").localeCompare(String(a.id || ""));
+
+    return getArticleTime(b) - getArticleTime(a);
   });
 }
 
@@ -120,16 +137,34 @@ function normalizePayload(payload: unknown) {
     : [];
 
   return sortedPayload({
-    articles: articles.map((article, index) => ({
-      id: String((article as { id?: string | number }).id || Date.now() + index),
-      title: String((article as { title?: string }).title || "Article"),
-      date: getArticleDateKey((article as { date?: string }).date) || new Date().toISOString().slice(0, 10),
-      category: String((article as { category?: string }).category || "Club"),
-      featured_image: String((article as { featured_image?: string }).featured_image || ""),
-      excerpt: String((article as { excerpt?: string }).excerpt || ""),
-      body: String((article as { body?: string }).body || ""),
-      author: String((article as { author?: string }).author || "RHUYS VOLLEY BALL"),
-    })),
+    articles: articles.map((article, index) => {
+      const record = article as {
+        id?: string | number;
+        title?: string;
+        date?: string;
+        category?: string;
+        featured_image?: string;
+        excerpt?: string;
+        body?: string;
+        author?: string;
+        created_at?: string;
+        updated_at?: string;
+      };
+      const id = String(record.id || Date.now() + index);
+
+      return {
+        id,
+        title: String(record.title || "Article"),
+        date: getArticleDateKey(record.date) || new Date().toISOString().slice(0, 10),
+        category: String(record.category || "Club"),
+        featured_image: String(record.featured_image || ""),
+        excerpt: String(record.excerpt || ""),
+        body: String(record.body || ""),
+        author: String(record.author || "RHUYS VOLLEY BALL"),
+        created_at: String(record.created_at || ""),
+        updated_at: String(record.updated_at || ""),
+      };
+    }),
   });
 }
 
