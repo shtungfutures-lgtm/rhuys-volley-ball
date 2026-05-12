@@ -16,16 +16,37 @@
         <a href="index.html" class="logo">RHUYS <span>VOLLEY BALL</span></a>
         <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
         <ul class="nav-links" id="main-nav">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="club.html">Le club</a></li>
-          <li><a href="equipes.html">Équipes</a></li>
-          <li><a href="horaires.html">Horaires</a></li>
-          <li><a href="calendrier.html">Calendrier</a></li>
-          <li><a href="classements.html">Classements</a></li>
-          <li><a href="actualites.html">Actualités</a></li>
-          <li><a href="partenaires.html">Partenaires</a></li>
-          <li><a href="boutique.html">Boutique</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li class="nav-item"><a href="index.html">Accueil</a></li>
+          <li class="nav-item nav-dropdown">
+            <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="nav-club">
+              Le Club <span aria-hidden="true">▾</span>
+            </button>
+            <ul class="nav-submenu" id="nav-club">
+              <li><a href="club.html">Présentation</a></li>
+              <li><a href="partenaires.html">Partenaires</a></li>
+            </ul>
+          </li>
+          <li class="nav-item nav-dropdown">
+            <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="nav-equipes">
+              Équipes <span aria-hidden="true">▾</span>
+            </button>
+            <ul class="nav-submenu" id="nav-equipes">
+              <li><a href="equipes.html">Équipes</a></li>
+              <li><a href="classements.html">Classements</a></li>
+            </ul>
+          </li>
+          <li class="nav-item nav-dropdown">
+            <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="nav-planning">
+              Planning <span aria-hidden="true">▾</span>
+            </button>
+            <ul class="nav-submenu" id="nav-planning">
+              <li><a href="horaires.html">Horaires d’entraînement</a></li>
+              <li><a href="calendrier.html">Calendrier / Matchs</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="actualites.html">Actualités</a></li>
+          <li class="nav-item"><a href="boutique.html">Boutique</a></li>
+          <li class="nav-item"><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
       <section class="page-hero container reveal visible">
@@ -136,7 +157,7 @@
       <div class="container">
         <div class="footer-grid">
           <div><h4>RHUYS VOLLEY BALL</h4><p>Gymnases de Sarzeau et Surzur</p><p>Presqu'île de Rhuys, Morbihan</p></div>
-          <div><h4>Navigation</h4><div class="footer-links"><a href="index.html">Accueil</a><a href="club.html">Le club</a><a href="equipes.html">Équipes</a><a href="horaires.html">Horaires</a><a href="calendrier.html">Calendrier</a><a href="classements.html">Classements</a><a href="actualites.html">Actualités</a><a href="partenaires.html">Partenaires</a><a href="boutique.html">Boutique</a><a href="contact.html">Contact</a></div></div>
+          <div><h4>Navigation</h4><div class="footer-links"><a href="index.html">Accueil</a><a href="club.html">Le club</a><a href="equipes.html">Équipes</a><a href="planning.html">Planning</a><a href="horaires.html">Horaires</a><a href="calendrier.html">Calendrier</a><a href="classements.html">Classements</a><a href="actualites.html">Actualités</a><a href="partenaires.html">Partenaires</a><a href="boutique.html">Boutique</a><a href="contact.html">Contact</a></div></div>
           <div><h4>Suivez-nous</h4><div class="social-links"><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">Facebook</a><a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube</a></div></div>
         </div>
         <p class="footer-copy">© 2026 RHUYS VOLLEY BALL</p>

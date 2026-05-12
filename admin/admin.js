@@ -582,6 +582,7 @@ function fillPage(page) {
     club: 'Le club',
     contact: 'Contact',
     equipes: 'Équipes',
+    planning: 'Planning',
     horaires: 'Horaires',
     calendrier: 'Calendrier',
     classements: 'Classements',
@@ -594,6 +595,7 @@ function fillPage(page) {
     club: 'Modifiez le texte de présentation du club et son visuel.',
     contact: 'Modifiez le texte d’introduction de la page contact.',
     equipes: 'Modifiez l’introduction de la page des équipes.',
+    planning: 'Modifiez le titre et l’introduction de la page planning.',
     horaires: 'Modifiez le titre et l’introduction de la page des horaires d’entraînement.',
     calendrier: 'Modifiez le texte de présentation du calendrier.',
     classements: 'Modifiez le texte de présentation des classements.',
@@ -634,6 +636,7 @@ function renderPages(activeSlug = '') {
     club: 'Le club',
     contact: 'Contact',
     equipes: 'Équipes',
+    planning: 'Planning',
     horaires: 'Horaires',
     calendrier: 'Calendrier',
     classements: 'Classements',
@@ -674,6 +677,7 @@ async function loadDashboard() {
     { slug: 'index', title: 'Accueil', content: '', image: '' },
     { slug: 'club', title: 'Le club', content: '', image: '' },
     { slug: 'horaires', title: 'Horaires', content: '', image: '' },
+    { slug: 'planning', title: 'Planning', content: '', image: '' },
     { slug: 'contact', title: 'Contact', content: '', image: '' },
   ];
   showEditor();

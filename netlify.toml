@@ -11,3 +11,53 @@
 [dev]
   framework = "#static"
   publish = "."
+
+[[redirects]]
+  from = "/club"
+  to = "/club.html"
+  status = 200
+
+[[redirects]]
+  from = "/partenaires"
+  to = "/partenaires.html"
+  status = 200
+
+[[redirects]]
+  from = "/equipes"
+  to = "/equipes.html"
+  status = 200
+
+[[redirects]]
+  from = "/classements"
+  to = "/classements.html"
+  status = 200
+
+[[redirects]]
+  from = "/planning"
+  to = "/planning.html"
+  status = 200
+
+[[redirects]]
+  from = "/entrainements"
+  to = "/horaires.html"
+  status = 200
+
+[[redirects]]
+  from = "/matchs"
+  to = "/calendrier.html"
+  status = 200
+
+[[redirects]]
+  from = "/actualites"
+  to = "/actualites.html"
+  status = 200
+
+[[redirects]]
+  from = "/boutique"
+  to = "/boutique.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200

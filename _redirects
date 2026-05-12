@@ -1,2 +1,12 @@
 /admin  /admin/index.html  301
 /admin/ /admin/index.html  200
+/club /club.html 200
+/partenaires /partenaires.html 200
+/equipes /equipes.html 200
+/classements /classements.html 200
+/planning /planning.html 200
+/entrainements /horaires.html 200
+/matchs /calendrier.html 200
+/actualites /actualites.html 200
+/boutique /boutique.html 200
+/contact /contact.html 200

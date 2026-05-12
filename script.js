@@ -2,6 +2,8 @@ const menuToggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.nav');
 const navLinks = document.querySelector('.nav-links');
 const navItems = document.querySelectorAll('.nav-links a');
+const navDropdowns = document.querySelectorAll('.nav-dropdown');
+const navDropdownToggles = document.querySelectorAll('.nav-dropdown-toggle');
 const internalAnchors = document.querySelectorAll('a[href^="#"]:not([href="#"])');
 const contactForm = document.querySelector('.contact-form');
 const orderForm = document.querySelector('.order-form');
@@ -484,6 +486,7 @@ const pageContentFiles = {
   index: '/content/pages/accueil.json',
   club: '/content/pages/club.json',
   horaires: '/content/pages/horaires.json',
+  planning: '/content/pages/planning.json',
   contact: '/content/pages/contact.json'
 };
 let resolvedArticlesCache = null;
@@ -510,13 +513,37 @@ const getNavOffset = () => {
   return nav.getBoundingClientRect().height + 10;
 };
 
-function setActiveNavLink() {
-  if (!navItems.length) {
-    return;
+const routeAliases = {
+  '': 'index.html',
+  club: 'club.html',
+  partenaires: 'partenaires.html',
+  equipes: 'equipes.html',
+  classements: 'classements.html',
+  planning: 'planning.html',
+  entrainements: 'horaires.html',
+  horaires: 'horaires.html',
+  matchs: 'calendrier.html',
+  calendrier: 'calendrier.html',
+  actualites: 'actualites.html',
+  boutique: 'boutique.html',
+  contact: 'contact.html'
+};
+
+function getCurrentPageName() {
+  const currentSegment = decodeURIComponent(window.location.pathname)
+    .split('/')
+    .filter(Boolean)
+    .pop() || 'index.html';
+
+  if (currentSegment.endsWith('.html')) {
+    return currentSegment;
   }
 
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  return routeAliases[currentSegment] || `${currentSegment}.html`;
+}
 
+function setActiveNavLink() {
+  const currentPage = getCurrentPageName();
   const navPage = currentPage === 'article.html' ? 'actualites.html' : currentPage;
 
   navItems.forEach((link) => {
@@ -532,12 +559,30 @@ function setActiveNavLink() {
       link.removeAttribute('aria-current');
     }
   });
+
+  navDropdowns.forEach((dropdown) => {
+    const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+    if (!toggle) {
+      return;
+    }
+
+    const isPlanningOverview = currentPage === 'planning.html' && toggle.getAttribute('aria-controls') === 'nav-planning';
+    const isCurrent = Boolean(dropdown.querySelector('a[aria-current="page"]')) || isPlanningOverview;
+    dropdown.classList.toggle('active', isCurrent);
+
+    if (isCurrent) {
+      toggle.setAttribute('aria-current', 'page');
+    } else {
+      toggle.removeAttribute('aria-current');
+    }
+  });
 }
 
 const breadcrumbLabels = {
   'index.html': 'Accueil',
   'club.html': 'Le club',
   'equipes.html': 'Équipes',
+  'planning.html': 'Planning',
   'horaires.html': "Horaires d'entraînement",
   'calendrier.html': 'Calendrier',
   'classements.html': 'Classements',
@@ -547,10 +592,6 @@ const breadcrumbLabels = {
   'boutique.html': 'Boutique',
   'contact.html': 'Contact',
 };
-
-function getCurrentPageName() {
-  return window.location.pathname.split('/').pop() || 'index.html';
-}
 
 function updateBreadcrumbCurrent(label) {
   const current = document.querySelector('.site-breadcrumb [aria-current="page"]');
@@ -604,6 +645,32 @@ function initBreadcrumb() {
   nav.insertAdjacentElement('afterend', breadcrumb);
 }
 
+function closeAllDropdowns(except = null) {
+  navDropdowns.forEach((dropdown) => {
+    if (dropdown === except) {
+      return;
+    }
+
+    dropdown.classList.remove('open');
+    const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+function toggleDropdown(dropdown, shouldOpen) {
+  if (!dropdown) {
+    return;
+  }
+
+  dropdown.classList.toggle('open', shouldOpen);
+  const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+  if (toggle) {
+    toggle.setAttribute('aria-expanded', String(shouldOpen));
+  }
+}
+
 function closeMenu(shouldFocusToggle = false) {
   if (!menuToggle || !navLinks) {
     return;
@@ -613,6 +680,7 @@ function closeMenu(shouldFocusToggle = false) {
   menuToggle.classList.remove('active');
   menuToggle.setAttribute('aria-expanded', 'false');
   menuToggle.setAttribute('aria-label', 'Ouvrir le menu');
+  closeAllDropdowns();
 
   if (shouldFocusToggle) {
     menuToggle.focus();
@@ -1664,8 +1732,7 @@ async function initPartnersPage() {
 }
 
 function getCurrentPageSlug() {
-  const filename = window.location.pathname.split('/').pop() || 'index.html';
-  return filename.replace(/\.html$/, '') || 'index';
+  return getCurrentPageName().replace(/\.html$/, '') || 'index';
 }
 
 function normalizePageContent(payload, slug) {
@@ -1688,7 +1755,7 @@ function normalizePageContent(payload, slug) {
 async function initSimplePageContent() {
   const slug = getCurrentPageSlug();
   const pageFile = pageContentFiles[slug];
-  const pagesPayload = await fetchFirstJson(getStaticContentEndpoints('/api/pages'));
+  const pagesPayload = isLocalPreview() ? null : await fetchFirstJson(getStaticContentEndpoints('/api/pages'));
   const dynamicPages = pagesPayload && Array.isArray(pagesPayload.pages) ? pagesPayload.pages : [];
   const dynamicPage = dynamicPages.find((item) => item.slug === slug);
   const directPayload = dynamicPage || (pageFile ? await fetchFirstJson(getStaticContentEndpoints(pageFile)) : null);
@@ -1947,11 +2014,22 @@ if (menuToggle && navLinks) {
     menuToggle.setAttribute('aria-label', isOpen ? 'Fermer le menu' : 'Ouvrir le menu');
 
     if (isOpen && isMobileMenuMode()) {
-      const firstMenuLink = navLinks.querySelector('a[href]');
-      if (firstMenuLink) {
-        firstMenuLink.focus();
+      const firstMenuItem = navLinks.querySelector('a[href], button');
+      if (firstMenuItem) {
+        firstMenuItem.focus();
       }
+    } else {
+      closeAllDropdowns();
     }
+  });
+
+  navDropdownToggles.forEach((button) => {
+    button.addEventListener('click', () => {
+      const dropdown = button.closest('.nav-dropdown');
+      const shouldOpen = !dropdown.classList.contains('open');
+      closeAllDropdowns(dropdown);
+      toggleDropdown(dropdown, shouldOpen);
+    });
   });
 
   navItems.forEach((link) => {
@@ -1959,11 +2037,16 @@ if (menuToggle && navLinks) {
   });
 
   document.addEventListener('click', (event) => {
+    const clickedInsideNav = navLinks.contains(event.target) || menuToggle.contains(event.target);
+
+    if (!clickedInsideNav) {
+      closeAllDropdowns();
+    }
+
     if (!navLinks.classList.contains('open')) {
       return;
     }
 
-    const clickedInsideNav = navLinks.contains(event.target) || menuToggle.contains(event.target);
     if (!clickedInsideNav) {
       closeMenu();
     }
@@ -1972,25 +2055,36 @@ if (menuToggle && navLinks) {
   window.addEventListener('resize', () => {
     if (window.innerWidth > 980) {
       closeMenu();
+      closeAllDropdowns();
     }
   });
 
   document.addEventListener('keydown', (event) => {
-    if (!navLinks.classList.contains('open') || !isMobileMenuMode()) {
-      return;
-    }
-
     if (event.key === 'Escape') {
-      event.preventDefault();
-      closeMenu(true);
+      const openedDropdown = document.querySelector('.nav-dropdown.open');
+      if (navLinks.classList.contains('open') && isMobileMenuMode()) {
+        event.preventDefault();
+        closeMenu(true);
+        return;
+      }
+
+      if (openedDropdown) {
+        event.preventDefault();
+        const openedToggle = openedDropdown.querySelector('.nav-dropdown-toggle');
+        closeAllDropdowns();
+        if (openedToggle) {
+          openedToggle.focus();
+        }
+      }
       return;
     }
 
-    if (event.key !== 'Tab') {
+    if (event.key !== 'Tab' || !navLinks.classList.contains('open') || !isMobileMenuMode()) {
       return;
     }
 
-    const focusable = [menuToggle, ...navLinks.querySelectorAll('a[href]')].filter(Boolean);
+    const focusable = [menuToggle, ...navLinks.querySelectorAll('a[href], button')]
+      .filter((element) => !element.hasAttribute('disabled'));
     if (focusable.length === 0) {
       return;
     }

@@ -138,6 +138,7 @@ const contentConfig: Record<ContentType, { key: string; primaryField: string; fa
       `${GITHUB_BASE}/content/pages/accueil.json`,
       `${GITHUB_BASE}/content/pages/club.json`,
       `${GITHUB_BASE}/content/pages/horaires.json`,
+      `${GITHUB_BASE}/content/pages/planning.json`,
       `${GITHUB_BASE}/content/pages/contact.json`,
       `${GITHUB_BASE}/content/pages/pages.json`,
     ],
@@ -344,7 +345,7 @@ function normalizePages(payload: unknown) {
   const pages = items.map((item, index) => {
     const page = item as Record<string, unknown>;
     return {
-      slug: String(page.slug || ["index", "club", "horaires", "contact"][index] || `page-${index + 1}`),
+      slug: String(page.slug || ["index", "club", "horaires", "planning", "contact"][index] || `page-${index + 1}`),
       title: String(page.title || page.titre || ""),
       content: String(page.content || page.contenu || ""),
       image: String(page.image || ""),
@@ -388,7 +389,7 @@ async function fetchFallback(type: ContentType) {
 
   if (type === "pages") {
     const pages: PageRecord[] = [];
-    const slugs = ["index", "club", "horaires", "contact"];
+    const slugs = ["index", "club", "horaires", "planning", "contact"];
 
     for (let index = 0; index < config.fallbackUrls.length; index += 1) {
       const response = await fetch(config.fallbackUrls[index]);

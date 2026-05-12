@@ -167,6 +167,14 @@ collections:
           - { label: "Titre", name: "title", widget: "string" }
           - { label: "Texte", name: "content", widget: "text" }
           - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Planning"
+        name: "planning"
+        file: "content/pages/planning.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
       - label: "Contact"
         name: "contact"
         file: "content/pages/contact.json"
