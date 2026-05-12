@@ -1932,28 +1932,24 @@ textarea:focus {
 .footer {
   background: var(--blue-950);
   color: rgba(255, 255, 255, 0.86);
-  padding: 2rem 0 1.1rem;
+  padding: 1.7rem 0 1rem;
 }
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr 1fr;
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 1.2rem;
 }
 
 .footer h4 {
   margin: 0 0 0.55rem;
   color: #fff3be;
+  letter-spacing: 0.02em;
 }
 
 .footer p {
   margin: 0.3rem 0;
-}
-
-.footer-links,
-.social-links {
-  display: grid;
-  gap: 0.35rem;
 }
 
 .footer a {
@@ -1962,15 +1958,28 @@ textarea:focus {
   transition: color 0.2s ease;
 }
 
+.footer-instagram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  padding: 0.72rem 1rem;
+  border: 1px solid rgba(248, 200, 54, 0.35);
+  border-radius: 999px;
+  background: rgba(248, 200, 54, 0.1);
+  font-weight: 800;
+}
+
 .footer a:hover,
 .footer a:focus-visible {
   color: #ffe186;
 }
 
 .footer-copy {
-  margin-top: 1.4rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  max-width: var(--container);
+  margin: 1rem auto 0;
+  padding: 0.85rem 1rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
   font-size: 0.92rem;
 }
@@ -2183,10 +2192,6 @@ textarea:focus {
     grid-template-columns: 1fr 1fr;
   }
 
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .join-box {
     flex-direction: column;
     align-items: flex-start;
@@ -2340,8 +2345,9 @@ textarea:focus {
     padding: 4.8rem 0;
   }
 
-  .footer-grid {
-    grid-template-columns: 1fr;
+  .footer-inner {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .floating-cta {
