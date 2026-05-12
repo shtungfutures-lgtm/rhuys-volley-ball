@@ -4,6 +4,7 @@ const navLinks = document.querySelector('.nav-links');
 const navItems = document.querySelectorAll('.nav-links a');
 const navDropdowns = document.querySelectorAll('.nav-dropdown');
 const navDropdownToggles = document.querySelectorAll('.nav-dropdown-toggle');
+const dropdownCloseTimers = new WeakMap();
 const internalAnchors = document.querySelectorAll('a[href^="#"]:not([href="#"])');
 const contactForm = document.querySelector('.contact-form');
 const orderForm = document.querySelector('.order-form');
@@ -651,6 +652,7 @@ function closeAllDropdowns(except = null) {
       return;
     }
 
+    window.clearTimeout(dropdownCloseTimers.get(dropdown));
     dropdown.classList.remove('open');
     const toggle = dropdown.querySelector('.nav-dropdown-toggle');
     if (toggle) {
@@ -664,6 +666,7 @@ function toggleDropdown(dropdown, shouldOpen) {
     return;
   }
 
+  window.clearTimeout(dropdownCloseTimers.get(dropdown));
   dropdown.classList.toggle('open', shouldOpen);
   const toggle = dropdown.querySelector('.nav-dropdown-toggle');
   if (toggle) {
@@ -679,6 +682,14 @@ function getDropdownPrimaryHref(button) {
   };
 
   return dropdownLinks[button.getAttribute('aria-controls')] || '';
+}
+
+function scheduleDropdownClose(dropdown, delay = 260) {
+  window.clearTimeout(dropdownCloseTimers.get(dropdown));
+  const timer = window.setTimeout(() => {
+    toggleDropdown(dropdown, false);
+  }, delay);
+  dropdownCloseTimers.set(dropdown, timer);
 }
 
 function closeMenu(shouldFocusToggle = false) {
@@ -2056,6 +2067,7 @@ if (menuToggle && navLinks) {
         return;
       }
 
+      window.clearTimeout(dropdownCloseTimers.get(dropdown));
       closeAllDropdowns(dropdown);
       toggleDropdown(dropdown, true);
     });
@@ -2065,7 +2077,7 @@ if (menuToggle && navLinks) {
         return;
       }
 
-      toggleDropdown(dropdown, false);
+      scheduleDropdownClose(dropdown);
     });
 
     dropdown.addEventListener('focusin', () => {

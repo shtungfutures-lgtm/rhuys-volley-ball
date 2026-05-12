@@ -195,6 +195,16 @@ img {
 }
 
 @media (min-width: 981px) {
+  .nav-dropdown::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: -0.4rem;
+    width: max(100%, 230px);
+    height: 0.95rem;
+    pointer-events: auto;
+  }
+
   .nav-submenu {
     position: absolute;
     top: calc(100% + 0.7rem);
