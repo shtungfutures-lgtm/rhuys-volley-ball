@@ -66,7 +66,27 @@
           <p>Produits et équipements officiels aux couleurs du RHUYS VOLLEY BALL.</p>
         </div>
         <p class="shop-checkout-message" id="shop-checkout-message" aria-live="polite" hidden></p>
-        <div class="shop-grid" id="shop-products"></div>
+        <div class="shop-layout">
+          <div class="shop-grid" id="shop-products"></div>
+          <aside class="shop-cart card reveal" id="shop-cart" aria-label="Panier boutique">
+            <div class="shop-cart-header">
+              <div>
+                <p class="hero-tag">Panier</p>
+                <h2>Votre panier</h2>
+              </div>
+              <span class="shop-cart-count" id="shop-cart-summary" aria-live="polite">0 article</span>
+            </div>
+            <div class="shop-cart-items" id="shop-cart-items" aria-live="polite">
+              <p class="shop-cart-empty">Votre panier est vide.</p>
+            </div>
+            <p class="shop-cart-note">Le total final est calculé directement dans Stripe Checkout.</p>
+            <div class="shop-cart-actions">
+              <button type="button" class="btn btn-primary" id="shop-cart-checkout" disabled>Payer le panier</button>
+              <button type="button" class="btn btn-outline" id="shop-cart-clear" disabled>Vider</button>
+            </div>
+            <p class="form-status shop-cart-status" id="shop-cart-status" aria-live="polite"></p>
+          </aside>
+        </div>
       </section>
 
       <section class="section section-alt" id="paiement">

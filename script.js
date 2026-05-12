@@ -1451,6 +1451,12 @@ function renderProductOptions(id, label, options, inputName) {
 
 async function initBoutiquePage() {
   const shopRoot = document.getElementById('shop-products');
+  const cartRoot = document.getElementById('shop-cart');
+  const cartItemsRoot = document.getElementById('shop-cart-items');
+  const cartSummaryRoot = document.getElementById('shop-cart-summary');
+  const cartCheckoutButton = document.getElementById('shop-cart-checkout');
+  const cartClearButton = document.getElementById('shop-cart-clear');
+  const cartStatus = document.getElementById('shop-cart-status');
   const modal = document.getElementById('product-modal');
   const modalContent = document.getElementById('product-modal-content');
   const checkoutMessage = document.getElementById('shop-checkout-message');
@@ -1473,7 +1479,145 @@ async function initBoutiquePage() {
   }
 
   const resolvedProducts = await getResolvedProducts();
+  const cart = [];
   let lastFocusedElement = null;
+
+  const getCartItemKey = (item) => [item.productId, item.size, item.color].join('|');
+
+  const setCartStatus = (message, type = '') => {
+    if (!cartStatus) {
+      return;
+    }
+
+    cartStatus.className = `form-status shop-cart-status${type ? ` is-${type}` : ''}`;
+    cartStatus.textContent = message;
+  };
+
+  const renderCart = () => {
+    if (!cartItemsRoot || !cartSummaryRoot || !cartCheckoutButton || !cartClearButton) {
+      return;
+    }
+
+    const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+    cartSummaryRoot.textContent = `${totalQuantity} article${totalQuantity > 1 ? 's' : ''}`;
+    cartCheckoutButton.disabled = cart.length === 0;
+    cartClearButton.disabled = cart.length === 0;
+
+    if (cart.length === 0) {
+      cartItemsRoot.innerHTML = '<p class="shop-cart-empty">Votre panier est vide.</p>';
+      return;
+    }
+
+    cartItemsRoot.innerHTML = cart
+      .map((item) => {
+        const key = escapeHtml(getCartItemKey(item));
+        const details = [item.size ? `Taille : ${item.size}` : '', item.color ? `Couleur : ${item.color}` : '']
+          .filter(Boolean)
+          .join(' · ');
+
+        return `
+          <article class="shop-cart-item" data-cart-key="${key}">
+            <div class="shop-cart-item-main">
+              <div>
+                <h3 class="shop-cart-item-title">${escapeHtml(item.productName)}</h3>
+                <p class="shop-cart-item-meta">${escapeHtml(details || 'Produit club')}</p>
+              </div>
+              <strong>${escapeHtml(item.price)}</strong>
+            </div>
+            <div class="shop-cart-item-controls">
+              <label>
+                Quantité
+                <input class="shop-cart-quantity" type="number" min="1" max="10" value="${item.quantity}" data-cart-quantity="${key}" aria-label="Quantité ${escapeHtml(item.productName)}" />
+              </label>
+              <button type="button" class="shop-cart-remove" data-cart-remove="${key}">Retirer</button>
+            </div>
+          </article>
+        `;
+      })
+      .join('');
+  };
+
+  const addToCart = (item) => {
+    const key = getCartItemKey(item);
+    const existingItem = cart.find((cartItem) => getCartItemKey(cartItem) === key);
+
+    if (existingItem) {
+      existingItem.quantity = Math.min(10, existingItem.quantity + item.quantity);
+    } else {
+      cart.push(item);
+    }
+
+    renderCart();
+    setCartStatus('Produit ajouté au panier.', 'success');
+
+    if (cartRoot && window.matchMedia('(max-width: 760px)').matches) {
+      cartRoot.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const checkoutCart = async () => {
+    if (!cart.length) {
+      setCartStatus('Ajoutez au moins un produit avant de payer.', 'error');
+      return;
+    }
+
+    if (window.location.protocol === 'file:') {
+      setCartStatus(
+        'Le paiement Stripe nécessite Netlify Dev ou le site Netlify déployé. Le mode fichier ne peut pas appeler /api/create-checkout-session.',
+        'error'
+      );
+      return;
+    }
+
+    if (cartCheckoutButton) {
+      cartCheckoutButton.disabled = true;
+      cartCheckoutButton.textContent = 'Ouverture de Stripe...';
+    }
+
+    setCartStatus('Création du paiement sécurisé Stripe...', '');
+
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: cart.map((item) => ({
+            productId: item.productId,
+            productName: item.productName,
+            priceId: item.priceId,
+            quantity: item.quantity,
+            size: item.size,
+            color: item.color
+          }))
+        })
+      });
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.url) {
+        throw new Error(result.message || 'Impossible de créer le paiement Stripe.');
+      }
+
+      const checkoutLink = document.createElement('a');
+      checkoutLink.href = result.url;
+      checkoutLink.target = '_blank';
+      checkoutLink.rel = 'noopener noreferrer';
+      document.body.appendChild(checkoutLink);
+      checkoutLink.click();
+      checkoutLink.remove();
+
+      setCartStatus('Stripe Checkout est ouvert dans un nouvel onglet.', 'success');
+    } catch (error) {
+      setCartStatus(
+        error.message || 'Paiement indisponible. Vérifiez Netlify Dev et la configuration Stripe.',
+        'error'
+      );
+    } finally {
+      if (cartCheckoutButton) {
+        cartCheckoutButton.disabled = cart.length === 0;
+        cartCheckoutButton.textContent = 'Payer le panier';
+      }
+    }
+  };
 
   const closeProductModal = () => {
     if (!modal || !modalContent || modal.hidden) {
@@ -1498,15 +1642,15 @@ async function initBoutiquePage() {
 
     const canBuy = Boolean(product.priceId) && product.status !== 'indisponible';
     const buyAction = canBuy
-      ? `<button type="submit" class="btn btn-primary btn-xl">Payer avec Stripe</button>`
-      : `<button type="button" class="btn btn-primary btn-xl disabled" disabled aria-disabled="true">Paiement test bientôt disponible</button>`;
+      ? `<button type="submit" class="btn btn-primary btn-xl">Ajouter au panier</button>`
+      : `<button type="button" class="btn btn-primary btn-xl disabled" disabled aria-disabled="true">Paiement Stripe non configuré</button>`;
 
     lastFocusedElement = document.activeElement;
     modalContent.innerHTML = `
       <div class="product-modal-layout">
         <div class="product-modal-media">
           <img
-            src="${product.image}"
+            src="${escapeHtml(product.image)}"
             alt="${escapeHtml(product.name)}"
             loading="lazy"
             decoding="async"
@@ -1574,14 +1718,6 @@ async function initBoutiquePage() {
         const status = checkoutForm.querySelector('.product-checkout-status');
         const formData = new FormData(checkoutForm);
         const quantity = Math.max(1, Math.min(10, Number(formData.get('quantity') || 1)));
-        const payload = {
-          productId: product.id,
-          productName: product.name,
-          priceId: product.priceId,
-          quantity,
-          size: String(formData.get('size') || ''),
-          color: String(formData.get('color') || '')
-        };
 
         if (!product.priceId) {
           if (status) {
@@ -1591,65 +1727,84 @@ async function initBoutiquePage() {
           return;
         }
 
-        if (window.location.protocol === 'file:') {
-          if (status) {
-            status.className = 'form-status is-error product-checkout-status';
-            status.textContent =
-              'Le paiement Stripe nécessite Netlify Dev ou le site Netlify déployé. Le mode fichier ne peut pas appeler /api/create-checkout-session.';
-          }
-          return;
-        }
-
         if (submitButton) {
           submitButton.disabled = true;
-          submitButton.textContent = 'Ouverture de Stripe...';
+          submitButton.textContent = 'Ajout...';
         }
 
         if (status) {
-          status.className = 'form-status product-checkout-status';
-          status.textContent = 'Création du paiement test Stripe...';
+          status.className = 'form-status is-success product-checkout-status';
+          status.textContent = 'Produit ajouté au panier.';
         }
 
-        try {
-          const response = await fetch('/api/create-checkout-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const result = await response.json().catch(() => ({}));
+        addToCart({
+          productId: product.id,
+          productName: product.name,
+          priceId: product.priceId,
+          price: product.price,
+          quantity,
+          size: String(formData.get('size') || ''),
+          color: String(formData.get('color') || '')
+        });
 
-          if (!response.ok || !result.url) {
-            throw new Error(result.message || 'Impossible de créer le paiement Stripe.');
-          }
-
-          const checkoutLink = document.createElement('a');
-          checkoutLink.href = result.url;
-          checkoutLink.target = '_blank';
-          checkoutLink.rel = 'noopener noreferrer';
-          document.body.appendChild(checkoutLink);
-          checkoutLink.click();
-          checkoutLink.remove();
-
-          if (status) {
-            status.className = 'form-status is-success product-checkout-status';
-            status.textContent = 'Stripe Checkout est ouvert dans un nouvel onglet.';
-          }
-        } catch (error) {
-          if (status) {
-            status.className = 'form-status is-error product-checkout-status';
-            status.textContent =
-              error.message ||
-              'Paiement test indisponible. Lancez le site avec Netlify Dev et vérifiez STRIPE_SECRET_KEY.';
-          }
-        } finally {
+        window.setTimeout(() => {
           if (submitButton) {
             submitButton.disabled = false;
-            submitButton.textContent = 'Payer avec Stripe';
+            submitButton.textContent = 'Ajouter au panier';
           }
-        }
+          closeProductModal();
+        }, 350);
       });
     }
   };
+
+  if (cartItemsRoot) {
+    cartItemsRoot.addEventListener('input', (event) => {
+      const input = event.target;
+
+      if (!(input instanceof HTMLInputElement) || !input.dataset.cartQuantity) {
+        return;
+      }
+
+      const item = cart.find((cartItem) => getCartItemKey(cartItem) === input.dataset.cartQuantity);
+      if (!item) {
+        return;
+      }
+
+      item.quantity = Math.max(1, Math.min(10, Number(input.value || 1)));
+      renderCart();
+      setCartStatus('Quantité mise à jour.', 'success');
+    });
+
+    cartItemsRoot.addEventListener('click', (event) => {
+      const button = event.target;
+
+      if (!(button instanceof HTMLElement) || !button.dataset.cartRemove) {
+        return;
+      }
+
+      const index = cart.findIndex((item) => getCartItemKey(item) === button.dataset.cartRemove);
+      if (index === -1) {
+        return;
+      }
+
+      cart.splice(index, 1);
+      renderCart();
+      setCartStatus('Produit retiré du panier.', 'success');
+    });
+  }
+
+  if (cartCheckoutButton) {
+    cartCheckoutButton.addEventListener('click', checkoutCart);
+  }
+
+  if (cartClearButton) {
+    cartClearButton.addEventListener('click', () => {
+      cart.splice(0, cart.length);
+      renderCart();
+      setCartStatus('Panier vidé.', 'success');
+    });
+  }
 
   resolvedProducts.forEach((product) => {
     const card = document.createElement('article');
@@ -1658,7 +1813,7 @@ async function initBoutiquePage() {
     card.innerHTML = `
       <img
         class="product-image"
-        src="${product.image}"
+        src="${escapeHtml(product.image)}"
         alt="${escapeHtml(product.name)}"
         loading="lazy"
         decoding="async"
@@ -1699,8 +1854,9 @@ async function initBoutiquePage() {
     });
   }
 
+  renderCart();
   bindImageFallback(shopRoot.querySelectorAll('.product-image'));
-  initRevealAnimations(shopRoot.querySelectorAll('.reveal'));
+  initRevealAnimations(document.querySelectorAll('.shop-layout .reveal'));
 }
 
 

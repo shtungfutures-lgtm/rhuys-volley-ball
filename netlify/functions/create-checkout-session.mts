@@ -13,6 +13,15 @@ const fallbackAllowedPrices = new Map([
   ["sac-sport", "price_1TVIJS3OCDghhlsbEhYNVgAB"],
 ]);
 
+type CheckoutItem = {
+  productId: string;
+  productName: string;
+  priceId: string;
+  quantity: number;
+  size: string;
+  color: string;
+};
+
 function getEnv(name: string) {
   return Netlify.env.get(name) || process.env[name] || "";
 }
@@ -54,6 +63,42 @@ function getProductsFromPayload(payload: unknown) {
 function getProductPriceId(product: unknown) {
   const data = product as Record<string, unknown>;
   return cleanMetadataValue(data.priceId || data.price_id || data.stripePriceId || "");
+}
+
+function normalizeCheckoutItems(body: Record<string, unknown>) {
+  const rawItems = Array.isArray(body.items) ? body.items : [body];
+
+  return rawItems
+    .slice(0, 20)
+    .map((rawItem) => {
+      const data = (rawItem || {}) as Record<string, unknown>;
+      const productId = cleanMetadataValue(data.productId);
+      const priceId = cleanMetadataValue(data.priceId);
+
+      if (!productId || !priceId) {
+        return null;
+      }
+
+      return {
+        productId,
+        productName: cleanMetadataValue(data.productName) || "Produit RHUYS VOLLEY BALL",
+        priceId,
+        quantity: toPositiveQuantity(data.quantity),
+        size: cleanMetadataValue(data.size),
+        color: cleanMetadataValue(data.color),
+      };
+    })
+    .filter((item): item is CheckoutItem => Boolean(item));
+}
+
+function getCartSummary(items: CheckoutItem[]) {
+  return items
+    .map((item) => {
+      const options = [item.size, item.color].filter(Boolean).join("/");
+      return `${item.productId}${options ? `(${options})` : ""}x${item.quantity}`;
+    })
+    .join(", ")
+    .slice(0, 250);
 }
 
 async function fetchProductPriceIdFromContent(origin: string, productId: string) {
@@ -104,33 +149,51 @@ export default async (req: Request) => {
   }
 
   const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
-  const productId = cleanMetadataValue(body.productId);
-  const productName = cleanMetadataValue(body.productName) || "Produit RHUYS VOLLEY BALL";
-  const priceId = cleanMetadataValue(body.priceId);
   const origin = getRequestOrigin(req);
-  const expectedPriceId = (await getAllowedPriceId(origin, productId)) || fallbackAllowedPrices.get(productId);
+  const items = normalizeCheckoutItems(body);
 
-  if (!expectedPriceId || expectedPriceId !== priceId) {
-    return Response.json({ message: "Produit Stripe invalide ou non autorisé." }, { status: 400 });
+  if (!items.length) {
+    return Response.json({ message: "Panier vide ou produit Stripe manquant." }, { status: 400 });
   }
 
-  const quantity = toPositiveQuantity(body.quantity);
+  for (const item of items) {
+    const expectedPriceId = (await getAllowedPriceId(origin, item.productId)) || fallbackAllowedPrices.get(item.productId);
+
+    if (!expectedPriceId || expectedPriceId !== item.priceId) {
+      return Response.json({ message: "Produit Stripe invalide ou non autorisé." }, { status: 400 });
+    }
+  }
+
   const params = new URLSearchParams();
+  const totalQuantity = items.reduce((total, item) => total + item.quantity, 0);
 
   params.set("mode", "payment");
-  params.set("line_items[0][price]", priceId);
-  params.set("line_items[0][quantity]", String(quantity));
+  items.forEach((item, index) => {
+    params.set(`line_items[${index}][price]`, item.priceId);
+    params.set(`line_items[${index}][quantity]`, String(item.quantity));
+  });
   params.set("success_url", `${origin}/boutique.html?checkout=success`);
   params.set("cancel_url", `${origin}/boutique.html?checkout=cancel`);
-  params.set("client_reference_id", productId);
+  params.set("client_reference_id", items.length === 1 ? items[0].productId : `cart-${Date.now()}`);
   params.set("allow_promotion_codes", "true");
   params.set("billing_address_collection", "auto");
   params.set("shipping_address_collection[allowed_countries][0]", "FR");
-  params.set("metadata[product_id]", productId);
-  params.set("metadata[product_name]", productName);
-  params.set("metadata[size]", cleanMetadataValue(body.size));
-  params.set("metadata[color]", cleanMetadataValue(body.color));
-  params.set("metadata[quantity]", String(quantity));
+  params.set("metadata[order_type]", items.length === 1 ? "single" : "cart");
+  params.set("metadata[item_count]", String(items.length));
+  params.set("metadata[total_quantity]", String(totalQuantity));
+  params.set("metadata[cart_summary]", getCartSummary(items));
+
+  if (items.length === 1) {
+    params.set("metadata[product_id]", items[0].productId);
+    params.set("metadata[product_name]", items[0].productName);
+    params.set("metadata[size]", items[0].size);
+    params.set("metadata[color]", items[0].color);
+    params.set("metadata[quantity]", String(items[0].quantity));
+  } else {
+    params.set("metadata[product_id]", "cart");
+    params.set("metadata[product_name]", "Panier boutique RHUYS VOLLEY BALL");
+    params.set("metadata[quantity]", String(totalQuantity));
+  }
 
   const stripeResponse = await fetch(`${STRIPE_API_BASE}/checkout/sessions`, {
     method: "POST",
