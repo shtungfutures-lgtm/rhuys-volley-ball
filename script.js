@@ -527,7 +527,9 @@ const routeAliases = {
   calendrier: 'calendrier.html',
   actualites: 'actualites.html',
   boutique: 'boutique.html',
-  contact: 'contact.html'
+  contact: 'contact.html',
+  'mentions-legales': 'mentions-legales.html',
+  'politique-confidentialite': 'politique-confidentialite.html'
 };
 
 function getCurrentPageName() {
@@ -592,6 +594,8 @@ const breadcrumbLabels = {
   'partenaires.html': 'Partenaires',
   'boutique.html': 'Boutique',
   'contact.html': 'Contact',
+  'mentions-legales.html': 'Mentions légales',
+  'politique-confidentialite.html': 'Politique de confidentialité',
 };
 
 function updateBreadcrumbCurrent(label) {
