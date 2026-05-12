@@ -199,13 +199,13 @@ const articles = [
   },
   {
     id: 5,
-    titre: "Séances d'essai ouvertes tout le mois d'octobre",
+    titre: "4 séances d'essai gratuites pour découvrir le club",
     date: '2026-10-01',
     categorie: 'Annonces',
     image: 'https://images.pexels.com/photos/6203635/pexels-photo-6203635.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    extrait: 'Le club propose des essais gratuits pour découvrir la pratique et les équipes.',
+    extrait: "Le club propose 4 séances d'essai gratuites pour découvrir la pratique et les équipes.",
     contenu:
-      "Le RHUYS VOLLEY BALL ouvre des séances d'essai sur l'ensemble de ses créneaux pendant le mois d'octobre. Cette formule permet aux futurs licenciés de découvrir le fonctionnement du club, d'échanger avec les encadrants et de trouver la section la plus adaptée à leur profil. Les demandes se font via le formulaire de contact.",
+      "Le RHUYS VOLLEY BALL propose 4 séances d'essai gratuites sur ses créneaux d'entraînement. Cette formule permet aux futurs licenciés de découvrir le fonctionnement du club, d'échanger avec les encadrants et de trouver la section la plus adaptée à leur profil. Les demandes se font via le formulaire de contact.",
     auteur: 'Emmanuelle Tillon'
   },
   {
