@@ -671,6 +671,16 @@ function toggleDropdown(dropdown, shouldOpen) {
   }
 }
 
+function getDropdownPrimaryHref(button) {
+  const dropdownLinks = {
+    'nav-club': 'club.html',
+    'nav-equipes': 'equipes.html',
+    'nav-planning': 'planning.html'
+  };
+
+  return dropdownLinks[button.getAttribute('aria-controls')] || '';
+}
+
 function closeMenu(shouldFocusToggle = false) {
   if (!menuToggle || !navLinks) {
     return;
@@ -2025,10 +2035,58 @@ if (menuToggle && navLinks) {
 
   navDropdownToggles.forEach((button) => {
     button.addEventListener('click', () => {
+      if (!isMobileMenuMode()) {
+        const primaryHref = getDropdownPrimaryHref(button);
+        if (primaryHref) {
+          window.location.href = primaryHref;
+        }
+        return;
+      }
+
       const dropdown = button.closest('.nav-dropdown');
       const shouldOpen = !dropdown.classList.contains('open');
       closeAllDropdowns(dropdown);
       toggleDropdown(dropdown, shouldOpen);
+    });
+  });
+
+  navDropdowns.forEach((dropdown) => {
+    dropdown.addEventListener('pointerenter', () => {
+      if (isMobileMenuMode()) {
+        return;
+      }
+
+      closeAllDropdowns(dropdown);
+      toggleDropdown(dropdown, true);
+    });
+
+    dropdown.addEventListener('pointerleave', () => {
+      if (isMobileMenuMode()) {
+        return;
+      }
+
+      toggleDropdown(dropdown, false);
+    });
+
+    dropdown.addEventListener('focusin', () => {
+      if (isMobileMenuMode()) {
+        return;
+      }
+
+      closeAllDropdowns(dropdown);
+      toggleDropdown(dropdown, true);
+    });
+
+    dropdown.addEventListener('focusout', () => {
+      if (isMobileMenuMode()) {
+        return;
+      }
+
+      window.setTimeout(() => {
+        if (!dropdown.contains(document.activeElement)) {
+          toggleDropdown(dropdown, false);
+        }
+      }, 0);
     });
   });
 
