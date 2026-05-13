@@ -15,6 +15,20 @@ const sportImages = document.querySelectorAll(
 );
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const phoneRegex = /^[0-9+().\s-]{8,20}$/;
+
+function redirectIdentityTokenToAdmin() {
+  const hash = window.location.hash || '';
+  const isIdentityCallback = /(?:invite_token|recovery_token|confirmation_token|email_change_token|access_token|error)=/.test(hash);
+
+  if (!isIdentityCallback || window.location.pathname.startsWith('/admin')) {
+    return;
+  }
+
+  window.location.replace(`/admin/${hash}`);
+}
+
+redirectIdentityTokenToAdmin();
+
 const matches = [
   {
     id: 1,
