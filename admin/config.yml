@@ -5,6 +5,9 @@ backend:
 local_backend: true
 site_url: "https://rhuys-volley-ball-site.netlify.app"
 display_url: "https://rhuys-volley-ball-site.netlify.app"
+logo_url: "/assets/logo-rhuys-volley-ball.png"
+locale: "fr"
+show_preview_links: true
 media_folder: "uploads/images"
 public_folder: "/uploads/images"
 # Note sécurité : privilégier les imports JPG, JPEG, PNG ou WebP.
@@ -12,46 +15,53 @@ public_folder: "/uploads/images"
 
 collections:
   - name: "articles"
-    label: "Articles"
+    label: "1. Actualités"
     label_singular: "Article"
+    description: "Créer, modifier et organiser les articles visibles sur la page Actualités."
     files:
       - label: "Liste des articles"
         name: "articles"
         file: "content/articles/articles.json"
         format: "json"
         fields:
-          - label: "Articles"
+          - label: "Articles publiés"
             name: "articles"
             widget: "list"
-            summary: "{{fields.date}} - {{fields.title}}"
+            summary: "{{fields.date}} · {{fields.category}} · {{fields.title}}"
+            collapsed: true
+            minimize_collapsed: true
+            hint: "Ajoutez un article, remplissez son titre, sa date, son image et son contenu, puis publiez."
             fields:
-              - { label: "Titre", name: "title", widget: "string" }
-              - { label: "Date", name: "date", widget: "date", format: "YYYY-MM-DD" }
+              - { label: "Titre de l’article", name: "title", widget: "string", hint: "Exemple : Victoire des loisirs à domicile." }
+              - { label: "Date de publication", name: "date", widget: "date", format: "YYYY-MM-DD" }
               - label: "Catégorie"
                 name: "category"
                 widget: "select"
                 options: ["Matchs", "Club", "Événements", "Jeunes", "Annonces"]
-              - { label: "Image principale", name: "image", widget: "image", required: false }
-              - { label: "Extrait", name: "excerpt", widget: "text" }
-              - { label: "Contenu", name: "body", widget: "markdown" }
+              - { label: "Image principale", name: "image", widget: "image", required: false, hint: "Format recommandé : JPG, PNG ou WebP." }
+              - { label: "Résumé court", name: "excerpt", widget: "text", hint: "Deux phrases maximum pour la carte d’actualité." }
+              - { label: "Contenu complet", name: "body", widget: "markdown", hint: "Texte complet affiché sur la page de l’article." }
               - { label: "Auteur", name: "author", widget: "string", required: false, default: "RHUYS VOLLEY BALL" }
 
   - name: "gallery"
-    label: "Galerie photos"
+    label: "2. Galerie photos"
     label_singular: "Photo"
+    description: "Gérer les images de la galerie du site."
     files:
       - label: "Photos"
         name: "gallery"
         file: "content/gallery/gallery.json"
         format: "json"
         fields:
-          - label: "Photos"
+          - label: "Photos affichées"
             name: "gallery"
             widget: "list"
-            summary: "{{fields.title}}"
+            summary: "{{fields.category}} · {{fields.title}}"
+            collapsed: true
+            minimize_collapsed: true
             fields:
-              - { label: "Titre", name: "title", widget: "string" }
-              - { label: "Image", name: "image", widget: "image" }
+              - { label: "Titre de repère", name: "title", widget: "string", hint: "Nom interne utile pour retrouver la photo." }
+              - { label: "Image", name: "image", widget: "image", hint: "Format recommandé : JPG, PNG ou WebP." }
               - { label: "Description", name: "description", widget: "text", required: false }
               - label: "Catégorie"
                 name: "category"
@@ -60,8 +70,9 @@ collections:
                 default: "Club"
 
   - name: "training"
-    label: "Horaires entraînement"
+    label: "3. Horaires entraînement"
     label_singular: "Créneau"
+    description: "Modifier les jours, horaires et lieux d’entraînement."
     files:
       - label: "Planning des entraînements"
         name: "training"
@@ -72,6 +83,8 @@ collections:
             name: "training"
             widget: "list"
             summary: "{{fields.team}} - {{fields.day}} {{fields.time}}"
+            collapsed: true
+            minimize_collapsed: true
             fields:
               - { label: "Équipe", name: "team", widget: "string" }
               - { label: "Âge / niveau", name: "age", widget: "string", required: false }
@@ -85,22 +98,25 @@ collections:
               - { label: "Description", name: "description", widget: "text", required: false }
 
   - name: "products"
-    label: "Produits boutique"
+    label: "4. Boutique"
     label_singular: "Produit"
+    description: "Gérer les produits visibles dans la boutique et leurs identifiants Stripe."
     files:
       - label: "Catalogue boutique"
         name: "products"
         file: "content/products/products.json"
         format: "json"
         fields:
-          - label: "Produits"
+          - label: "Produits affichés"
             name: "products"
             widget: "list"
-            summary: "{{fields.name}} - {{fields.price}}"
+            summary: "{{fields.status}} · {{fields.name}} · {{fields.price}}"
+            collapsed: true
+            minimize_collapsed: true
             fields:
-              - { label: "Nom", name: "name", widget: "string" }
-              - { label: "Image", name: "image", widget: "image", required: false }
-              - { label: "Prix", name: "price", widget: "string" }
+              - { label: "Nom du produit", name: "name", widget: "string" }
+              - { label: "Image du produit", name: "image", widget: "image", required: false, hint: "Format recommandé : JPG, PNG ou WebP." }
+              - { label: "Prix affiché", name: "price", widget: "string", hint: "Exemple : 45 €" }
               - label: "Tailles"
                 name: "sizes"
                 widget: "list"
@@ -108,7 +124,7 @@ collections:
                 field: { label: "Taille", name: "size", widget: "string" }
               - { label: "Description courte", name: "shortDescription", widget: "text" }
               - { label: "Description complète", name: "detailedDescription", widget: "markdown" }
-              - { label: "Lien Stripe", name: "stripeLink", widget: "string", required: false }
+              - { label: "Lien Stripe Payment Link", name: "stripeLink", widget: "string", required: false }
               - { label: "ID prix Stripe", name: "priceId", widget: "string", required: false, hint: "Nécessaire pour le paiement Stripe Checkout dynamique." }
               - label: "Statut"
                 name: "status"
@@ -119,8 +135,9 @@ collections:
                 default: "indisponible"
 
   - name: "partners"
-    label: "Partenaires"
+    label: "5. Partenaires"
     label_singular: "Partenaire"
+    description: "Mettre en avant les partenaires et sponsors du club."
     files:
       - label: "Liste des partenaires"
         name: "partners"
@@ -130,10 +147,12 @@ collections:
           - label: "Partenaires"
             name: "partners"
             widget: "list"
-            summary: "{{fields.name}}"
+            summary: "{{fields.category}} · {{fields.name}}"
+            collapsed: true
+            minimize_collapsed: true
             fields:
               - { label: "Nom", name: "name", widget: "string" }
-              - { label: "Logo", name: "logo", widget: "image", required: false }
+              - { label: "Logo", name: "logo", widget: "image", required: false, hint: "Format recommandé : JPG, PNG ou WebP." }
               - label: "Catégorie"
                 name: "category"
                 widget: "select"
@@ -142,8 +161,9 @@ collections:
               - { label: "Lien du site", name: "website", widget: "string", required: false }
 
   - name: "pages"
-    label: "Contenus du site"
+    label: "6. Textes des pages"
     label_singular: "Page"
+    description: "Modifier les grands titres, textes courts et images principales des pages."
     files:
       - label: "Accueil"
         name: "accueil"

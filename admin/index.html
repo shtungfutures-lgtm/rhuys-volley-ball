@@ -13,6 +13,68 @@
         background: #0b2340;
       }
 
+      .admin-loading {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: #ffffff;
+        font-family: Barlow, system-ui, sans-serif;
+        background:
+          radial-gradient(circle at 20% 20%, rgba(248, 200, 54, 0.2), transparent 34%),
+          linear-gradient(135deg, #07182d, #0b2340 58%, #123a66);
+        pointer-events: none;
+      }
+
+      .admin-loading-card {
+        width: min(680px, 100%);
+        display: grid;
+        gap: 14px;
+        padding: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 28px 80px rgba(0, 0, 0, 0.24);
+        backdrop-filter: blur(12px);
+      }
+
+      .admin-loading-card img {
+        width: 84px;
+        height: 84px;
+        object-fit: contain;
+        border-radius: 20px;
+        background: #fff;
+      }
+
+      .admin-loading-card h1 {
+        margin: 0;
+        font-size: clamp(30px, 5vw, 52px);
+        line-height: 0.96;
+      }
+
+      .admin-loading-card p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 17px;
+      }
+
+      .admin-loading-steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .admin-loading-steps span {
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: rgba(248, 200, 54, 0.18);
+        color: #f8c836;
+        font-weight: 800;
+      }
+
       noscript {
         display: block;
         max-width: 720px;
@@ -26,8 +88,29 @@
     </style>
   </head>
   <body>
+    <section class="admin-loading" aria-label="Chargement de l'administration">
+      <div class="admin-loading-card">
+        <img src="../assets/logo-rhuys-volley-ball.png" alt="" />
+        <h1>Gestion du site RHUYS VOLLEY BALL</h1>
+        <p>Connectez-vous avec Netlify Identity, puis choisissez une rubrique : actualités, boutique, partenaires, photos ou pages.</p>
+        <div class="admin-loading-steps" aria-hidden="true">
+          <span>1. Choisir une rubrique</span>
+          <span>2. Modifier le contenu</span>
+          <span>3. Publier</span>
+        </div>
+      </div>
+    </section>
     <noscript>JavaScript doit être activé pour accéder à Decap CMS.</noscript>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="/admin/cms-preview.js"></script>
+    <script>
+      window.addEventListener('load', function () {
+        window.setTimeout(function () {
+          var loading = document.querySelector('.admin-loading');
+          if (loading) loading.remove();
+        }, 1200);
+      });
+    </script>
   </body>
 </html>
