@@ -1,5 +1,7 @@
 /admin  /admin/index.html  301
 /admin/ /admin/index.html  200
+/admin/simple.html /admin/ 301
+/admin/decap.html /admin/ 301
 /club /club.html 200
 /partenaires /partenaires.html 200
 /equipes /equipes.html 200

@@ -121,6 +121,11 @@ async function fetchProductPriceIdFromContent(origin: string, productId: string)
 }
 
 async function getAllowedPriceId(origin: string, productId: string) {
+  const contentPriceId = await fetchProductPriceIdFromContent(origin, productId);
+  if (contentPriceId) {
+    return contentPriceId;
+  }
+
   try {
     const stored = await getStore(STORE_NAME, { consistency: "strong" }).get("products", { type: "json" });
     const products = getProductsFromPayload(stored);
@@ -131,7 +136,7 @@ async function getAllowedPriceId(origin: string, productId: string) {
     // Local development without Blob state falls back to static content.
   }
 
-  return fetchProductPriceIdFromContent(origin, productId);
+  return "";
 }
 
 export default async (req: Request) => {

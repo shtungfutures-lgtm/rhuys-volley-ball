@@ -472,16 +472,15 @@ const fallbackTraining = [
 ];
 
 const cmsArticlesEndpoint = '/content/articles/articles.json';
-const liveArticlesEndpoint = '/api/articles';
 const githubArticlesEndpoint =
   'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main/content/articles/articles.json';
 const githubMediaBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
 const githubContentBaseUrl = 'https://raw.githubusercontent.com/shtungfutures-lgtm/rhuys-volley-ball/main';
-const galleryContentPath = ['/api/gallery', '/content/gallery/gallery.json', '/content/galerie/galerie.json'];
-const productsContentPath = ['/api/products', '/content/products/products.json', '/content/produits/produits.json'];
-const partnersContentPath = ['/api/partners', '/content/partners/partners.json', '/content/partenaires/partenaires.json'];
-const teamsContentPath = ['/api/teams', '/content/teams/teams.json'];
-const trainingContentPath = ['/api/training', '/content/training/training.json'];
+const galleryContentPath = ['/content/gallery/gallery.json', '/content/galerie/galerie.json'];
+const productsContentPath = ['/content/products/products.json', '/content/produits/produits.json'];
+const partnersContentPath = ['/content/partners/partners.json', '/content/partenaires/partenaires.json'];
+const teamsContentPath = ['/content/teams/teams.json'];
+const trainingContentPath = ['/content/training/training.json'];
 const pagesContentPath = '/content/pages/pages.json';
 const pageContentFiles = {
   index: '/content/pages/accueil.json',
@@ -835,7 +834,7 @@ function isLocalPreview() {
 }
 
 function getCmsArticleEndpoints() {
-  return isLocalPreview() ? [liveArticlesEndpoint, cmsArticlesEndpoint] : [liveArticlesEndpoint, githubArticlesEndpoint, cmsArticlesEndpoint];
+  return isLocalPreview() ? [cmsArticlesEndpoint] : [cmsArticlesEndpoint, githubArticlesEndpoint];
 }
 
 function getStaticContentEndpoints(pathOrPaths) {
@@ -845,7 +844,7 @@ function getStaticContentEndpoints(pathOrPaths) {
     return paths;
   }
 
-  return paths.flatMap((path) => (path.startsWith('/api/') ? [path] : [`${githubContentBaseUrl}${path}`, path]));
+  return paths.flatMap((path) => (path.startsWith('/api/') ? [path] : [path, `${githubContentBaseUrl}${path}`]));
 }
 
 async function fetchFirstJson(endpoints) {
@@ -1936,7 +1935,7 @@ function normalizePageContent(payload, slug) {
 async function initSimplePageContent() {
   const slug = getCurrentPageSlug();
   const pageFile = pageContentFiles[slug];
-  const pagesPayload = isLocalPreview() ? null : await fetchFirstJson(getStaticContentEndpoints('/api/pages'));
+  const pagesPayload = await fetchFirstJson(getStaticContentEndpoints(pagesContentPath));
   const dynamicPages = pagesPayload && Array.isArray(pagesPayload.pages) ? pagesPayload.pages : [];
   const dynamicPage = dynamicPages.find((item) => item.slug === slug);
   const directPayload = dynamicPage || (pageFile ? await fetchFirstJson(getStaticContentEndpoints(pageFile)) : null);

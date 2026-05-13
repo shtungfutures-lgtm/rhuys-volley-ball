@@ -13,6 +13,16 @@
   publish = "."
 
 [[redirects]]
+  from = "/admin/simple.html"
+  to = "/admin/"
+  status = 301
+
+[[redirects]]
+  from = "/admin/decap.html"
+  to = "/admin/"
+  status = 301
+
+[[redirects]]
   from = "/club"
   to = "/club.html"
   status = 200

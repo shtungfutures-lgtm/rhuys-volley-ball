@@ -6,8 +6,8 @@ Cette checklist est à vérifier avant la livraison finale au club, puis à chaq
 
 - [ ] 2FA GitHub activée pour les personnes qui ont accès au dépôt.
 - [ ] 2FA Netlify activée pour les personnes qui ont accès au projet.
-- [ ] Netlify Identity configuré en mode invitation only si Decap CMS / Git Gateway est utilisé.
-- [ ] Seuls les responsables autorisés ont accès au CMS ou à l'administration.
+- [ ] Netlify Identity configuré en mode invitation only pour Decap CMS / Git Gateway.
+- [ ] Seuls les responsables autorisés ont accès à Decap CMS.
 - [ ] Les anciens accès des personnes qui ne gèrent plus le site sont supprimés.
 
 ## Domaine et HTTPS
@@ -20,9 +20,9 @@ Cette checklist est à vérifier avant la livraison finale au club, puis à chaq
 
 ## Administration et CMS
 
-- [ ] Une seule interface admin est conservée et documentée pour le club.
-- [ ] Ancien admin supprimé ou désactivé s'il n'est plus utilisé.
-- [ ] Git Gateway activé si Decap CMS est l'interface retenue.
+- [ ] `/admin` pointe vers Decap CMS, interface unique retenue pour le club.
+- [ ] Ancien admin maison supprimé ou désactivé.
+- [ ] Git Gateway activé dans Netlify pour Decap CMS.
 - [ ] Aucune clé secrète ou mot de passe n'est présent dans le frontend ou dans `admin/config.yml`.
 - [ ] La procédure de publication CMS est expliquée au club.
 
@@ -31,6 +31,7 @@ Cette checklist est à vérifier avant la livraison finale au club, puis à chaq
 - [ ] Headers de sécurité actifs via `_headers`.
 - [ ] `robots.txt` présent et bloque `/admin/`.
 - [ ] Formulaires protégés contre le spam avec un honeypot ou une solution équivalente.
+- [ ] Notifications Netlify Forms activées vers l'adresse e-mail du club.
 - [ ] Le site ne demande pas de données sensibles inutiles.
 - [ ] Les mentions légales et la politique de confidentialité sont relues et complétées par le club.
 
