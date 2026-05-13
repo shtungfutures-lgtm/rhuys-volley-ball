@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin/
+Allow: /
+
+# TODO: add Sitemap: https://DOMAINE-OFFICIEL/sitemap.xml after the final custom domain is connected.

@@ -77,8 +77,19 @@
             <p><strong>Téléphone :</strong> <a href="tel:+33600000000">06 00 00 00 00</a></p>
           </article>
 
-          <form class="contact-form card reveal">
+          <form
+            class="contact-form card reveal"
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+          >
             <h3>Formulaire de contact</h3>
+            <input type="hidden" name="form-name" value="contact" />
+            <input type="hidden" name="subject" value="RVB - Nouveau message du site" />
+            <p class="form-honeypot" aria-hidden="true">
+              <label>Ne pas remplir ce champ <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label>
+            </p>
             <div class="form-grid">
               <div>
                 <label for="name">Nom complet</label>

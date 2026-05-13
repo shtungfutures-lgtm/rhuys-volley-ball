@@ -7,6 +7,8 @@ site_url: "https://rhuys-volley-ball-site.netlify.app"
 display_url: "https://rhuys-volley-ball-site.netlify.app"
 media_folder: "uploads/images"
 public_folder: "/uploads/images"
+# Note sécurité : privilégier les imports JPG, JPEG, PNG ou WebP.
+# Decap CMS ne bloque pas toujours les extensions depuis config.yml selon le média backend utilisé.
 
 collections:
   - name: "articles"

@@ -2456,7 +2456,7 @@ function initFormValidation(form, options) {
     }
   });
 
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const nameInput = form.querySelector(options.nameSelector);
@@ -2514,8 +2514,53 @@ function initFormValidation(form, options) {
     }
 
     const formData = new FormData(form);
+    if (String(formData.get('bot-field') || '').trim()) {
+      statusMessage.className = 'form-status is-success';
+      statusMessage.textContent = options.successMessage;
+      form.reset();
+      return;
+    }
+
     const payload = Object.fromEntries(formData.entries());
     console.log(options.consoleLabel, payload);
+
+    if (form.dataset.netlify === 'true' && window.location.protocol !== 'file:') {
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Envoi en cours...';
+      }
+
+      statusMessage.className = 'form-status';
+      statusMessage.textContent = '';
+
+      try {
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        });
+
+        if (!response.ok) {
+          throw new Error('Envoi indisponible.');
+        }
+      } catch (error) {
+        statusMessage.className = 'form-status is-error';
+        statusMessage.textContent =
+          'Le message n’a pas pu être envoyé. Vous pouvez contacter le club directement par e-mail.';
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = options.submitLabel || 'Envoyer le message';
+        }
+        return;
+      }
+
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = options.submitLabel || 'Envoyer le message';
+      }
+    }
 
     statusMessage.className = 'form-status is-success';
     statusMessage.textContent = options.successMessage;

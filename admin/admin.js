@@ -1,4 +1,6 @@
 const tokenKey = 'rvb-admin-token';
+const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+const maxImageSize = 5 * 1024 * 1024;
 const state = {
   articles: [],
   products: [],
@@ -148,6 +150,18 @@ function readImageFile(inputSelector, onRead) {
   const input = qs(inputSelector);
   const file = input?.files && input.files[0];
   if (!file) return;
+
+  if (!allowedImageTypes.includes(file.type)) {
+    showToast('Format image non autorisé. Utilisez JPG, PNG ou WebP.', 'error');
+    input.value = '';
+    return;
+  }
+
+  if (file.size > maxImageSize) {
+    showToast('Image trop lourde. Limite recommandée : 5 Mo.', 'error');
+    input.value = '';
+    return;
+  }
 
   const reader = new FileReader();
   reader.addEventListener('load', () => onRead(String(reader.result || '')));
