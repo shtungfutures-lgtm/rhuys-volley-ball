@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <title>Formulaires Netlify | RHUYS VOLLEY BALL</title>
+  </head>
+  <body>
+    <!-- Squelette utilisé par Netlify pour détecter le formulaire de contact au déploiement. -->
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="subject" value="RVB - Nouveau message du site" />
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <select name="topic">
+        <option value="inscription">Inscription</option>
+        <option value="essai">Séance d'essai</option>
+        <option value="infos">Informations générales</option>
+      </select>
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>

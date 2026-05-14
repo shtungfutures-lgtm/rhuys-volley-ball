@@ -2559,7 +2559,8 @@ function initFormValidation(form, options) {
       statusMessage.textContent = '';
 
       try {
-        const response = await fetch('/', {
+        const formEndpoint = form.dataset.netlifyFormEndpoint || form.getAttribute('action') || '/';
+        const response = await fetch(formEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: new URLSearchParams(formData).toString()
