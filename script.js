@@ -2547,7 +2547,11 @@ function initFormValidation(form, options) {
     const payload = Object.fromEntries(formData.entries());
     console.log(options.consoleLabel, payload);
 
-    if (form.dataset.netlify === 'true' && window.location.protocol !== 'file:') {
+    const shouldSubmitToNetlify =
+      window.location.protocol !== 'file:' &&
+      (form.dataset.netlifyFormEndpoint || form.querySelector('input[name="form-name"]'));
+
+    if (shouldSubmitToNetlify) {
       const submitButton = form.querySelector('button[type="submit"]');
 
       if (submitButton) {
