@@ -1,25 +1,19 @@
 {
-  "name": "sales-prospecting-saas",
+  "name": "rhuys-volley-ball-site",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "netlify dev",
+    "build": "echo 'Static RHUYS site'",
+    "check": "npm run check:js && npm run typecheck",
+    "check:js": "node --check script.js && node --check admin/cms-preview.js",
+    "typecheck": "tsc --noEmit --pretty false"
   },
   "dependencies": {
-    "@netlify/blobs": "^10.7.6",
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "@netlify/blobs": "^10.7.6"
   },
   "devDependencies": {
     "@types/node": "20.14.10",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.5",
     "typescript": "5.5.4"
   }
 }

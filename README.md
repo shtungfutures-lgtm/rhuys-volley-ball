@@ -1,41 +1,43 @@
-# Sales Prospecting SaaS - Starter Kit
+# RHUYS VOLLEY BALL - Site vitrine
 
-Ce dépôt contient une base de démarrage pour créer un SaaS qui aide les commerciaux à suivre leur prospection.
+Site officiel du RHUYS VOLLEY BALL, construit en HTML, CSS et JavaScript simple, avec Decap CMS pour la gestion des contenus.
 
-## Objectif du MVP
+## Stack actuelle
 
-Permettre à une équipe commerciale de :
-- centraliser ses prospects,
-- planifier et suivre les relances,
-- visualiser les performances de prospection.
+- Site statique : HTML, CSS, JavaScript
+- CMS : Decap CMS dans `admin/`
+- Authentification CMS : Netlify Identity + Git Gateway
+- Hébergement : Netlify
+- Paiement boutique : Stripe Checkout via Netlify Functions
+- Données éditables : fichiers JSON dans `content/`
 
-## Ce qui est inclus
+## Structure principale
 
-- Cadrage produit du MVP : `docs/mvp-cahier-des-charges.md`
-- Modèle de données : `docs/modele-donnees.md`
-- Schéma SQL initial : `db/schema.sql`
-- Squelette d'application Next.js : `src/app/*`
+- `index.html` : accueil
+- `club.html` : présentation du club
+- `equipes.html` : équipes
+- `horaires.html` : horaires d'entraînement
+- `calendrier.html` : widgets calendrier / matchs
+- `classements.html` : widgets classements
+- `actualites.html` et `article.html` : actualités
+- `boutique.html` : boutique club
+- `partenaires.html` : partenaires
+- `contact.html` : contact et formulaires
+- `admin/` : Decap CMS
+- `content/` : contenus éditables par le CMS
+- `netlify/functions/` : fonctions serveur Stripe
 
-## Stack recommandée
-
-- Frontend : Next.js (App Router)
-- Backend : Routes API Next.js
-- Base de données : PostgreSQL
-- Auth : Supabase Auth ou Auth.js
-- Déploiement : Vercel + Neon/Supabase
-
-## Lancement local (quand tu installeras les dépendances)
+## Commandes utiles
 
 ```bash
 npm install
-npm run dev
+npm run check
+npm run build
+npx netlify build --offline
 ```
 
-Puis ouvre `http://localhost:3000`.
+## Notes techniques
 
-## Feuille de route courte
+Next.js n'est plus utilisé par le site. Le projet est publié comme site statique avec `publish = "."` dans `netlify.toml`.
 
-1. Implémenter l'authentification et le multi-tenant.
-2. Brancher PostgreSQL et migrer `db/schema.sql`.
-3. Remplacer les mocks par des lectures/écritures en base.
-4. Ajouter les rappels automatiques de relance.
+Ne pas stocker de secrets dans le frontend. Les clés Stripe doivent rester dans les variables d'environnement Netlify.
