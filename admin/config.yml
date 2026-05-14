@@ -69,8 +69,38 @@ collections:
                 options: ["Club", "Matchs", "Jeunes", "Événements", "Entraînements"]
                 default: "Club"
 
+  - name: "teams"
+    label: "3. Équipes"
+    label_singular: "Équipe"
+    description: "Modifier les cartes équipes, leurs images, leurs horaires et leurs informations."
+    files:
+      - label: "Liste des équipes"
+        name: "teams"
+        file: "content/teams/teams.json"
+        format: "json"
+        fields:
+          - label: "Équipes affichées"
+            name: "teams"
+            widget: "list"
+            summary: "{{fields.name}} · {{fields.age}} · {{fields.location}}"
+            collapsed: true
+            minimize_collapsed: true
+            fields:
+              - { label: "Identifiant technique", name: "id", widget: "string", hint: "Exemple : ecole-volley. Ne pas changer sauf besoin précis." }
+              - { label: "Nom de l’équipe", name: "name", widget: "string" }
+              - { label: "Âge / niveau", name: "age", widget: "string", required: false }
+              - { label: "Horaire résumé", name: "schedule", widget: "string", required: false, hint: "Exemple : Mercredi 16h00 - 17h30" }
+              - { label: "Lieu", name: "location", widget: "string", required: false }
+              - { label: "Image de l’équipe", name: "image", widget: "image", required: false, hint: "Format recommandé : JPG, PNG ou WebP." }
+              - { label: "Description", name: "description", widget: "text" }
+              - label: "Points clés"
+                name: "highlights"
+                widget: "list"
+                required: false
+                field: { label: "Point clé", name: "highlight", widget: "string" }
+
   - name: "training"
-    label: "3. Horaires entraînement"
+    label: "4. Horaires entraînement"
     label_singular: "Créneau"
     description: "Modifier les jours, horaires et lieux d’entraînement."
     files:
@@ -98,7 +128,7 @@ collections:
               - { label: "Description", name: "description", widget: "text", required: false }
 
   - name: "products"
-    label: "4. Boutique"
+    label: "5. Boutique"
     label_singular: "Produit"
     description: "Gérer les produits visibles dans la boutique et leurs identifiants Stripe."
     files:
@@ -135,7 +165,7 @@ collections:
                 default: "indisponible"
 
   - name: "partners"
-    label: "5. Partenaires"
+    label: "6. Partenaires"
     label_singular: "Partenaire"
     description: "Mettre en avant les partenaires et sponsors du club."
     files:
@@ -161,7 +191,7 @@ collections:
               - { label: "Lien du site", name: "website", widget: "string", required: false }
 
   - name: "pages"
-    label: "6. Textes des pages"
+    label: "7. Textes des pages"
     label_singular: "Page"
     description: "Modifier les grands titres, textes courts et images principales des pages."
     files:
@@ -181,6 +211,30 @@ collections:
           - { label: "Titre", name: "title", widget: "string" }
           - { label: "Texte", name: "content", widget: "text" }
           - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Partenaires"
+        name: "partenaires"
+        file: "content/pages/partenaires.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Équipes"
+        name: "equipes"
+        file: "content/pages/equipes.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Classements"
+        name: "classements"
+        file: "content/pages/classements.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
       - label: "Horaires"
         name: "horaires"
         file: "content/pages/horaires.json"
@@ -189,9 +243,33 @@ collections:
           - { label: "Titre", name: "title", widget: "string" }
           - { label: "Texte", name: "content", widget: "text" }
           - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Calendrier / Matchs"
+        name: "calendrier"
+        file: "content/pages/calendrier.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
       - label: "Planning"
         name: "planning"
         file: "content/pages/planning.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Actualités"
+        name: "actualites"
+        file: "content/pages/actualites.json"
+        format: "json"
+        fields:
+          - { label: "Titre", name: "title", widget: "string" }
+          - { label: "Texte", name: "content", widget: "text" }
+          - { label: "Image", name: "image", widget: "image", required: false }
+      - label: "Boutique"
+        name: "boutique"
+        file: "content/pages/boutique.json"
         format: "json"
         fields:
           - { label: "Titre", name: "title", widget: "string" }

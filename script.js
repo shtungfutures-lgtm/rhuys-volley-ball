@@ -499,8 +499,14 @@ const pagesContentPath = '/content/pages/pages.json';
 const pageContentFiles = {
   index: '/content/pages/accueil.json',
   club: '/content/pages/club.json',
+  partenaires: '/content/pages/partenaires.json',
+  equipes: '/content/pages/equipes.json',
+  classements: '/content/pages/classements.json',
   horaires: '/content/pages/horaires.json',
+  calendrier: '/content/pages/calendrier.json',
   planning: '/content/pages/planning.json',
+  actualites: '/content/pages/actualites.json',
+  boutique: '/content/pages/boutique.json',
   contact: '/content/pages/contact.json'
 };
 let resolvedArticlesCache = null;
@@ -1949,22 +1955,26 @@ function normalizePageContent(payload, slug) {
 async function initSimplePageContent() {
   const slug = getCurrentPageSlug();
   const pageFile = pageContentFiles[slug];
-  const pagesPayload = await fetchFirstJson(getStaticContentEndpoints(pagesContentPath));
-  const dynamicPages = pagesPayload && Array.isArray(pagesPayload.pages) ? pagesPayload.pages : [];
-  const dynamicPage = dynamicPages.find((item) => item.slug === slug);
-  const directPayload = dynamicPage || (pageFile ? await fetchFirstJson(getStaticContentEndpoints(pageFile)) : null);
+  const directPayload = pageFile ? await fetchFirstJson(getStaticContentEndpoints(pageFile)) : null;
   let page = normalizePageContent(directPayload, slug);
 
-  if (!page) {
-    const payload = await fetchFirstJson(getStaticContentEndpoints(pagesContentPath));
-    const pages = payload && Array.isArray(payload.pages) ? payload.pages : [];
-    page = pages.find((item) => item.slug === slug);
+  if (page) {
+    applySimplePageContent(page);
+    return;
   }
+
+  const pagesPayload = await fetchFirstJson(getStaticContentEndpoints(pagesContentPath));
+  const dynamicPages = pagesPayload && Array.isArray(pagesPayload.pages) ? pagesPayload.pages : [];
+  page = normalizePageContent(dynamicPages.find((item) => item.slug === slug), slug);
 
   if (!page) {
     return;
   }
 
+  applySimplePageContent(page);
+}
+
+function applySimplePageContent(page) {
   const title = page.title || '';
   const content = page.content || '';
   const image = page.image ? resolveCmsMediaUrl(page.image) : '';

@@ -130,6 +130,36 @@
     );
   }
 
+  function TeamsPreview(props) {
+    const teams = list(props.entry, 'teams');
+    return h(
+      Layout,
+      null,
+      h(Header, {
+        kicker: 'Équipes',
+        title: 'Aperçu des équipes',
+        description: 'Vérifiez les images, horaires, lieux et points clés affichés sur la page Équipes.'
+      }),
+      teams.length
+        ? h(
+            'section',
+            { className: 'rvb-preview-grid' },
+            teams.map((team, index) =>
+              h(
+                Card,
+                { key: index, image: team.image },
+                h('span', { className: 'rvb-badge' }, text(team.age, 'Catégorie')),
+                h('h3', null, text(team.name, 'Nom de l’équipe')),
+                h('p', { className: 'rvb-price' }, text(team.schedule, 'Horaire à renseigner')),
+                h('p', null, text(team.location, 'Lieu à renseigner')),
+                h('p', null, text(team.description, 'Description de l’équipe'))
+              )
+            )
+          )
+        : h(Empty, null)
+    );
+  }
+
   function PartnersPreview(props) {
     const partners = list(props.entry, 'partners');
     return h(
@@ -217,6 +247,7 @@
 
   cms.registerPreviewTemplate('articles', ArticlesPreview);
   cms.registerPreviewTemplate('gallery', GalleryPreview);
+  cms.registerPreviewTemplate('teams', TeamsPreview);
   cms.registerPreviewTemplate('products', ProductsPreview);
   cms.registerPreviewTemplate('partners', PartnersPreview);
   cms.registerPreviewTemplate('training', TrainingPreview);
